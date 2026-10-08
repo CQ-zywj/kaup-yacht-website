@@ -13,10 +13,7 @@
         "description": "Hailan 42 Flybridge Yacht, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": [
-      "assets/media/boats.svg",
-      "assets/media/boats-detail.svg"
-    ],
+    "media": ["assets/media/boats.svg", "assets/media/boats-detail.svg"],
     "parameters": {
       "boat_type": "yacht",
       "material": "FRP",
@@ -45,11 +42,7 @@
       "moq": 1,
       "unit": "set",
       "lead_time": 30,
-      "incoterms": [
-        "FOB",
-        "CIF",
-        "EXW"
-      ],
+      "incoterms": ["FOB", "CIF", "EXW"],
       "price_min": 185000,
       "price_max": 212750,
       "currency": "USD"
@@ -71,10 +64,7 @@
         "description": "Voyager 18m Aluminum Workboat, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": [
-      "assets/media/boats.svg",
-      "assets/media/boats-detail.svg"
-    ],
+    "media": ["assets/media/boats.svg", "assets/media/boats-detail.svg"],
     "parameters": {
       "boat_type": "workboat",
       "material": "Aluminum",
@@ -103,11 +93,7 @@
       "moq": 1,
       "unit": "set",
       "lead_time": 32,
-      "incoterms": [
-        "FOB",
-        "CIF",
-        "EXW"
-      ],
+      "incoterms": ["FOB", "CIF", "EXW"],
       "price_min": 320000,
       "price_max": 368000,
       "currency": "USD"
@@ -129,10 +115,7 @@
         "description": "Qingyuan 10m Electric Cruiser, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": [
-      "assets/media/boats.svg",
-      "assets/media/boats-detail.svg"
-    ],
+    "media": ["assets/media/boats.svg", "assets/media/boats-detail.svg"],
     "parameters": {
       "boat_type": "yacht",
       "material": "FRP",
@@ -161,11 +144,7 @@
       "moq": 1,
       "unit": "set",
       "lead_time": 34,
-      "incoterms": [
-        "FOB",
-        "CIF",
-        "EXW"
-      ],
+      "incoterms": ["FOB", "CIF", "EXW"],
       "price_min": 95000,
       "price_max": 109250,
       "currency": "USD"
@@ -187,10 +166,7 @@
         "description": "Bluebay 38 Offshore Sailboat, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": [
-      "assets/media/boats.svg",
-      "assets/media/boats-detail.svg"
-    ],
+    "media": ["assets/media/boats.svg", "assets/media/boats-detail.svg"],
     "parameters": {
       "boat_type": "sailboat",
       "material": "FRP",
@@ -219,11 +195,7 @@
       "moq": 1,
       "unit": "set",
       "lead_time": 36,
-      "incoterms": [
-        "FOB",
-        "CIF",
-        "EXW"
-      ],
+      "incoterms": ["FOB", "CIF", "EXW"],
       "price_min": 128000,
       "price_max": 147200,
       "currency": "USD"
@@ -275,11 +247,7 @@
       "moq": 10,
       "unit": "set",
       "lead_time": 38,
-      "incoterms": [
-        "FOB",
-        "CIF",
-        "EXW"
-      ],
+      "incoterms": ["FOB", "CIF", "EXW"],
       "price_min": 680,
       "price_max": 782,
       "currency": "USD"
@@ -331,11 +299,7 @@
       "moq": 10,
       "unit": "set",
       "lead_time": 40,
-      "incoterms": [
-        "FOB",
-        "CIF",
-        "EXW"
-      ],
+      "incoterms": ["FOB", "CIF", "EXW"],
       "price_min": 12500,
       "price_max": 14375,
       "currency": "USD"
@@ -387,11 +351,7 @@
       "moq": 10,
       "unit": "set",
       "lead_time": 42,
-      "incoterms": [
-        "FOB",
-        "CIF",
-        "EXW"
-      ],
+      "incoterms": ["FOB", "CIF", "EXW"],
       "price_min": 850,
       "price_max": 977,
       "currency": "USD"
@@ -443,11 +403,7 @@
       "moq": 10,
       "unit": "set",
       "lead_time": 44,
-      "incoterms": [
-        "FOB",
-        "CIF",
-        "EXW"
-      ],
+      "incoterms": ["FOB", "CIF", "EXW"],
       "price_min": 420,
       "price_max": 483,
       "currency": "USD"
@@ -469,10 +425,7 @@
         "description": "BlueShield Low-VOC Antifouling, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": [
-      "assets/media/coatings.svg",
-      "assets/media/coatings-detail.svg"
-    ],
+    "media": ["assets/media/coatings.svg", "assets/media/coatings-detail.svg"],
     "parameters": {},
     "certifications": [
       {
@@ -502,11 +455,7 @@
       "moq": 10,
       "unit": "kg",
       "lead_time": 46,
-      "incoterms": [
-        "FOB",
-        "CIF",
-        "EXW"
-      ],
+      "incoterms": ["FOB", "CIF", "EXW"],
       "price_min": 28,
       "price_max": 32,
       "currency": "USD"
@@ -528,10 +477,7 @@
         "description": "SeaGuard Epoxy Marine Primer, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": [
-      "assets/media/coatings.svg",
-      "assets/media/coatings-detail.svg"
-    ],
+    "media": ["assets/media/coatings.svg", "assets/media/coatings-detail.svg"],
     "parameters": {},
     "certifications": [
       {
@@ -561,11 +507,7 @@
       "moq": 10,
       "unit": "kg",
       "lead_time": 48,
-      "incoterms": [
-        "FOB",
-        "CIF",
-        "EXW"
-      ],
+      "incoterms": ["FOB", "CIF", "EXW"],
       "price_min": 18,
       "price_max": 21,
       "currency": "USD"
@@ -587,10 +529,7 @@
         "description": "Yacht Deck Care Cleaner, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": [
-      "assets/media/coatings.svg",
-      "assets/media/coatings-detail.svg"
-    ],
+    "media": ["assets/media/coatings.svg", "assets/media/coatings-detail.svg"],
     "parameters": {},
     "certifications": [
       {
@@ -620,11 +559,7 @@
       "moq": 10,
       "unit": "kg",
       "lead_time": 50,
-      "incoterms": [
-        "FOB",
-        "CIF",
-        "EXW"
-      ],
+      "incoterms": ["FOB", "CIF", "EXW"],
       "price_min": 12,
       "price_max": 14,
       "currency": "USD"
@@ -646,10 +581,7 @@
         "description": "Antifouling Sample · Compliance Pending, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": [
-      "assets/media/coatings.svg",
-      "assets/media/coatings-detail.svg"
-    ],
+    "media": ["assets/media/coatings.svg", "assets/media/coatings-detail.svg"],
     "parameters": {},
     "certifications": [
       {
@@ -675,11 +607,7 @@
       "moq": 10,
       "unit": "kg",
       "lead_time": 52,
-      "incoterms": [
-        "FOB",
-        "CIF",
-        "EXW"
-      ],
+      "incoterms": ["FOB", "CIF", "EXW"],
       "price_min": 22,
       "price_max": 25,
       "currency": "USD"
@@ -701,10 +629,7 @@
         "description": "Pre-delivery Vessel Inspection, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": [
-      "assets/media/services.svg",
-      "assets/media/services-detail.svg"
-    ],
+    "media": ["assets/media/services.svg", "assets/media/services-detail.svg"],
     "parameters": {
       "service_type": "inspection",
       "region": "asia",
@@ -734,11 +659,7 @@
       "moq": 1,
       "unit": "set",
       "lead_time": 54,
-      "incoterms": [
-        "FOB",
-        "CIF",
-        "EXW"
-      ],
+      "incoterms": ["FOB", "CIF", "EXW"],
       "price_min": 1800,
       "price_max": 2070,
       "currency": "USD"
@@ -760,10 +681,7 @@
         "description": "Cross-border Yacht Shipping, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": [
-      "assets/media/services.svg",
-      "assets/media/services-detail.svg"
-    ],
+    "media": ["assets/media/services.svg", "assets/media/services-detail.svg"],
     "parameters": {
       "service_type": "logistics",
       "region": "global",
@@ -793,11 +711,7 @@
       "moq": 1,
       "unit": "set",
       "lead_time": 56,
-      "incoterms": [
-        "FOB",
-        "CIF",
-        "EXW"
-      ],
+      "incoterms": ["FOB", "CIF", "EXW"],
       "price_min": 2500,
       "price_max": 2875,
       "currency": "USD"
@@ -819,10 +733,7 @@
         "description": "Marine Structural Design, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": [
-      "assets/media/services.svg",
-      "assets/media/services-detail.svg"
-    ],
+    "media": ["assets/media/services.svg", "assets/media/services-detail.svg"],
     "parameters": {
       "service_type": "design",
       "region": "global",
@@ -852,11 +763,7 @@
       "moq": 1,
       "unit": "set",
       "lead_time": 58,
-      "incoterms": [
-        "FOB",
-        "CIF",
-        "EXW"
-      ],
+      "incoterms": ["FOB", "CIF", "EXW"],
       "price_min": 3500,
       "price_max": 4025,
       "currency": "USD"
@@ -878,10 +785,7 @@
         "description": "European Port Survey & Delivery, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": [
-      "assets/media/services.svg",
-      "assets/media/services-detail.svg"
-    ],
+    "media": ["assets/media/services.svg", "assets/media/services-detail.svg"],
     "parameters": {
       "service_type": "inspection",
       "region": "europe",
@@ -911,11 +815,7 @@
       "moq": 1,
       "unit": "set",
       "lead_time": 60,
-      "incoterms": [
-        "FOB",
-        "CIF",
-        "EXW"
-      ],
+      "incoterms": ["FOB", "CIF", "EXW"],
       "price_min": 2200,
       "price_max": 2530,
       "currency": "USD"

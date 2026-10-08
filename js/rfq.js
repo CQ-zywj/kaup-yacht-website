@@ -1,5 +1,46 @@
-const productId=new URLSearchParams(location.search).get('product');const product=productId?U.product(productId):null;
-if(productId&&!product){document.getElementById('main').innerHTML=`<div class="container section">${U.empty('notFound','adjust','products.html','backBrowse')}</div>`}else{
-document.getElementById('main').innerHTML=`<div class="container"><div class="page-intro"><div class="eyebrow">REQUEST FOR QUOTATION</div><h1>${U.tr('rfqTitle')}</h1><p>${U.tr('rfqDesc')}</p></div><div class="form-layout"><form id="rfq-form" novalidate>${U.context(product)}<section class="panel"><h2>${U.tr('generalRfq')}</h2><div class="form-grid">${U.field('company','company','text','',true)}${U.field('buyerCountry','buyer_country','text','',true,'countryHint')}${U.field('quantity','quantity','number','',true)}${U.field('targetCountry','target_country','text','',true,'targetHint')}${U.field('delivery','expected_delivery','date','',true)}<div class="field"><label for="rfq-terms">${U.tr('terms')}</label><select id="rfq-terms" name="incoterms"><option>EXW</option><option selected>FOB</option><option>CIF</option></select></div>${U.area('message','message','',true,'messageHint')}<div class="field full"><label for="rfq-attachments">${U.tr('attachments')}</label><input id="rfq-attachments" type="file" multiple><p class="muted">${U.tr('attachmentHint')}</p><div id="rfq-files"></div></div></div></section><div class="form-actions"><button class="button" type="submit">${U.tr('submitRfq')} →</button></div></form><aside class="form-aside"><div class="form-note"><h3>${U.tr('rfq')}</h3><p>${U.tr('quoteDesc')}</p><p>${U.tr('demo')}</p></div></aside></div></div>`;
-const form=document.getElementById('rfq-form');let files=[];document.getElementById('rfq-attachments').onchange=e=>{files=U.attachments(e.target.files);document.getElementById('rfq-files').innerHTML=U.filesHtml(files)};form.onsubmit=e=>{e.preventDefault();if(!U.errors(form,U.validate(form)))return;const d=Object.fromEntries(new FormData(form));const row={id:'rfq-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),product_id:product?.id||null,buyer:{company:d.company.trim(),country:d.buyer_country.trim(),type:'buyer'},quantity:Number(d.quantity),target_country:d.target_country.trim(),expected_delivery:d.expected_delivery,incoterms:d.incoterms,message:d.message.trim(),attachments:files,status:'submitted',created_at:new Date().toISOString()};const list=U.read('rfq_drafts');list.push(row);if(U.write('rfq_drafts',list)){form.reset();files=[];document.getElementById('rfq-files').innerHTML='';U.notice('rfqSuccess','rfqSuccessDesc','inbox.html','goInbox')}}
-}U.translate();
+const productId = new URLSearchParams(location.search).get("product");
+const product = productId ? U.product(productId) : null;
+if (productId && !product) {
+  document.getElementById("main").innerHTML =
+    `<div class="container section">${U.empty("notFound", "adjust", "products.html", "backBrowse")}</div>`;
+} else {
+  document.getElementById("main").innerHTML =
+    `<div class="container"><div class="page-intro"><div class="eyebrow">${U.tr("rfqEyebrow")}</div><h1>${U.tr("rfqTitle")}</h1><p>${U.tr("rfqDesc")}</p></div><div class="form-layout"><form id="rfq-form" novalidate>${U.context(product)}<section class="panel"><h2>${U.tr("generalRfq")}</h2><div class="form-grid">${U.field("company", "company", "text", "", true)}${U.field("buyerCountry", "buyer_country", "text", "", true, "countryHint")}${U.field("quantity", "quantity", "number", "", true)}${U.field("targetCountry", "target_country", "text", "", true, "targetHint")}${U.field("delivery", "expected_delivery", "date", "", true)}<div class="field"><label for="rfq-terms">${U.tr("terms")}</label><select id="rfq-terms" name="incoterms"><option>EXW</option><option selected>FOB</option><option>CIF</option></select></div>${U.area("message", "message", "", true, "messageHint")}<div class="field full"><label for="rfq-attachments">${U.tr("attachments")}</label><input id="rfq-attachments" type="file" multiple><p class="muted">${U.tr("attachmentHint")}</p><div id="rfq-files"></div></div></div></section><div class="form-actions"><button class="button" type="submit">${U.tr("submitRfq")} →</button></div></form><aside class="form-aside"><div class="form-note"><h3>${U.tr("rfq")}</h3><p>${U.tr("quoteDesc")}</p><p>${U.tr("demo")}</p></div></aside></div></div>`;
+  const form = document.getElementById("rfq-form");
+  let files = [];
+  document.getElementById("rfq-attachments").onchange = (e) => {
+    files = U.attachments(e.target.files);
+    document.getElementById("rfq-files").innerHTML = U.filesHtml(files);
+  };
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    if (!U.errors(form, U.validate(form))) return;
+    const d = Object.fromEntries(new FormData(form));
+    const row = {
+      id: "rfq-" + Date.now() + "-" + Math.random().toString(36).slice(2, 7),
+      product_id: product?.id || null,
+      buyer: {
+        company: d.company.trim(),
+        country: d.buyer_country.trim(),
+        type: "buyer",
+      },
+      quantity: Number(d.quantity),
+      target_country: d.target_country.trim(),
+      expected_delivery: d.expected_delivery,
+      incoterms: d.incoterms,
+      message: d.message.trim(),
+      attachments: files,
+      status: "submitted",
+      created_at: new Date().toISOString(),
+    };
+    const list = U.read("rfq_drafts");
+    list.push(row);
+    if (U.write("rfq_drafts", list)) {
+      form.reset();
+      files = [];
+      document.getElementById("rfq-files").innerHTML = "";
+      U.notice("rfqSuccess", "rfqSuccessDesc", "inbox.html", "goInbox");
+    }
+  };
+}
+U.translate();
