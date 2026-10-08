@@ -1,0 +1,478 @@
+[
+  {
+    "id": "boats",
+    "name": {
+      "zh": "整艇",
+      "en": "Vessels & yachts"
+    },
+    "description": {
+      "zh": "从休闲游艇到商用工作艇",
+      "en": "From leisure yachts to working vessels"
+    },
+    "subcategories": [
+      {
+        "id": "yacht",
+        "name": {
+          "zh": "动力游艇",
+          "en": "Motor yachts"
+        }
+      },
+      {
+        "id": "workboat",
+        "name": {
+          "zh": "商用工作艇",
+          "en": "Workboats"
+        }
+      },
+      {
+        "id": "sailboat",
+        "name": {
+          "zh": "帆船",
+          "en": "Sailboats"
+        }
+      }
+    ],
+    "fields": [
+      {
+        "key": "boat_type",
+        "label": {
+          "zh": "艇型",
+          "en": "Vessel type"
+        },
+        "type": "enum",
+        "options": [
+          {
+            "value": "yacht",
+            "label": {
+              "zh": "游艇",
+              "en": "Yacht"
+            }
+          },
+          {
+            "value": "workboat",
+            "label": {
+              "zh": "工作艇",
+              "en": "Workboat"
+            }
+          },
+          {
+            "value": "sailboat",
+            "label": {
+              "zh": "帆船",
+              "en": "Sailboat"
+            }
+          }
+        ],
+        "required": true
+      },
+      {
+        "key": "material",
+        "label": {
+          "zh": "船体材质",
+          "en": "Hull material"
+        },
+        "type": "enum",
+        "options": [
+          {
+            "value": "FRP",
+            "label": {
+              "zh": "玻璃钢",
+              "en": "FRP"
+            }
+          },
+          {
+            "value": "Aluminum",
+            "label": {
+              "zh": "铝合金",
+              "en": "Aluminum"
+            }
+          },
+          {
+            "value": "Steel",
+            "label": {
+              "zh": "钢",
+              "en": "Steel"
+            }
+          }
+        ],
+        "required": true
+      },
+      {
+        "key": "length",
+        "label": {
+          "zh": "总长（m）",
+          "en": "Length (m)"
+        },
+        "type": "number",
+        "options": [],
+        "required": true
+      },
+      {
+        "key": "power",
+        "label": {
+          "zh": "动力类型",
+          "en": "Propulsion"
+        },
+        "type": "enum",
+        "options": [
+          {
+            "value": "diesel",
+            "label": {
+              "zh": "柴油",
+              "en": "Diesel"
+            }
+          },
+          {
+            "value": "electric",
+            "label": {
+              "zh": "电动",
+              "en": "Electric"
+            }
+          },
+          {
+            "value": "hybrid",
+            "label": {
+              "zh": "混合动力",
+              "en": "Hybrid"
+            }
+          }
+        ],
+        "required": true
+      },
+      {
+        "key": "speed",
+        "label": {
+          "zh": "航速（kn）",
+          "en": "Speed (kn)"
+        },
+        "type": "number",
+        "options": [],
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "equipment",
+    "name": {
+      "zh": "配件设备",
+      "en": "Parts & equipment"
+    },
+    "description": {
+      "zh": "航行、动力与甲板系统",
+      "en": "Navigation, propulsion and deck systems"
+    },
+    "subcategories": [
+      {
+        "id": "navigation",
+        "name": {
+          "zh": "航行设备",
+          "en": "Navigation"
+        }
+      },
+      {
+        "id": "engine",
+        "name": {
+          "zh": "动力系统",
+          "en": "Propulsion"
+        }
+      },
+      {
+        "id": "deck",
+        "name": {
+          "zh": "甲板设备",
+          "en": "Deck equipment"
+        }
+      }
+    ],
+    "fields": [
+      {
+        "key": "compatible",
+        "label": {
+          "zh": "适配船型",
+          "en": "Compatible vessel"
+        },
+        "type": "enum",
+        "options": [
+          {
+            "value": "yacht",
+            "label": {
+              "zh": "游艇",
+              "en": "Yacht"
+            }
+          },
+          {
+            "value": "commercial",
+            "label": {
+              "zh": "商船",
+              "en": "Commercial"
+            }
+          },
+          {
+            "value": "all",
+            "label": {
+              "zh": "通用",
+              "en": "Universal"
+            }
+          }
+        ],
+        "required": true
+      },
+      {
+        "key": "brand",
+        "label": {
+          "zh": "品牌",
+          "en": "Brand"
+        },
+        "type": "text",
+        "options": [],
+        "required": true
+      },
+      {
+        "key": "model",
+        "label": {
+          "zh": "型号",
+          "en": "Model"
+        },
+        "type": "text",
+        "options": [],
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "coatings",
+    "name": {
+      "zh": "涂装养护",
+      "en": "Coatings & care"
+    },
+    "description": {
+      "zh": "专业船用涂装与合规方案",
+      "en": "Marine coatings and compliance solutions"
+    },
+    "subcategories": [
+      {
+        "id": "antifouling",
+        "name": {
+          "zh": "防污涂料",
+          "en": "Antifouling"
+        }
+      },
+      {
+        "id": "primer",
+        "name": {
+          "zh": "防腐底漆",
+          "en": "Primers"
+        }
+      },
+      {
+        "id": "care",
+        "name": {
+          "zh": "养护用品",
+          "en": "Care products"
+        }
+      }
+    ],
+    "fields": [
+      {
+        "key": "afs",
+        "label": {
+          "zh": "AFS 合规",
+          "en": "AFS compliance"
+        },
+        "type": "enum",
+        "options": [
+          {
+            "value": "compliant",
+            "label": {
+              "zh": "符合",
+              "en": "Compliant"
+            }
+          },
+          {
+            "value": "pending",
+            "label": {
+              "zh": "待确认",
+              "en": "Pending"
+            }
+          }
+        ],
+        "required": true
+      },
+      {
+        "key": "voc",
+        "label": {
+          "zh": "VOC 标准",
+          "en": "VOC standard"
+        },
+        "type": "enum",
+        "options": [
+          {
+            "value": "low",
+            "label": {
+              "zh": "低 VOC",
+              "en": "Low VOC"
+            }
+          },
+          {
+            "value": "standard",
+            "label": {
+              "zh": "标准 VOC",
+              "en": "Standard VOC"
+            }
+          }
+        ],
+        "required": true
+      },
+      {
+        "key": "msds",
+        "label": {
+          "zh": "MSDS 链接",
+          "en": "MSDS URL"
+        },
+        "type": "url",
+        "options": [],
+        "required": true
+      },
+      {
+        "key": "un_number",
+        "label": {
+          "zh": "UN 编号",
+          "en": "UN number"
+        },
+        "type": "text",
+        "options": [],
+        "required": true
+      },
+      {
+        "key": "hazard_class",
+        "label": {
+          "zh": "危险等级",
+          "en": "Hazard class"
+        },
+        "type": "text",
+        "options": [],
+        "required": true
+      },
+      {
+        "key": "transport",
+        "label": {
+          "zh": "运输限制",
+          "en": "Transport restrictions"
+        },
+        "type": "text",
+        "options": [],
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "services",
+    "name": {
+      "zh": "衍生服务",
+      "en": "Marine services"
+    },
+    "description": {
+      "zh": "检验、物流与设计服务",
+      "en": "Inspection, logistics and design"
+    },
+    "subcategories": [
+      {
+        "id": "inspection",
+        "name": {
+          "zh": "检验认证",
+          "en": "Inspection"
+        }
+      },
+      {
+        "id": "logistics",
+        "name": {
+          "zh": "跨境物流",
+          "en": "Logistics"
+        }
+      },
+      {
+        "id": "design",
+        "name": {
+          "zh": "设计咨询",
+          "en": "Design consulting"
+        }
+      }
+    ],
+    "fields": [
+      {
+        "key": "service_type",
+        "label": {
+          "zh": "服务类型",
+          "en": "Service type"
+        },
+        "type": "enum",
+        "options": [
+          {
+            "value": "inspection",
+            "label": {
+              "zh": "检验认证",
+              "en": "Inspection"
+            }
+          },
+          {
+            "value": "logistics",
+            "label": {
+              "zh": "国际物流",
+              "en": "Logistics"
+            }
+          },
+          {
+            "value": "design",
+            "label": {
+              "zh": "船舶设计",
+              "en": "Marine design"
+            }
+          }
+        ],
+        "required": true
+      },
+      {
+        "key": "region",
+        "label": {
+          "zh": "服务地区",
+          "en": "Service region"
+        },
+        "type": "enum",
+        "options": [
+          {
+            "value": "asia",
+            "label": {
+              "zh": "亚洲",
+              "en": "Asia"
+            }
+          },
+          {
+            "value": "global",
+            "label": {
+              "zh": "全球",
+              "en": "Global"
+            }
+          },
+          {
+            "value": "europe",
+            "label": {
+              "zh": "欧洲",
+              "en": "Europe"
+            }
+          }
+        ],
+        "required": true
+      },
+      {
+        "key": "content",
+        "label": {
+          "zh": "服务内容",
+          "en": "Service scope"
+        },
+        "type": "textarea",
+        "options": [],
+        "required": true
+      }
+    ]
+  }
+]

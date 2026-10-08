@@ -1,0 +1,6 @@
+DEMO MSDS — not valid for trade or transport.
+Product: BlueShield sample
+UN: UN 1263
+Class: 3
+Transport: IMDG sea freight only
+Request the actual safety data sheet from your supplier.

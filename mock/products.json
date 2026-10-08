@@ -1,0 +1,926 @@
+[
+  {
+    "id": "p01",
+    "category_id": "boats",
+    "subcategory_id": "yacht",
+    "i18n": {
+      "zh": {
+        "title": "海岚 42 尺飞桥游艇",
+        "description": "海岚 42 尺飞桥游艇，面向专业船舶采购的结构化产品样例。可按项目需求提供规格确认与出口贸易方案。此信息为原型演示数据。"
+      },
+      "en": {
+        "title": "Hailan 42 Flybridge Yacht",
+        "description": "Hailan 42 Flybridge Yacht, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
+      }
+    },
+    "media": [
+      "assets/media/boats.svg",
+      "assets/media/boats-detail.svg"
+    ],
+    "parameters": {
+      "boat_type": "yacht",
+      "material": "FRP",
+      "length": 12.8,
+      "power": "diesel",
+      "speed": 28
+    },
+    "certifications": [
+      {
+        "type": "CCS",
+        "number": "DEMO-CCS-0001"
+      }
+    ],
+    "compliance": {},
+    "supplier": {
+      "id": "s1",
+      "name": {
+        "zh": "海岚船艇制造有限公司",
+        "en": "Hailan Marine Manufacturing"
+      },
+      "country": "China",
+      "verified": true,
+      "products_count": 24
+    },
+    "trade": {
+      "moq": 1,
+      "unit": "set",
+      "lead_time": 30,
+      "incoterms": [
+        "FOB",
+        "CIF",
+        "EXW"
+      ],
+      "price_min": 185000,
+      "price_max": 212750,
+      "currency": "USD"
+    },
+    "updated_at": "2026-10-08T08:00:00Z",
+    "status": "published"
+  },
+  {
+    "id": "p02",
+    "category_id": "boats",
+    "subcategory_id": "workboat",
+    "i18n": {
+      "zh": {
+        "title": "远航 18m 铝合金工作艇",
+        "description": "远航 18m 铝合金工作艇，面向专业船舶采购的结构化产品样例。可按项目需求提供规格确认与出口贸易方案。此信息为原型演示数据。"
+      },
+      "en": {
+        "title": "Voyager 18m Aluminum Workboat",
+        "description": "Voyager 18m Aluminum Workboat, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
+      }
+    },
+    "media": [
+      "assets/media/boats.svg",
+      "assets/media/boats-detail.svg"
+    ],
+    "parameters": {
+      "boat_type": "workboat",
+      "material": "Aluminum",
+      "length": 18,
+      "power": "diesel",
+      "speed": 24
+    },
+    "certifications": [
+      {
+        "type": "ABS",
+        "number": "DEMO-ABS-0002"
+      }
+    ],
+    "compliance": {},
+    "supplier": {
+      "id": "s2",
+      "name": {
+        "zh": "远航海洋装备有限公司",
+        "en": "Voyager Ocean Equipment"
+      },
+      "country": "China",
+      "verified": true,
+      "products_count": 27
+    },
+    "trade": {
+      "moq": 1,
+      "unit": "set",
+      "lead_time": 32,
+      "incoterms": [
+        "FOB",
+        "CIF",
+        "EXW"
+      ],
+      "price_min": 320000,
+      "price_max": 368000,
+      "currency": "USD"
+    },
+    "updated_at": "2026-10-07T08:00:00Z",
+    "status": "published"
+  },
+  {
+    "id": "p03",
+    "category_id": "boats",
+    "subcategory_id": "yacht",
+    "i18n": {
+      "zh": {
+        "title": "清源 10m 纯电动观光艇",
+        "description": "清源 10m 纯电动观光艇，面向专业船舶采购的结构化产品样例。可按项目需求提供规格确认与出口贸易方案。此信息为原型演示数据。"
+      },
+      "en": {
+        "title": "Qingyuan 10m Electric Cruiser",
+        "description": "Qingyuan 10m Electric Cruiser, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
+      }
+    },
+    "media": [
+      "assets/media/boats.svg",
+      "assets/media/boats-detail.svg"
+    ],
+    "parameters": {
+      "boat_type": "yacht",
+      "material": "FRP",
+      "length": 10,
+      "power": "electric",
+      "speed": 12
+    },
+    "certifications": [
+      {
+        "type": "DNV",
+        "number": "DEMO-DNV-0003"
+      }
+    ],
+    "compliance": {},
+    "supplier": {
+      "id": "s3",
+      "name": {
+        "zh": "蓝湾船舶技术有限公司",
+        "en": "Bluebay Marine Technology"
+      },
+      "country": "China",
+      "verified": true,
+      "products_count": 30
+    },
+    "trade": {
+      "moq": 1,
+      "unit": "set",
+      "lead_time": 34,
+      "incoterms": [
+        "FOB",
+        "CIF",
+        "EXW"
+      ],
+      "price_min": 95000,
+      "price_max": 109250,
+      "currency": "USD"
+    },
+    "updated_at": "2026-10-06T08:00:00Z",
+    "status": "published"
+  },
+  {
+    "id": "p04",
+    "category_id": "boats",
+    "subcategory_id": "sailboat",
+    "i18n": {
+      "zh": {
+        "title": "蓝湾 38 尺远洋帆船",
+        "description": "蓝湾 38 尺远洋帆船，面向专业船舶采购的结构化产品样例。可按项目需求提供规格确认与出口贸易方案。此信息为原型演示数据。"
+      },
+      "en": {
+        "title": "Bluebay 38 Offshore Sailboat",
+        "description": "Bluebay 38 Offshore Sailboat, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
+      }
+    },
+    "media": [
+      "assets/media/boats.svg",
+      "assets/media/boats-detail.svg"
+    ],
+    "parameters": {
+      "boat_type": "sailboat",
+      "material": "FRP",
+      "length": 11.6,
+      "power": "hybrid",
+      "speed": 9
+    },
+    "certifications": [
+      {
+        "type": "CCS",
+        "number": "DEMO-CCS-0004"
+      }
+    ],
+    "compliance": {},
+    "supplier": {
+      "id": "s4",
+      "name": {
+        "zh": "海固海事服务有限公司",
+        "en": "SeaGuard Marine Services"
+      },
+      "country": "China",
+      "verified": true,
+      "products_count": 33
+    },
+    "trade": {
+      "moq": 1,
+      "unit": "set",
+      "lead_time": 36,
+      "incoterms": [
+        "FOB",
+        "CIF",
+        "EXW"
+      ],
+      "price_min": 128000,
+      "price_max": 147200,
+      "currency": "USD"
+    },
+    "updated_at": "2026-10-05T08:00:00Z",
+    "status": "published"
+  },
+  {
+    "id": "p05",
+    "category_id": "equipment",
+    "subcategory_id": "navigation",
+    "i18n": {
+      "zh": {
+        "title": "N7 多功能船用导航仪",
+        "description": "N7 多功能船用导航仪，面向专业船舶采购的结构化产品样例。可按项目需求提供规格确认与出口贸易方案。此信息为原型演示数据。"
+      },
+      "en": {
+        "title": "N7 Marine Navigation Display",
+        "description": "N7 Marine Navigation Display, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
+      }
+    },
+    "media": [
+      "assets/media/equipment.svg",
+      "assets/media/equipment-detail.svg"
+    ],
+    "parameters": {
+      "compatible": "all",
+      "brand": "NAVSEA",
+      "model": "N7"
+    },
+    "certifications": [
+      {
+        "type": "ABS",
+        "number": "DEMO-ABS-0005"
+      }
+    ],
+    "compliance": {},
+    "supplier": {
+      "id": "s1",
+      "name": {
+        "zh": "海岚船艇制造有限公司",
+        "en": "Hailan Marine Manufacturing"
+      },
+      "country": "China",
+      "verified": true,
+      "products_count": 36
+    },
+    "trade": {
+      "moq": 10,
+      "unit": "set",
+      "lead_time": 38,
+      "incoterms": [
+        "FOB",
+        "CIF",
+        "EXW"
+      ],
+      "price_min": 680,
+      "price_max": 782,
+      "currency": "USD"
+    },
+    "updated_at": "2026-10-04T08:00:00Z",
+    "status": "published"
+  },
+  {
+    "id": "p06",
+    "category_id": "equipment",
+    "subcategory_id": "engine",
+    "i18n": {
+      "zh": {
+        "title": "M280 船用柴油动力系统",
+        "description": "M280 船用柴油动力系统，面向专业船舶采购的结构化产品样例。可按项目需求提供规格确认与出口贸易方案。此信息为原型演示数据。"
+      },
+      "en": {
+        "title": "M280 Marine Diesel Engine",
+        "description": "M280 Marine Diesel Engine, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
+      }
+    },
+    "media": [
+      "assets/media/equipment.svg",
+      "assets/media/equipment-detail.svg"
+    ],
+    "parameters": {
+      "compatible": "commercial",
+      "brand": "OCEANPOWER",
+      "model": "M280"
+    },
+    "certifications": [
+      {
+        "type": "DNV",
+        "number": "DEMO-DNV-0006"
+      }
+    ],
+    "compliance": {},
+    "supplier": {
+      "id": "s2",
+      "name": {
+        "zh": "远航海洋装备有限公司",
+        "en": "Voyager Ocean Equipment"
+      },
+      "country": "China",
+      "verified": true,
+      "products_count": 39
+    },
+    "trade": {
+      "moq": 10,
+      "unit": "set",
+      "lead_time": 40,
+      "incoterms": [
+        "FOB",
+        "CIF",
+        "EXW"
+      ],
+      "price_min": 12500,
+      "price_max": 14375,
+      "currency": "USD"
+    },
+    "updated_at": "2026-10-03T08:00:00Z",
+    "status": "published"
+  },
+  {
+    "id": "p07",
+    "category_id": "equipment",
+    "subcategory_id": "deck",
+    "i18n": {
+      "zh": {
+        "title": "不锈钢电动锚机 1500W",
+        "description": "不锈钢电动锚机 1500W，面向专业船舶采购的结构化产品样例。可按项目需求提供规格确认与出口贸易方案。此信息为原型演示数据。"
+      },
+      "en": {
+        "title": "1500W Stainless Electric Windlass",
+        "description": "1500W Stainless Electric Windlass, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
+      }
+    },
+    "media": [
+      "assets/media/equipment.svg",
+      "assets/media/equipment-detail.svg"
+    ],
+    "parameters": {
+      "compatible": "yacht",
+      "brand": "SEADECK",
+      "model": "W1500"
+    },
+    "certifications": [
+      {
+        "type": "CCS",
+        "number": "DEMO-CCS-0007"
+      }
+    ],
+    "compliance": {},
+    "supplier": {
+      "id": "s3",
+      "name": {
+        "zh": "蓝湾船舶技术有限公司",
+        "en": "Bluebay Marine Technology"
+      },
+      "country": "China",
+      "verified": true,
+      "products_count": 42
+    },
+    "trade": {
+      "moq": 10,
+      "unit": "set",
+      "lead_time": 42,
+      "incoterms": [
+        "FOB",
+        "CIF",
+        "EXW"
+      ],
+      "price_min": 850,
+      "price_max": 977,
+      "currency": "USD"
+    },
+    "updated_at": "2026-10-02T08:00:00Z",
+    "status": "published"
+  },
+  {
+    "id": "p08",
+    "category_id": "equipment",
+    "subcategory_id": "navigation",
+    "i18n": {
+      "zh": {
+        "title": "AIS 船舶自动识别系统",
+        "description": "AIS 船舶自动识别系统，面向专业船舶采购的结构化产品样例。可按项目需求提供规格确认与出口贸易方案。此信息为原型演示数据。"
+      },
+      "en": {
+        "title": "Class B AIS Transponder",
+        "description": "Class B AIS Transponder, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
+      }
+    },
+    "media": [
+      "assets/media/equipment.svg",
+      "assets/media/equipment-detail.svg"
+    ],
+    "parameters": {
+      "compatible": "all",
+      "brand": "NAVSEA",
+      "model": "AIS-B"
+    },
+    "certifications": [
+      {
+        "type": "ABS",
+        "number": "DEMO-ABS-0008"
+      }
+    ],
+    "compliance": {},
+    "supplier": {
+      "id": "s4",
+      "name": {
+        "zh": "海固海事服务有限公司",
+        "en": "SeaGuard Marine Services"
+      },
+      "country": "China",
+      "verified": true,
+      "products_count": 45
+    },
+    "trade": {
+      "moq": 10,
+      "unit": "set",
+      "lead_time": 44,
+      "incoterms": [
+        "FOB",
+        "CIF",
+        "EXW"
+      ],
+      "price_min": 420,
+      "price_max": 483,
+      "currency": "USD"
+    },
+    "updated_at": "2026-10-08T08:00:00Z",
+    "status": "published"
+  },
+  {
+    "id": "p09",
+    "category_id": "coatings",
+    "subcategory_id": "antifouling",
+    "i18n": {
+      "zh": {
+        "title": "蓝盾低 VOC 无锡防污涂料",
+        "description": "蓝盾低 VOC 无锡防污涂料，面向专业船舶采购的结构化产品样例。可按项目需求提供规格确认与出口贸易方案。此信息为原型演示数据。"
+      },
+      "en": {
+        "title": "BlueShield Low-VOC Antifouling",
+        "description": "BlueShield Low-VOC Antifouling, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
+      }
+    },
+    "media": [
+      "assets/media/coatings.svg",
+      "assets/media/coatings-detail.svg"
+    ],
+    "parameters": {},
+    "certifications": [
+      {
+        "type": "DNV",
+        "number": "DEMO-DNV-0009"
+      }
+    ],
+    "compliance": {
+      "afs": "compliant",
+      "voc": "low",
+      "msds": "assets/media/msds-sample.txt",
+      "un_number": "UN 1263",
+      "hazard_class": "3",
+      "transport": "IMDG / Sea freight only"
+    },
+    "supplier": {
+      "id": "s1",
+      "name": {
+        "zh": "海岚船艇制造有限公司",
+        "en": "Hailan Marine Manufacturing"
+      },
+      "country": "China",
+      "verified": true,
+      "products_count": 48
+    },
+    "trade": {
+      "moq": 10,
+      "unit": "kg",
+      "lead_time": 46,
+      "incoterms": [
+        "FOB",
+        "CIF",
+        "EXW"
+      ],
+      "price_min": 28,
+      "price_max": 32,
+      "currency": "USD"
+    },
+    "updated_at": "2026-10-07T08:00:00Z",
+    "status": "published"
+  },
+  {
+    "id": "p10",
+    "category_id": "coatings",
+    "subcategory_id": "primer",
+    "i18n": {
+      "zh": {
+        "title": "海固环氧防腐底漆",
+        "description": "海固环氧防腐底漆，面向专业船舶采购的结构化产品样例。可按项目需求提供规格确认与出口贸易方案。此信息为原型演示数据。"
+      },
+      "en": {
+        "title": "SeaGuard Epoxy Marine Primer",
+        "description": "SeaGuard Epoxy Marine Primer, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
+      }
+    },
+    "media": [
+      "assets/media/coatings.svg",
+      "assets/media/coatings-detail.svg"
+    ],
+    "parameters": {},
+    "certifications": [
+      {
+        "type": "CCS",
+        "number": "DEMO-CCS-0010"
+      }
+    ],
+    "compliance": {
+      "afs": "compliant",
+      "voc": "low",
+      "msds": "assets/media/msds-sample.txt",
+      "un_number": "UN 1263",
+      "hazard_class": "3",
+      "transport": "IMDG / Sea freight only"
+    },
+    "supplier": {
+      "id": "s2",
+      "name": {
+        "zh": "远航海洋装备有限公司",
+        "en": "Voyager Ocean Equipment"
+      },
+      "country": "China",
+      "verified": true,
+      "products_count": 51
+    },
+    "trade": {
+      "moq": 10,
+      "unit": "kg",
+      "lead_time": 48,
+      "incoterms": [
+        "FOB",
+        "CIF",
+        "EXW"
+      ],
+      "price_min": 18,
+      "price_max": 21,
+      "currency": "USD"
+    },
+    "updated_at": "2026-10-06T08:00:00Z",
+    "status": "published"
+  },
+  {
+    "id": "p11",
+    "category_id": "coatings",
+    "subcategory_id": "care",
+    "i18n": {
+      "zh": {
+        "title": "游艇甲板养护清洁剂",
+        "description": "游艇甲板养护清洁剂，面向专业船舶采购的结构化产品样例。可按项目需求提供规格确认与出口贸易方案。此信息为原型演示数据。"
+      },
+      "en": {
+        "title": "Yacht Deck Care Cleaner",
+        "description": "Yacht Deck Care Cleaner, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
+      }
+    },
+    "media": [
+      "assets/media/coatings.svg",
+      "assets/media/coatings-detail.svg"
+    ],
+    "parameters": {},
+    "certifications": [
+      {
+        "type": "ABS",
+        "number": "DEMO-ABS-0011"
+      }
+    ],
+    "compliance": {
+      "afs": "compliant",
+      "voc": "low",
+      "msds": "assets/media/msds-sample.txt",
+      "un_number": "UN 1263",
+      "hazard_class": "3",
+      "transport": "IMDG / Sea freight only"
+    },
+    "supplier": {
+      "id": "s3",
+      "name": {
+        "zh": "蓝湾船舶技术有限公司",
+        "en": "Bluebay Marine Technology"
+      },
+      "country": "China",
+      "verified": true,
+      "products_count": 54
+    },
+    "trade": {
+      "moq": 10,
+      "unit": "kg",
+      "lead_time": 50,
+      "incoterms": [
+        "FOB",
+        "CIF",
+        "EXW"
+      ],
+      "price_min": 12,
+      "price_max": 14,
+      "currency": "USD"
+    },
+    "updated_at": "2026-10-05T08:00:00Z",
+    "status": "published"
+  },
+  {
+    "id": "p12",
+    "category_id": "coatings",
+    "subcategory_id": "antifouling",
+    "i18n": {
+      "zh": {
+        "title": "防污涂层样例 · 合规待补全",
+        "description": "防污涂层样例 · 合规待补全，面向专业船舶采购的结构化产品样例。可按项目需求提供规格确认与出口贸易方案。此信息为原型演示数据。"
+      },
+      "en": {
+        "title": "Antifouling Sample · Compliance Pending",
+        "description": "Antifouling Sample · Compliance Pending, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
+      }
+    },
+    "media": [
+      "assets/media/coatings.svg",
+      "assets/media/coatings-detail.svg"
+    ],
+    "parameters": {},
+    "certifications": [
+      {
+        "type": "DNV",
+        "number": "DEMO-DNV-0012"
+      }
+    ],
+    "compliance": {
+      "afs": "pending",
+      "voc": "standard"
+    },
+    "supplier": {
+      "id": "s4",
+      "name": {
+        "zh": "海固海事服务有限公司",
+        "en": "SeaGuard Marine Services"
+      },
+      "country": "China",
+      "verified": true,
+      "products_count": 57
+    },
+    "trade": {
+      "moq": 10,
+      "unit": "kg",
+      "lead_time": 52,
+      "incoterms": [
+        "FOB",
+        "CIF",
+        "EXW"
+      ],
+      "price_min": 22,
+      "price_max": 25,
+      "currency": "USD"
+    },
+    "updated_at": "2026-10-04T08:00:00Z",
+    "status": "published"
+  },
+  {
+    "id": "p13",
+    "category_id": "services",
+    "subcategory_id": "inspection",
+    "i18n": {
+      "zh": {
+        "title": "船舶交付前检验服务",
+        "description": "船舶交付前检验服务，面向专业船舶采购的结构化产品样例。可按项目需求提供规格确认与出口贸易方案。此信息为原型演示数据。"
+      },
+      "en": {
+        "title": "Pre-delivery Vessel Inspection",
+        "description": "Pre-delivery Vessel Inspection, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
+      }
+    },
+    "media": [
+      "assets/media/services.svg",
+      "assets/media/services-detail.svg"
+    ],
+    "parameters": {
+      "service_type": "inspection",
+      "region": "asia",
+      "content": {
+        "zh": "船体、动力及安全系统现场检验",
+        "en": "On-site hull, propulsion and safety inspection"
+      }
+    },
+    "certifications": [
+      {
+        "type": "CCS",
+        "number": "DEMO-CCS-0013"
+      }
+    ],
+    "compliance": {},
+    "supplier": {
+      "id": "s1",
+      "name": {
+        "zh": "海岚船艇制造有限公司",
+        "en": "Hailan Marine Manufacturing"
+      },
+      "country": "China",
+      "verified": true,
+      "products_count": 60
+    },
+    "trade": {
+      "moq": 1,
+      "unit": "set",
+      "lead_time": 54,
+      "incoterms": [
+        "FOB",
+        "CIF",
+        "EXW"
+      ],
+      "price_min": 1800,
+      "price_max": 2070,
+      "currency": "USD"
+    },
+    "updated_at": "2026-10-03T08:00:00Z",
+    "status": "published"
+  },
+  {
+    "id": "p14",
+    "category_id": "services",
+    "subcategory_id": "logistics",
+    "i18n": {
+      "zh": {
+        "title": "游艇跨境运输与清关",
+        "description": "游艇跨境运输与清关，面向专业船舶采购的结构化产品样例。可按项目需求提供规格确认与出口贸易方案。此信息为原型演示数据。"
+      },
+      "en": {
+        "title": "Cross-border Yacht Shipping",
+        "description": "Cross-border Yacht Shipping, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
+      }
+    },
+    "media": [
+      "assets/media/services.svg",
+      "assets/media/services-detail.svg"
+    ],
+    "parameters": {
+      "service_type": "logistics",
+      "region": "global",
+      "content": {
+        "zh": "吊装、海运及目的港清关协调",
+        "en": "Lifting, sea transport and port customs coordination"
+      }
+    },
+    "certifications": [
+      {
+        "type": "ABS",
+        "number": "DEMO-ABS-0014"
+      }
+    ],
+    "compliance": {},
+    "supplier": {
+      "id": "s2",
+      "name": {
+        "zh": "远航海洋装备有限公司",
+        "en": "Voyager Ocean Equipment"
+      },
+      "country": "China",
+      "verified": true,
+      "products_count": 63
+    },
+    "trade": {
+      "moq": 1,
+      "unit": "set",
+      "lead_time": 56,
+      "incoterms": [
+        "FOB",
+        "CIF",
+        "EXW"
+      ],
+      "price_min": 2500,
+      "price_max": 2875,
+      "currency": "USD"
+    },
+    "updated_at": "2026-10-02T08:00:00Z",
+    "status": "published"
+  },
+  {
+    "id": "p15",
+    "category_id": "services",
+    "subcategory_id": "design",
+    "i18n": {
+      "zh": {
+        "title": "船舶结构设计与技术咨询",
+        "description": "船舶结构设计与技术咨询，面向专业船舶采购的结构化产品样例。可按项目需求提供规格确认与出口贸易方案。此信息为原型演示数据。"
+      },
+      "en": {
+        "title": "Marine Structural Design",
+        "description": "Marine Structural Design, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
+      }
+    },
+    "media": [
+      "assets/media/services.svg",
+      "assets/media/services-detail.svg"
+    ],
+    "parameters": {
+      "service_type": "design",
+      "region": "global",
+      "content": {
+        "zh": "结构方案、工程图纸及技术咨询",
+        "en": "Structural concepts, engineering drawings and consulting"
+      }
+    },
+    "certifications": [
+      {
+        "type": "DNV",
+        "number": "DEMO-DNV-0015"
+      }
+    ],
+    "compliance": {},
+    "supplier": {
+      "id": "s3",
+      "name": {
+        "zh": "蓝湾船舶技术有限公司",
+        "en": "Bluebay Marine Technology"
+      },
+      "country": "China",
+      "verified": true,
+      "products_count": 66
+    },
+    "trade": {
+      "moq": 1,
+      "unit": "set",
+      "lead_time": 58,
+      "incoterms": [
+        "FOB",
+        "CIF",
+        "EXW"
+      ],
+      "price_min": 3500,
+      "price_max": 4025,
+      "currency": "USD"
+    },
+    "updated_at": "2026-10-08T08:00:00Z",
+    "status": "published"
+  },
+  {
+    "id": "p16",
+    "category_id": "services",
+    "subcategory_id": "inspection",
+    "i18n": {
+      "zh": {
+        "title": "欧洲目的港验船与交付",
+        "description": "欧洲目的港验船与交付，面向专业船舶采购的结构化产品样例。可按项目需求提供规格确认与出口贸易方案。此信息为原型演示数据。"
+      },
+      "en": {
+        "title": "European Port Survey & Delivery",
+        "description": "European Port Survey & Delivery, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
+      }
+    },
+    "media": [
+      "assets/media/services.svg",
+      "assets/media/services-detail.svg"
+    ],
+    "parameters": {
+      "service_type": "inspection",
+      "region": "europe",
+      "content": {
+        "zh": "目的港检验及交付协调",
+        "en": "Destination port survey and delivery coordination"
+      }
+    },
+    "certifications": [
+      {
+        "type": "CCS",
+        "number": "DEMO-CCS-0016"
+      }
+    ],
+    "compliance": {},
+    "supplier": {
+      "id": "s4",
+      "name": {
+        "zh": "海固海事服务有限公司",
+        "en": "SeaGuard Marine Services"
+      },
+      "country": "China",
+      "verified": true,
+      "products_count": 69
+    },
+    "trade": {
+      "moq": 1,
+      "unit": "set",
+      "lead_time": 60,
+      "incoterms": [
+        "FOB",
+        "CIF",
+        "EXW"
+      ],
+      "price_min": 2200,
+      "price_max": 2530,
+      "currency": "USD"
+    },
+    "updated_at": "2026-10-07T08:00:00Z",
+    "status": "published"
+  }
+]
