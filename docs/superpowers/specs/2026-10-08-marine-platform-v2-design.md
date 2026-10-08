@@ -1,6 +1,6 @@
 # MARINEX 买卖双方平台第二版设计
 
-日期：2026-10-08。状态：待用户审阅。依据用户“继续完善”及 platform-optimization-review.md；保持纯 HTML/CSS/JS 静态交付，准备未来后端接入。当前会话实施方式沿用用户此前选择。
+日期：2026-10-08。状态：用户已于本会话确认。依据用户“继续完善”及 platform-optimization-review.md；保持纯 HTML/CSS/JS 静态交付，准备未来后端接入。当前会话实施方式沿用用户此前选择。
 
 ## 目标与方案
 
