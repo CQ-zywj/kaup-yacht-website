@@ -55,9 +55,12 @@ const AccountUI = {
     const a = document.createElement("div");
     a.dataset.accountNav = "";
     a.className = "account-nav";
+    const authPage = document.body.dataset.page === "supplier-auth" ? "supplier-auth.html" : "buyer-auth.html";
+    const source = new URLSearchParams(location.search).get("return");
+    const authParams = source ? { return: MarineAccounts.safeReturn(source) } : {};
     a.innerHTML = u
       ? `<details class="account-menu"><summary aria-label="${U.t("accountMenu")}">${U.e(u.role === "supplier" ? u.company || u.name : u.name)} <small>${U.tr(u.role === "supplier" ? "identitySupplier" : "identityBuyer")}</small></summary><div>${u.role === "supplier" ? `<a href="${U.url("company.html")}">${U.tr("companyProfile")}</a><a href="${U.url("supplier.html")}">${U.tr("myProducts")}</a><a href="${U.url("inbox.html")}">${U.tr("inbox")}</a>` : `<button type="button" class="link-button" id="personal-center">${U.tr("personalCenter")}</button>`}<button type="button" id="sign-out" class="link-button">${U.tr("logout")}</button></div></details>`
-      : `<a href="${U.url("buyer-auth.html")}">${U.tr("buyerLogin")}</a><a href="${U.url("supplier-auth.html")}">${U.tr("supplierLogin")}</a>`;
+      : `<a href="${U.url(authPage, { ...authParams, tab: "login" })}">${U.tr("login")}</a><a href="${U.url(authPage, { ...authParams, tab: "register" })}">${U.tr("register")}</a>`;
     nav.append(a);
     a.querySelector("#personal-center")?.addEventListener("click", () =>
       U.notice("buyerAuthHint"),
