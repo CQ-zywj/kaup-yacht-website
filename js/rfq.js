@@ -73,7 +73,7 @@ if (rfqUser?.role !== "buyer") {
       updateSubcategories(product?.subcategory_id || "");
       files = [];
       document.getElementById("rfq-files").innerHTML = "";
-      U.notice("rfqSuccess", "rfqSuccessDesc", "products.html", "backBrowse");
+      U.notice("rfqSuccess", "rfqSuccessDesc", "my-rfq.html", "viewMyInquiries", [{ page: "products.html", label: "backBrowse" }]);
     }
   };
 }

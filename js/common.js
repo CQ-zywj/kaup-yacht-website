@@ -158,9 +158,9 @@ const U = (window.MarineUI = {
     const button = document.getElementById("language");
     if (button) button.textContent = this.t("language");
   },
-  notice(key, desc, link, label) {
+  notice(key, desc, link, label, extraLinks = []) {
     const modal = document.getElementById("feedback");
-    modal.innerHTML = `<div class="modal-body"><div class="success-icon">✓</div><h2>${this.tr(key)}</h2>${desc ? `<p>${this.tr(desc)}</p>` : ""}<div class="actions">${link ? `<a class="button" href="${this.url(link)}">${this.tr(label)}</a>` : ""}<button type="button" class="button secondary" id="close-feedback">${this.tr("close")}</button></div></div>`;
+    modal.innerHTML = `<div class="modal-body"><div class="success-icon">✓</div><h2>${this.tr(key)}</h2>${desc ? `<p>${this.tr(desc)}</p>` : ""}<div class="actions">${link ? `<a class="button" href="${this.url(link)}">${this.tr(label)}</a>` : ""}${extraLinks.map(item => `<a class="button secondary" href="${this.url(item.page)}">${this.tr(item.label)}</a>`).join("")}<button type="button" class="button secondary" id="close-feedback">${this.tr("close")}</button></div></div>`;
     modal.showModal();
     document.getElementById("close-feedback").onclick = () => modal.close();
   },

@@ -9,6 +9,7 @@ test("all pages use existing local classic scripts and stylesheet without build"
     "product",
     "publish",
     "rfq",
+    "my-rfq",
     "inbox",
     "supplier",
     "buyer-auth",
@@ -19,7 +20,7 @@ test("all pages use existing local classic scripts and stylesheet without build"
     assert.match(html, /name="viewport"/);
     assert.doesNotMatch(html, /type="module"/);
     for (const [, path] of html.matchAll(
-      /(?:src|href)="((?:js|mock|assets)\/[^"?]+)"/g,
+      /(?:src|href)="((?:js|mock|assets)\/[^"?]+)(?:\?[^"\s]*)?"/g,
     ))
       assert.ok(fs.existsSync(path), page + ": " + path);
   }

@@ -56,6 +56,18 @@ const AccountUI = {
   },
   refreshContext() {
     const policy = this.permissions();
+    const nav = document.querySelector(".main-nav .container");
+    if (nav) {
+      nav.querySelector('[data-buyer-nav]')?.remove();
+      if (policy.role === 'buyer') {
+        const link = document.createElement('a');
+        link.dataset.buyerNav = '';
+        link.href = U.url('my-rfq.html');
+        link.innerHTML = U.tr('myInquiries');
+        link.classList.toggle('active', document.body.dataset.page === 'my-rfq');
+        nav.insertBefore(link, nav.querySelector('.nav-spacer'));
+      }
+    }
     const mainAction = document.getElementById("primary-action");
     if (mainAction) {
       mainAction.href = U.url(policy.role === "buyer" ? "rfq.html" : "publish.html");
@@ -63,7 +75,7 @@ const AccountUI = {
     }
     const footer = document.getElementById("workspace-links");
     if (footer) footer.innerHTML = policy.role === "buyer"
-      ? `<h4>${U.tr("buyerWorkspace")}</h4><a href="${U.url("products.html")}">${U.tr("browse")}</a><a href="${U.url("rfq.html")}">${U.tr("generalRfq")}</a>`
+      ? `<h4>${U.tr("buyerWorkspace")}</h4><a href="${U.url("my-rfq.html")}">${U.tr("myInquiries")}</a><a href="${U.url("products.html")}">${U.tr("browse")}</a><a href="${U.url("rfq.html")}">${U.tr("generalRfq")}</a>`
       : `<h4>${U.tr("supplier")}</h4><a href="${U.url("company.html")}">${U.tr("companyProfile")}</a><a href="${U.url("publish.html")}">${U.tr("publish")}</a><a href="${U.url("inbox.html")}">${U.tr("inbox")}</a><a href="${U.url("supplier.html")}">${U.tr("myProducts")}</a>`;
     if (document.body.dataset.page === "home") {
       const supplier = policy.role === "supplier";
@@ -81,6 +93,7 @@ const AccountUI = {
       // Public browsing stays available to both roles. Work actions follow identity.
       if (["publish.html", "supplier.html", "inbox.html", "company.html"].includes(filename)) link.hidden = !policy.sell;
       if (filename === "rfq.html") link.hidden = !policy.buy;
+      if (filename === "my-rfq.html") link.hidden = policy.role !== "buyer";
     }
     U.translate();
   },
@@ -96,7 +109,7 @@ const AccountUI = {
     const source = new URLSearchParams(location.search).get("return");
     const authParams = source ? { return: MarineAccounts.safeReturn(source) } : {};
     a.innerHTML = u
-      ? `<details class="account-menu"><summary aria-label="${U.t("accountMenu")}">${U.e(u.role === "supplier" ? u.company || u.name : u.name)} <small>${U.tr(u.role === "supplier" ? "identitySupplier" : "identityBuyer")}</small></summary><div>${u.role === "supplier" ? `<a href="${U.url("company.html")}">${U.tr("companyProfile")}</a><a href="${U.url("supplier.html")}">${U.tr("myProducts")}</a><a href="${U.url("inbox.html")}">${U.tr("inbox")}</a>` : `<a href="${U.url("rfq.html")}">${U.tr("generalRfq")}</a>`}<button type="button" id="sign-out" class="link-button">${U.tr("logout")}</button></div></details>`
+      ? `<details class="account-menu"><summary aria-label="${U.t("accountMenu")}">${U.e(u.role === "supplier" ? u.company || u.name : u.name)} <small>${U.tr(u.role === "supplier" ? "identitySupplier" : "identityBuyer")}</small></summary><div>${u.role === "supplier" ? `<a href="${U.url("company.html")}">${U.tr("companyProfile")}</a><a href="${U.url("supplier.html")}">${U.tr("myProducts")}</a><a href="${U.url("inbox.html")}">${U.tr("inbox")}</a>` : `<a href="${U.url("my-rfq.html")}">${U.tr("myInquiries")}</a><a href="${U.url("rfq.html")}">${U.tr("generalRfq")}</a>`}<button type="button" id="sign-out" class="link-button">${U.tr("logout")}</button></div></details>`
       : `<a href="${U.url(authPage, { ...authParams, tab: "login" })}">${U.tr("login")}</a><a href="${U.url(authPage, { ...authParams, tab: "register" })}">${U.tr("register")}</a>`;
     nav.append(a);
     a.querySelector("#personal-center")?.addEventListener("click", () =>
