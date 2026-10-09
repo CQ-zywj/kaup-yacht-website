@@ -1,3 +1,5 @@
+(() => {
+if (!AccountUI.requireSupplier()) return;
 let state = { status: "", from: "", to: "", sort: "newest" };
 let selectedId = null;
 document.getElementById("main").innerHTML =
@@ -27,7 +29,7 @@ function renderList() {
     ? list
         .map((r) => {
           const p = U.product(r.product_id);
-          return `<button type="button" class="inquiry-item" data-inquiry="${U.e(r.id)}"><img src="${U.e(p ? U.img(p) : "assets/media/services.svg")}" alt=""><div><h3>${p ? U.bi({ zh: p.i18n.zh.title, en: p.i18n.en.title }) : U.tr("general")}</h3><p>${U.e(r.buyer.company)} · ${U.e(r.buyer.country)}</p></div><div class="inquiry-meta"><p>${U.tr("quantity")} ${U.e(r.quantity)} · ${U.e(r.target_country)}</p><p>${U.e(U.date(r.created_at))}</p></div><div class="status-cell"><span class="status ${U.e(r.status)}">${U.tr(r.status)}</span></div></button>`;
+          return `<button type="button" class="inquiry-item" data-inquiry="${U.e(r.id)}"><img src="${U.e(p ? U.img(p) : "assets/media/services.svg")}" alt=""><div><h3>${p ? U.bi({ zh: p.i18n.zh.title, en: p.i18n.en.title }) : U.tr("general")}</h3><p>${U.e(r.buyer.company)} · ${U.e(r.buyer.country)}</p></div><div class="inquiry-meta"><p>${U.tr("quantity")} ${U.e(r.quantity)} · ${U.e(r.target_country || "")}</p><p>${U.e(U.date(r.created_at))}</p></div><div class="status-cell"><span class="status ${U.e(r.status)}">${U.tr(r.status)}</span></div></button>`;
         })
         .join("")
     : U.empty("noInquiries", "noInquiriesHint", "rfq.html", "generalRfq");
@@ -54,8 +56,9 @@ function openInquiry(id) {
     ["company", row.buyer.company],
     ["buyerCountry", row.buyer.country],
     ["quantity", row.quantity],
-    ["targetCountry", row.target_country],
-    ["delivery", row.expected_delivery],
+    ...(row.target_country ? [["targetCountry", row.target_country]] : []),
+    ...(row.category_id ? [["category", U.cat(row.category_id)?.name?.[U.lang] || row.category_id], ["subcategory", U.cat(row.category_id)?.subcategories.find(c => c.id === row.subcategory_id)?.name?.[U.lang] || row.subcategory_id]] : []),
+    ["delivery", row.expected_delivery || "—"],
     ["terms", row.incoterms],
     ["sentAt", U.date(row.created_at)],
   ]
@@ -108,3 +111,5 @@ window.addEventListener("storage", (e) => {
 window.addEventListener("focus", renderList);
 window.addEventListener("languagechange", renderList);
 renderList();
+
+})();

@@ -149,3 +149,9 @@ test("relevance prioritizes title match over description-only match", () => {
     };
   assert.equal(C.sortProducts([b, a], "relevance", "yacht")[0].id, "a");
 });
+test('new inquiries can omit target country and delivery and retain product taxonomy', () => {
+ const inquiry = { id:'rfq-taxonomy', buyer:{company:'Demo',country:'China'}, quantity:2, category_id:'boats', subcategory_id:'motor-yacht', message:'Demo request', status:'submitted', attachments:[], created_at:new Date().toISOString() };
+ const records = C.readArray({getItem:()=>JSON.stringify([inquiry])},'rfq_drafts');
+ assert.equal(records[0].category_id,'boats');
+ assert.equal(records[0].expected_delivery,undefined);
+});

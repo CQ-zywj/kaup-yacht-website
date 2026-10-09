@@ -1965,3 +1965,6 @@ body[data-page="supplier-auth"] .page-intro { padding: 0; margin: 24px 0; }
 .auth-panel button.text-link { background: none; border: 0; padding: 0; text-align: left; font: inherit; font-size: 12px; color: var(--ocean); }
 .auth-panel button.text-link:hover { text-decoration: underline; }
 .auth-panel #auth-error:empty { display: none; }
+
+/* Role-specific actions are removed from layout as well as accessibility. */
+[hidden] { display: none !important; }

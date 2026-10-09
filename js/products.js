@@ -87,6 +87,7 @@ function renderFilters() {
       }),
   );
   U.translate();
+  AccountUI.refreshContext();
 }
 function reset() {
   filters = { category: "", subcategory: "", q: "", cert: [], params: {} };
@@ -127,6 +128,7 @@ function renderResults() {
   });
   sync();
   U.translate();
+  AccountUI.refreshContext();
 }
 document.getElementById("main").innerHTML =
   `<div class="container"><div class="page-intro" id="catalog-top"><div class="eyebrow">${U.tr("marineMarketplace")}</div><h1>${U.tr("market")}</h1><p>${U.tr("featuredDesc")}</p></div><button type="button" class="button secondary mobile-filter-button" id="toggle-filters" aria-expanded="false">${U.tr("filters")} ☰</button><div class="catalog-layout"><aside class="filters" id="filter-panel"></aside><section><form id="catalog-form" class="header-search" style="max-width:none;margin-bottom:16px"><label class="sr-only" for="catalog-search">${U.tr("search")}</label><input id="catalog-search" data-i18n-placeholder="search" placeholder="${U.t("search")}" value="${U.e(filters.q)}"><button>${U.tr("searchButton")}</button></form><div class="catalog-toolbar"><span class="count" id="result-count" aria-live="polite"></span><label>${U.tr("sort")} <select id="sort"><option value="updated" data-i18n="updated"></option><option value="relevance" data-i18n="relevance"></option><option value="price" data-i18n="priceSort"></option></select></label></div><div id="results"></div><div class="pagination" id="pagination"></div></section></div></div>`;

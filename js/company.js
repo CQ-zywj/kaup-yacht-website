@@ -9,6 +9,7 @@ try {
   profileFailed = true;
 }
 function profileView() {
+  if (!AccountUI.requireSupplier()) return;
   const user = AccountUI.getUser();
   if (profileFailed) {
     document.getElementById("main").innerHTML =

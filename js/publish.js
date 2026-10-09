@@ -1,4 +1,5 @@
 (() => {
+  if (!AccountUI.requireSupplier()) return;
   const params = new URLSearchParams(location.search);
   let draftId = params.get("draft");
   const stored = U.read("draft_products");

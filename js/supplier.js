@@ -1,4 +1,5 @@
 function render() {
+  if (!AccountUI.requireSupplier()) return;
   const user = AccountUI.getUser();
   let ownId;
   try {

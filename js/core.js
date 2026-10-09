@@ -117,7 +117,7 @@
             !str(r.buyer.company) ||
             !str(r.buyer.country) ||
             !str(r.message) ||
-            !str(r.target_country) ||
+            (r.target_country !== undefined && !str(r.target_country)) ||
             !Number.isFinite(r.quantity) ||
             r.quantity <= 0 ||
             !Number.isFinite(Date.parse(r.created_at)) ||

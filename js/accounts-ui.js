@@ -47,6 +47,43 @@ const AccountUI = {
       return null;
     }
   },
+  permissions() { return MarineAccounts.permissions(this.getUser()); },
+  requireSupplier() {
+    if (this.permissions().sell) return true;
+    document.getElementById("main").innerHTML = `<div class="container section">${U.empty("sellerOnlyTitle", "sellerOnlyHint", "rfq.html", "generalRfq")}<a class="button secondary" href="${U.url("supplier-auth.html", { return: location.pathname.split("/").pop() + location.search })}">${U.tr("switchSupplier")}</a></div>`;
+    U.translate();
+    return false;
+  },
+  refreshContext() {
+    const policy = this.permissions();
+    const mainAction = document.getElementById("primary-action");
+    if (mainAction) {
+      mainAction.href = U.url(policy.role === "buyer" ? "rfq.html" : "publish.html");
+      mainAction.innerHTML = `${U.tr(policy.role === "buyer" ? "publishPurchase" : "publish")} <span>↗</span>`;
+    }
+    const footer = document.getElementById("workspace-links");
+    if (footer) footer.innerHTML = policy.role === "buyer"
+      ? `<h4>${U.tr("buyerWorkspace")}</h4><a href="${U.url("products.html")}">${U.tr("browse")}</a><a href="${U.url("rfq.html")}">${U.tr("generalRfq")}</a>`
+      : `<h4>${U.tr("supplier")}</h4><a href="${U.url("company.html")}">${U.tr("companyProfile")}</a><a href="${U.url("publish.html")}">${U.tr("publish")}</a><a href="${U.url("inbox.html")}">${U.tr("inbox")}</a><a href="${U.url("supplier.html")}">${U.tr("myProducts")}</a>`;
+    if (document.body.dataset.page === "home") {
+      const supplier = policy.role === "supplier";
+      for (const [selector, buyerKey, sellerKey] of [[".hero-copy .eyebrow", "heroNote", "supplierHeroNote"], [".hero-copy h1", "heroTitle", "supplierHeroTitle"], [".hero-copy > p", "heroDesc", "supplierHeroDesc"], [".quote-banner h2", "quoteTitle", "supplierQuoteTitle"], [".quote-banner p", "quoteDesc", "supplierQuoteDesc"]]) {
+        const node = document.querySelector(selector);
+        if (node) node.innerHTML = U.tr(supplier ? sellerKey : buyerKey);
+      }
+      const heroActions = document.querySelector(".hero-actions");
+      if (heroActions) heroActions.innerHTML = `<a class="button" href="${U.url(supplier ? "publish.html" : "products.html")}">${U.tr(supplier ? "publish" : "browse")} →</a><a class="button secondary" href="${U.url(supplier ? "inbox.html" : "rfq.html")}">${U.tr(supplier ? "inbox" : "generalRfq")}</a>`;
+      const quote = document.querySelector(".quote-banner > a");
+      if (quote) { quote.href = U.url(supplier ? "publish.html" : "rfq.html"); quote.innerHTML = U.tr(supplier ? "publish" : "generalRfq") + " →"; }
+    }
+    for (const link of document.querySelectorAll('a[href]')) {
+      const filename = new URL(link.href, location.href).pathname.split('/').pop();
+      // Public browsing stays available to both roles. Work actions follow identity.
+      if (["publish.html", "supplier.html", "inbox.html", "company.html"].includes(filename)) link.hidden = !policy.sell;
+      if (filename === "rfq.html") link.hidden = !policy.buy;
+    }
+    U.translate();
+  },
   refreshHeader() {
     const nav = document.querySelector(".main-nav .container");
     if (!nav) return;
@@ -59,7 +96,7 @@ const AccountUI = {
     const source = new URLSearchParams(location.search).get("return");
     const authParams = source ? { return: MarineAccounts.safeReturn(source) } : {};
     a.innerHTML = u
-      ? `<details class="account-menu"><summary aria-label="${U.t("accountMenu")}">${U.e(u.role === "supplier" ? u.company || u.name : u.name)} <small>${U.tr(u.role === "supplier" ? "identitySupplier" : "identityBuyer")}</small></summary><div>${u.role === "supplier" ? `<a href="${U.url("company.html")}">${U.tr("companyProfile")}</a><a href="${U.url("supplier.html")}">${U.tr("myProducts")}</a><a href="${U.url("inbox.html")}">${U.tr("inbox")}</a>` : `<button type="button" class="link-button" id="personal-center">${U.tr("personalCenter")}</button>`}<button type="button" id="sign-out" class="link-button">${U.tr("logout")}</button></div></details>`
+      ? `<details class="account-menu"><summary aria-label="${U.t("accountMenu")}">${U.e(u.role === "supplier" ? u.company || u.name : u.name)} <small>${U.tr(u.role === "supplier" ? "identitySupplier" : "identityBuyer")}</small></summary><div>${u.role === "supplier" ? `<a href="${U.url("company.html")}">${U.tr("companyProfile")}</a><a href="${U.url("supplier.html")}">${U.tr("myProducts")}</a><a href="${U.url("inbox.html")}">${U.tr("inbox")}</a>` : `<a href="${U.url("rfq.html")}">${U.tr("generalRfq")}</a>`}<button type="button" id="sign-out" class="link-button">${U.tr("logout")}</button></div></details>`
       : `<a href="${U.url(authPage, { ...authParams, tab: "login" })}">${U.tr("login")}</a><a href="${U.url(authPage, { ...authParams, tab: "register" })}">${U.tr("register")}</a>`;
     nav.append(a);
     a.querySelector("#personal-center")?.addEventListener("click", () =>
@@ -74,7 +111,7 @@ const AccountUI = {
         U.notice("storageError");
       }
     });
-    U.translate();
+    this.refreshContext();
   },
   preview(input, target) {
     input.onchange = () => {
@@ -105,7 +142,12 @@ const AccountUI = {
   },
 };
 AccountUI.refreshHeader();
+let renderedRole = AccountUI.permissions().role;
+document.addEventListener("DOMContentLoaded", () => AccountUI.refreshContext());
 window.addEventListener("languagechange", () => AccountUI.refreshHeader());
 window.addEventListener("storage", (e) => {
-  if (["accounts", "current_user"].includes(e.key)) AccountUI.refreshHeader();
+  if (["accounts", "current_user"].includes(e.key)) {
+    if (renderedRole !== AccountUI.permissions().role) location.reload();
+    else AccountUI.refreshHeader();
+  }
 });

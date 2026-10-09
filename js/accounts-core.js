@@ -1,5 +1,9 @@
 (function (root) {
   const A = {
+    permissions(user) {
+      const role = ["buyer", "supplier"].includes(user?.role) ? user.role : "guest";
+      return { role, buy: role !== "supplier", sell: role !== "buyer" };
+    },
     assertProfile(p) {
       if (!p || typeof p !== "object" || Array.isArray(p))
         throw Error("invalid profile");
