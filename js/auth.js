@@ -3,15 +3,30 @@ const role =
 const query = new URLSearchParams(location.search);
 let tab = query.get("tab") === "register" ? "register" : "login";
 const returnTo = MarineAccounts.safeReturn(query.get("return"));
+const authValues = { login: {}, register: {} };
+let authBusy = false;
+function rememberFields() {
+  const form = document.getElementById("auth-form");
+  if (!form) return;
+  const values = {};
+  for (const input of form.elements) {
+    if (!input.name || ["password", "confirm_password"].includes(input.name) || ["password", "file", "checkbox", "submit"].includes(input.type)) continue;
+    values[input.name] = input.value;
+  }
+  values.main_categories = [...form.querySelectorAll("[name=main_categories]:checked")].map(i => i.value);
+  authValues[tab] = values;
+}
 function categories(selected = []) {
   return `<div class="field full"><fieldset class="category-checks"><legend>${U.tr("mainCategories")} <b>*</b></legend>${MarineData.categories.map((c) => `<label><input type="checkbox" name="main_categories" value="${U.e(c.id)}" ${selected.includes(c.id) ? "checked" : ""}>${U.bi(c.name)}</label>`).join("")}</fieldset><small class="error" data-error="main_categories"></small></div>`;
 }
 function renderAuth() {
   document.getElementById("main").innerHTML =
-    `<div class="container auth-container"><div class="page-intro"><div class="eyebrow">${U.tr(role === "supplier" ? "identitySupplier" : "identityBuyer")}</div><h1>${U.tr(role === "supplier" ? "supplierLogin" : "buyerLogin")}</h1><p>${U.tr("loginDemo")}</p><a class="text-link" href="${U.url(role === "supplier" ? "buyer-auth.html" : "supplier-auth.html")}">${U.tr(role === "supplier" ? "buyerEntry" : "supplierEntry")} →</a></div><div class="auth-layout"><section class="panel"><div class="auth-tabs" role="tablist" aria-label="${U.t("login")}">${["login", "register"].map((t) => `<button type="button" role="tab" aria-selected="${tab === t}" class="${tab === t ? "selected" : ""}" data-tab="${t}">${U.tr(t)}</button>`).join("")}</div><form id="auth-form" novalidate><div class="form-grid">${tab === "login" ? `${U.field("email", "email", "text", "", true)}${U.field("password", "password", "password", "", true)}${role === "buyer" ? `<label class="field full check-label"><input type="checkbox" name="remember">${U.tr("remember")}</label>` : ""}` : role === "buyer" ? `${U.field("name", "name", "text", "", true)}${U.field("companyName", "company", "text", "", true)}${U.field("email", "email", "email", "", true)}${AccountUI.country("country")}${U.field("password", "password", "password", "", true)}${U.field("confirmPassword", "confirm_password", "password", "", true)}` : `${U.field("companyZh", "company", "text", "", true)}${U.field("companyEn", "company_en", "text", "", true)}${AccountUI.country("country")}${U.field("city", "city", "text", "", true)}${U.field("website", "website", "url")}<div class="field"><label for="business_type">${U.tr("businessType")}</label><select id="business_type" name="business_type">${["manufacturer", "trader", "agent", "serviceProvider"].map((k) => `<option value="${k}" data-i18n="${k}">${U.e(U.t(k))}</option>`).join("")}</select></div>${U.field("contact", "contact", "text", "", true)}${U.field("position", "position", "text", "", true)}${U.field("phone", "phone", "tel", "", true)}${U.field("email", "email", "email", "", true)}${categories()}<div class="field full"><label for="license">${U.tr("license")}</label><input id="license" type="file" accept="image/*"><div class="previews" id="license-preview"></div><p class="muted">${U.tr("profilePreviewHint")}</p></div>${U.field("password", "password", "password", "", true)}${U.field("confirmPassword", "confirm_password", "password", "", true)}`}${tab === "register" ? `<div class="field full"><label class="check-label"><input type="checkbox" name="terms">${U.tr("termsConsent")}</label><small class="error" data-error="terms"></small>${role === "supplier" ? `<label class="check-label"><input type="checkbox" name="supplier_terms">${U.tr("supplierConsent")}</label><small class="error" data-error="supplier_terms"></small>` : ""}<button type="button" class="text-link terms-placeholder">${U.tr("termsConsent")}</button></div>` : ""}</div><p id="auth-error" class="error" role="alert"></p><button class="button full-width" type="submit">${U.tr(tab === "login" ? "login" : role === "supplier" ? "registrationSubmit" : "register")}</button></form>${tab === "login" ? `<div class="auth-extras"><button type="button" class="text-link" id="forgot">${U.tr("forgot")}</button><button type="button" class="button secondary" id="demo-fill">${U.tr("demoFill")}</button></div><p class="muted">${role}@marinex.demo · Demo123!</p>` : ""}${role === "buyer" ? `<div class="oauth-buttons"><button class="button secondary" type="button" data-oauth>Google</button><button class="button secondary" type="button" data-oauth>LinkedIn</button></div>` : ""}</section><aside class="form-note"><h3>${U.tr(role === "supplier" ? "supplierInformation" : "buyerEntry")}</h3><p>${U.tr(role === "supplier" ? "reviewPeriod" : "buyerAuthHint")}</p><p>${U.tr("loginDemo")}</p></aside></div></div>`;
+    `<div class="container auth-container"><div class="page-intro"><div class="eyebrow">${U.tr(role === "supplier" ? "identitySupplier" : "identityBuyer")}</div><h1>${U.tr(tab === "register" ? "register" : "login")}</h1><p>${U.tr("loginDemo")}</p><nav class="auth-identities" aria-label="${U.t("accountMenu")}">${["buyer", "supplier"].map(r => `<a class="${r === role ? "active" : ""}" ${r === role ? 'aria-current="page"' : ""} href="${U.url(r + "-auth.html", { tab, ...(query.has("return") ? { return: returnTo } : {}) })}">${U.tr(r === "buyer" ? "buyerEntry" : "supplierEntry")}</a>`).join("")}</nav></div><div class="auth-layout"><section class="panel auth-panel"><div class="auth-tabs" role="tablist" aria-label="${U.t("login")}">${["login", "register"].map((t) => `<button type="button" role="tab" aria-selected="${tab === t}" tabindex="${tab === t ? "0" : "-1"}" class="${tab === t ? "selected" : ""}" data-tab="${t}">${U.tr(t)}</button>`).join("")}</div><form id="auth-form" novalidate><p class="form-required">${U.tr("requiredHint")}</p><div class="form-grid">${tab === "login" ? `${U.field("email", "email", "text", "", true)}${U.field("password", "password", "password", "", true)}${role === "buyer" ? `<label class="field full check-label"><input type="checkbox" name="remember">${U.tr("remember")}</label>` : ""}` : role === "buyer" ? `${U.field("name", "name", "text", "", true)}${U.field("companyName", "company", "text", "", true)}${U.field("email", "email", "email", "", true)}${AccountUI.country("country")}${U.field("password", "password", "password", "", true)}${U.field("confirmPassword", "confirm_password", "password", "", true)}` : `${U.field("companyZh", "company", "text", "", true)}${U.field("companyEn", "company_en", "text", "", true)}${AccountUI.country("country")}${U.field("city", "city", "text", "", true)}${U.field("website", "website", "url")}<div class="field"><label for="business_type">${U.tr("businessType")}</label><select id="business_type" name="business_type">${["manufacturer", "trader", "agent", "serviceProvider"].map((k) => `<option value="${k}" data-i18n="${k}">${U.e(U.t(k))}</option>`).join("")}</select></div>${U.field("contact", "contact", "text", "", true)}${U.field("position", "position", "text", "", true)}${U.field("phone", "phone", "tel", "", true)}${U.field("email", "email", "email", "", true)}${categories()}<div class="field full"><label for="license">${U.tr("license")}</label><input id="license" type="file" accept="image/*"><div class="previews" id="license-preview"></div><p class="muted">${U.tr("profilePreviewHint")}</p></div>${U.field("password", "password", "password", "", true)}${U.field("confirmPassword", "confirm_password", "password", "", true)}`}${tab === "register" ? `<div class="field full"><label class="check-label"><input type="checkbox" name="terms">${U.tr("termsConsent")}</label><small class="error" data-error="terms"></small>${role === "supplier" ? `<label class="check-label"><input type="checkbox" name="supplier_terms">${U.tr("supplierConsent")}</label><small class="error" data-error="supplier_terms"></small>` : ""}<button type="button" class="text-link terms-placeholder">${U.tr("viewTerms")}</button></div>` : ""}</div><p id="auth-error" class="error" role="alert"></p><button class="button full-width" type="submit">${U.tr(tab === "login" ? "login" : role === "supplier" ? "registrationSubmit" : "register")}</button></form>${tab === "login" ? `<div class="auth-extras"><button type="button" class="text-link" id="forgot">${U.tr("forgot")}</button><button type="button" class="button secondary" id="demo-fill">${U.tr("demoFill")}</button></div><p class="muted">${role}@marinex.demo · Demo123!</p>` : ""}${role === "buyer" ? `<div class="oauth-buttons"><button class="button secondary" type="button" data-oauth>Google</button><button class="button secondary" type="button" data-oauth>LinkedIn</button></div>` : ""}</section><aside class="auth-story"><div class="eyebrow">MARINEX · MARINE SOURCING</div><div class="marine-route" aria-hidden="true"><span></span><i></i><span></span></div><h2>${U.tr(role === "supplier" ? "authSupplierTitle" : "authBuyerTitle")}</h2><p>${U.tr(role === "supplier" ? "authSupplierCopy" : "authBuyerCopy")}</p><ul><li>${U.tr(role === "supplier" ? "authBenefitCompany" : "authBenefitSearch")}</li><li>${U.tr(role === "supplier" ? "authBenefitPublish" : "authBenefitInquiry")}</li></ul><div class="auth-demo-note">${U.tr("loginDemo")}</div></aside></div></div>`;
   document.querySelectorAll("[data-tab]").forEach(
     (b) =>
       (b.onclick = () => {
+        if (authBusy) return;
+        rememberFields();
         tab = b.dataset.tab;
         const url = new URL(location.href);
         url.searchParams.set("tab", tab);
@@ -19,6 +34,73 @@ function renderAuth() {
         renderAuth();
       }),
   );
+  const form = document.getElementById("auth-form");
+  const values = authValues[tab];
+  for (const [name, value] of Object.entries(values)) {
+    if (name === "main_categories") {
+      form.querySelectorAll("[name=main_categories]").forEach(i => i.checked = value.includes(i.value));
+    } else if (form.elements.namedItem(name)) form.elements.namedItem(name).value = value;
+  }
+  for (const b of document.querySelectorAll("[data-tab]")) b.onkeydown = e => {
+    if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) {
+      e.preventDefault();
+      const next = e.key === "Home" ? "login" : e.key === "End" ? "register" : tab === "login" ? "register" : "login";
+      document.querySelector(`[data-tab="${next}"]`).click();
+      document.querySelector(`[data-tab="${tab}"]`).focus();
+    }
+  };
+  if (tab === "register") {
+    const groups = role === "supplier" ? [["company", "enterpriseDetails"], ["contact", "contactDetails"], ["password", "accountDetails"]] : [["name", "contactDetails"], ["password", "accountDetails"]];
+    for (const [name, key] of groups) {
+      const heading = document.createElement("h3");
+      heading.className = "auth-group-title";
+      heading.innerHTML = U.tr(key);
+      form.elements.namedItem(name).closest(".field").before(heading);
+    }
+  }
+  for (const input of form.querySelectorAll("input")) {
+    if (input.type === "password") {
+      input.autocomplete = tab === "register" ? "new-password" : "current-password";
+      const wrapper = document.createElement("div");
+      wrapper.className = "password-control";
+      input.before(wrapper);
+      wrapper.append(input);
+      const toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.innerHTML = U.tr("showPassword");
+      toggle.setAttribute("aria-controls", input.id);
+      toggle.setAttribute("aria-pressed", "false");
+      toggle.onclick = () => {
+        const showing = input.type === "password";
+        input.type = showing ? "text" : "password";
+        toggle.innerHTML = U.tr(showing ? "hidePassword" : "showPassword");
+        toggle.setAttribute("aria-pressed", String(showing));
+      };
+      wrapper.append(toggle);
+      if (tab === "register" && input.name === "password") {
+        const hint = document.createElement("small");
+        hint.className = "input-hint";
+        hint.innerHTML = U.tr("passwordHint");
+        wrapper.after(hint);
+      }
+    } else if (input.name === "email") input.autocomplete = "username";
+    else if (input.name === "name" || input.name === "contact") input.autocomplete = "name";
+    else if (input.name === "company") input.autocomplete = "organization";
+  }
+  if (query.has("return")) {
+    const hint = document.createElement("p");
+    hint.className = "auth-return";
+    hint.innerHTML = U.tr("authReturnHint");
+    form.before(hint);
+  }
+  if (tab === "register") {
+    const hint = document.createElement("button");
+    hint.type = "button";
+    hint.className = "text-link demo-register-link";
+    hint.innerHTML = U.tr("demoAccessHint");
+    hint.onclick = () => document.querySelector('[data-tab="login"]').click();
+    form.after(hint);
+  }
   document
     .querySelectorAll("[data-oauth],#forgot")
     .forEach((b) => (b.onclick = () => U.notice("oauthPlaceholder")));
@@ -54,6 +136,8 @@ async function submitAuth(e) {
   if (!U.errors(f, errors)) return;
   const button = f.querySelector("[type=submit]");
   button.disabled = true;
+  authBusy = true;
+  document.querySelectorAll("[data-tab]").forEach(b => b.disabled = true);
   const error = document.getElementById("auth-error");
   error.textContent = "";
   try {
@@ -185,6 +269,8 @@ async function submitAuth(e) {
     error.innerHTML = U.tr("storageError");
   } finally {
     button.disabled = false;
+    authBusy = false;
+    document.querySelectorAll("[data-tab]").forEach(b => b.disabled = false);
   }
 }
 renderAuth();

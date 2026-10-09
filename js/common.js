@@ -205,7 +205,9 @@ const U = (window.MarineUI = {
       if (target) target.innerHTML = this.tr(key);
     });
     if (Object.keys(errors).length) {
-      form.querySelector(".invalid")?.focus();
+      const first = form.querySelector(".invalid");
+      first?.scrollIntoView?.({ block: "center", behavior: "instant" });
+      first?.focus();
       return false;
     }
     return true;

@@ -1883,3 +1883,85 @@ dialog::backdrop {
     flex-wrap: wrap;
   }
 }
+/* Marine workflow refinement: navy identity, quiet fields, clear actions. */
+input:focus, select:focus, textarea:focus { outline: 3px solid #087d8320; border-color: var(--ocean); }
+.field .error:empty { display: none; }
+.field input, .field select, .field textarea { transition: border-color .15s, box-shadow .15s; }
+body[data-page="buyer-auth"] .page-intro,
+body[data-page="supplier-auth"] .page-intro { margin: 26px 0 22px; }
+.auth-container { max-width: 1130px; }
+.auth-layout { grid-template-columns: minmax(260px, .85fr) minmax(0, 1.3fr); gap: 0; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 40px #102c400a; border: 1px solid var(--line); background: white; }
+.auth-panel { grid-column: 2; grid-row: 1; border: 0; border-radius: 0; margin: 0; padding: 30px 36px; }
+.auth-story { grid-column: 1; grid-row: 1; background: var(--navy); color: #d7e7ed; padding: 42px 32px; align-self: stretch; }
+.auth-story .eyebrow { color: #7dd4cf; font-size: 10px; letter-spacing: 1.7px; }
+.auth-story h2 { font-size: 30px; line-height: 1.35; color: white; margin: 35px 0 18px; letter-spacing: -.6px; }
+.auth-story p { font-size: 14px; line-height: 1.9; }
+.auth-story ul { list-style: none; padding: 0; margin: 30px 0; font-size: 13px; }
+.auth-story li { border-top: 1px solid #ffffff20; padding: 16px 0; }
+.auth-story li::before { content: '↗'; color: #7dd4cf; margin-right: 10px; }
+.auth-demo-note { border-top: 1px solid #ffffff20; padding-top: 20px; font-size: 12px; color: #9db7c4; }
+.marine-route { display: flex; align-items: center; margin-top: 40px; }
+.marine-route span { width: 12px; height: 12px; border: 2px solid #7dd4cf; border-radius: 50%; }
+.marine-route span:last-child { background: #7dd4cf; }
+.marine-route i { border-top: 1px dashed #7dd4cf80; flex: 1; }
+.auth-tabs { margin-bottom: 18px; gap: 4px; }
+.auth-tabs button { flex: 1; padding: 10px 18px; }
+.auth-tabs button.selected { background: #eff7f7; border-radius: 6px 6px 0 0; }
+.auth-panel .form-grid { gap: 16px 18px; }
+.form-required { color: var(--muted); font-size: 11px; margin: 0 0 14px; }
+.auth-group-title { grid-column: 1/-1; font-size: 13px; margin: 6px 0 0; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+.auth-panel .check-label { display: flex; font-weight: 400; margin-bottom: 8px; }
+.check-label input, .category-checks input { min-height: 18px; accent-color: var(--ocean); }
+.password-control { display: flex; position: relative; }
+.password-control input { padding-right: 62px; }
+.password-control button { position: absolute; right: 5px; top: 5px; bottom: 5px; padding: 0 8px; background: white; border: 0; color: var(--ocean); font-size: 12px; border-radius: 3px; }
+.input-hint { display: block; font-size: 11px; color: var(--muted); margin-top: 5px; }
+.auth-return { font-size: 12px; padding: 10px 12px; background: #eff7f7; border-left: 3px solid var(--ocean); }
+.auth-panel .full-width { margin-top: 12px; min-height: 46px; }
+.auth-panel .oauth-buttons { border-top: 1px solid var(--line); padding-top: 18px; margin-bottom: 0; }
+.auth-panel .oauth-buttons .button { flex: 1; font-size: 12px; }
+.demo-register-link { display: block; font-size: 12px; margin-top: 18px; }
+body[data-page="publish"] .form-layout { grid-template-columns: minmax(0, 1fr) 250px; }
+body[data-page="publish"] .panel, .company-container .panel { border-radius: 8px; box-shadow: 0 3px 14px #102c4003; }
+body[data-page="publish"] .panel { scroll-margin-top: 24px; }
+body[data-page="publish"] .form-aside { position: sticky; top: 24px; }
+.steps { gap: 5px; }
+.steps a { display: block; padding: 12px 14px; border-left: 2px solid var(--line); color: var(--muted); font-size: 13px; border-radius: 0 5px 5px 0; }
+.steps a:hover, .steps a.active { color: var(--ocean); background: #e9f3f4; border-left-color: var(--ocean); }
+.steps a.active { font-weight: 650; }
+.publish-actions, #company-form > .form-actions { position: sticky; bottom: 0; z-index: 5; background: #fffffff5; border: 1px solid var(--line); border-radius: 8px 8px 0 0; padding: 14px 18px; box-shadow: 0 -6px 24px #102c4008; align-items: center; }
+.save-state { margin-right: auto; min-width: 0; }
+.save-state strong { display: block; font-size: 12px; color: var(--ocean); font-weight: 550; }
+.save-state small { display: block; font-size: 10px; color: var(--muted); margin-top: 4px; }
+.company-heading { border-top: 3px solid var(--ocean); }
+.company-container .param-table th { width: 24%; }
+@media(max-width: 850px) {
+  .auth-layout { grid-template-columns: 1fr; }
+  .auth-panel { grid-column: 1; padding: 24px; }
+  .auth-story { display: none; }
+  body[data-page="publish"] .form-layout { grid-template-columns: 1fr; }
+  body[data-page="publish"] .form-aside { position: static; order: -1; }
+  body[data-page="publish"] .form-aside > .form-note, body[data-page="publish"] .form-aside > a { display: none !important; }
+  .steps { flex-direction: row; flex-wrap: wrap; margin-bottom: 0; }
+  .steps a { padding: 8px 10px; font-size: 12px; border-left: 0; border-bottom: 2px solid var(--line); border-radius: 4px 4px 0 0; }
+  .steps a.active { border-bottom-color: var(--ocean); }
+  .publish-actions { flex-wrap: wrap; gap: 10px; padding: 12px; }
+  .save-state { flex: 0 0 100%; }
+  .save-state small { display: none; }
+}
+@media(max-width: 540px) {
+  .auth-panel { padding: 20px; }
+  .auth-container { padding-bottom: 30px; }
+  .auth-panel .form-grid { grid-template-columns: 1fr; }
+  .auth-group-title { grid-column: 1; }
+  .company-container .param-table th { width: 34%; }
+}
+@media(prefers-reduced-motion: reduce) { input, select, textarea { transition: none; } }
+.auth-identities { display: inline-flex; padding: 4px; gap: 4px; background: #e7edf0; border-radius: 6px; margin-top: 8px; }
+.auth-identities a { font-size: 12px; padding: 7px 18px; color: var(--muted); border-radius: 4px; }
+.auth-identities a.active { background: white; color: var(--ocean); box-shadow: 0 1px 4px #102c4010; font-weight: 650; }
+body[data-page="buyer-auth"] .page-intro,
+body[data-page="supplier-auth"] .page-intro { padding: 0; margin: 24px 0; }
+.auth-panel button.text-link { background: none; border: 0; padding: 0; text-align: left; font: inherit; font-size: 12px; color: var(--ocean); }
+.auth-panel button.text-link:hover { text-decoration: underline; }
+.auth-panel #auth-error:empty { display: none; }

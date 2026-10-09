@@ -99,3 +99,11 @@ test("return page query merges without second question mark", () => {
   assert.equal(url.searchParams.get("product"), "p01");
   assert.equal(url.searchParams.get("v"), "prd3");
 });
+test("validation scrolls the first invalid field into view before focusing", () => {
+  const { u } = boot({ getItem: () => null });
+  const calls = [];
+  const input = { classList: { add() {} }, setAttribute() {}, scrollIntoView() { calls.push('scroll'); }, focus() { calls.push('focus'); } };
+  const form = { elements: { namedItem: () => input }, querySelectorAll: () => [], querySelector: (s) => s === '.invalid' ? input : null };
+  assert.equal(u.errors(form, { email: 'required' }), false);
+  assert.deepEqual(calls, ['scroll', 'focus']);
+});
