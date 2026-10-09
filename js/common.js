@@ -31,8 +31,15 @@ const U = (window.MarineUI = {
     return `<span data-zh="${this.e(o.zh)}" data-en="${this.e(o.en)}">${this.e(o[this.lang] || o.zh)}</span>`;
   },
   url(page, params = {}) {
-    const q = new URLSearchParams({ ...params, lang: this.lang });
-    return `${page}?${q}`;
+    const [base, existingQuery = ""] = page.split("?");
+    const q = new URLSearchParams(existingQuery);
+    for (const [key, value] of Object.entries({
+      v: "prd3",
+      ...params,
+      lang: this.lang,
+    }))
+      q.set(key, value);
+    return `${base}?${q}`;
   },
   read(key) {
     try {
@@ -61,10 +68,34 @@ const U = (window.MarineUI = {
     }
   },
   products() {
-    return [
+    const products = [
       ...MarineData.products,
       ...this.read("draft_products").filter((x) => x.status === "published"),
     ];
+    try {
+      const accounts = MarineAccounts.read(localStorage, "accounts", []);
+      const profile = MarineAccounts.read(localStorage, "supplier_profile");
+      return products.map((p) => {
+        const id = p.supplier_id || p.supplier?.id;
+        const live =
+          accounts.find((a) => a.id === id && a.role === "supplier") ||
+          (profile?.id === id ? profile : null);
+        return live
+          ? {
+              ...p,
+              supplier: {
+                ...p.supplier,
+                ...MarineAccounts.supplier(live),
+                products_count: products.filter(
+                  (item) => (item.supplier_id || item.supplier?.id) === id,
+                ).length,
+              },
+            }
+          : p;
+      });
+    } catch {
+      return products;
+    }
   },
   product(id) {
     return this.products().find((p) => p.id === id);
@@ -83,7 +114,7 @@ const U = (window.MarineUI = {
     );
   },
   card(p) {
-    return `<article class="product-card"><a class="card-image" href="${this.url("product.html", { id: p.id })}"><img src="${this.e(this.img(p))}" data-alt-zh="${this.e(p.i18n?.zh?.title)}" data-alt-en="${this.e(p.i18n?.en?.title)}" alt="${this.e(p.i18n?.[this.lang]?.title || "")}" loading="lazy"><span class="image-label">${this.bi(this.cat(p.category_id)?.name)}</span></a><div class="card-content"><div class="card-cert">${this.badges(p)}</div><a class="card-title" href="${this.url("product.html", { id: p.id })}">${this.bi({ zh: p.i18n.zh.title, en: p.i18n.en.title })}</a><div class="card-supplier">${this.tr("china")} · ${this.bi(p.supplier.name)}</div><div class="card-price">$${Number(p.trade.price_min).toLocaleString()} <small>– $${Number(p.trade.price_max).toLocaleString()}</small></div><div class="card-bottom"><span>${this.tr("moq")} ${this.e(p.trade.moq)} ${this.tr("unit_" + p.trade.unit)}</span><a data-i18n-aria="rfq" aria-label="${this.e(this.t("rfq"))}" href="${this.url("rfq.html", { product: p.id })}">↗</a></div></div></article>`;
+    return `<article class="product-card"><a class="card-image" href="${this.url("product.html", { id: p.id })}"><img src="${this.e(this.img(p))}" data-alt-zh="${this.e(p.i18n?.zh?.title)}" data-alt-en="${this.e(p.i18n?.en?.title)}" alt="${this.e(p.i18n?.[this.lang]?.title || "")}" loading="lazy"><span class="image-label">${this.bi(this.cat(p.category_id)?.name)}</span></a><div class="card-content"><div class="card-cert">${this.badges(p)}</div><a class="card-title" href="${this.url("product.html", { id: p.id })}">${this.bi({ zh: p.i18n.zh.title, en: p.i18n.en.title })}</a><div class="card-supplier">${this.e(p.supplier.country || "")} · ${this.bi(p.supplier.name)}</div><div class="card-price">$${Number(p.trade.price_min).toLocaleString()} <small>– $${Number(p.trade.price_max).toLocaleString()}</small></div><div class="card-bottom"><span>${this.tr("moq")} ${this.e(p.trade.moq)} ${this.tr("unit_" + p.trade.unit)}</span><a data-i18n-aria="rfq" aria-label="${this.e(this.t("rfq"))}" href="${this.url("rfq.html", { product: p.id })}">↗</a></div></div></article>`;
   },
   empty(title, desc, link = "products.html", label = "browse") {
     return `<div class="empty"><div class="empty-icon">⌁</div><h2>${this.tr(title)}</h2><p>${this.tr(desc)}</p><a class="button" href="${this.url(link)}">${this.tr(label)}</a></div>`;
@@ -162,9 +193,13 @@ const U = (window.MarineUI = {
     });
     Object.entries(errors).forEach(([name, key]) => {
       const input = form.elements.namedItem(name);
-      if (input) {
-        input.classList.add("invalid");
-        input.setAttribute("aria-invalid", "true");
+      for (const control of input
+        ? input.classList
+          ? [input]
+          : Array.from(input)
+        : []) {
+        control.classList.add("invalid");
+        control.setAttribute("aria-invalid", "true");
       }
       const target = form.querySelector(`[data-error="${name}"]`);
       if (target) target.innerHTML = this.tr(key);

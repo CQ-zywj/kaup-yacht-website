@@ -1673,3 +1673,213 @@ dialog::backdrop {
     padding-inline: 18px;
   }
 }
+/* Account and supplier profile surfaces */
+.supplier-information {
+  border-top: 3px solid var(--teal, #267b87);
+}
+.supplier-information .section-head {
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+.identity-strip {
+  padding: 13px 16px;
+  background: #edf6f6;
+  border-left: 3px solid #287c86;
+  margin: 16px 0;
+  color: #183447;
+}
+.auth-container {
+  max-width: 1100px;
+  padding-bottom: 65px;
+}
+.auth-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(230px, 1fr);
+  gap: 30px;
+  align-items: start;
+}
+.auth-tabs {
+  display: flex;
+  border-bottom: 1px solid #d9e3e9;
+  margin-bottom: 28px;
+  gap: 20px;
+}
+.auth-tabs button {
+  background: none;
+  border: 0;
+  padding: 13px 20px;
+  cursor: pointer;
+  font: inherit;
+  color: #426071;
+  border-bottom: 3px solid transparent;
+}
+.auth-tabs button.selected {
+  color: #176876;
+  border-bottom-color: #176876;
+  font-weight: 700;
+}
+.check-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+.check-label input,
+.category-checks input {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.category-checks {
+  border: 1px solid #d9e3e9;
+  padding: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.category-checks label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.category-checks legend {
+  padding: 0 5px;
+  font-weight: 600;
+}
+.auth-extras,
+.oauth-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 20px 0;
+}
+.auth-extras + .muted {
+  font-size: 13px;
+}
+.oauth-buttons {
+  justify-content: flex-start;
+}
+.account-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 12px;
+}
+.account-nav > a {
+  font-size: 13px;
+}
+.account-menu {
+  position: relative;
+}
+.account-menu summary {
+  cursor: pointer;
+  padding: 10px;
+  font-size: 14px;
+  max-width: 240px;
+  overflow-wrap: anywhere;
+}
+.account-menu summary small {
+  display: block;
+  color: #637989;
+  font-size: 11px;
+}
+.account-menu > div {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  min-width: 220px;
+  max-width: 280px;
+  background: white;
+  padding: 15px;
+  box-shadow: 0 8px 35px #18344722;
+  z-index: 40;
+  border: 1px solid #d9e3e9;
+}
+.account-menu > div > a,
+.account-menu > div > button {
+  display: block;
+  padding: 8px 0;
+  font-size: 14px;
+}
+.company-container {
+  max-width: 1100px;
+  padding-bottom: 65px;
+}
+.company-heading {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+.company-avatar {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  background: #e6f0f2;
+  color: #1d6672;
+  font-size: 30px;
+  font-weight: 700;
+}
+.company-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.company-container h3 {
+  margin: 25px 0 12px;
+}
+.previews figure {
+  margin: 0;
+  max-width: 160px;
+  overflow-wrap: anywhere;
+}
+.previews figure img {
+  width: 140px;
+  height: 100px;
+  object-fit: cover;
+}
+.previews figcaption {
+  font-size: 12px;
+  margin-top: 7px;
+}
+.company-cert {
+  margin: 16px 0;
+}
+@media (max-width: 850px) {
+  .auth-layout {
+    grid-template-columns: 1fr;
+  }
+  .main-nav .container {
+    flex-wrap: wrap;
+  }
+  .account-nav {
+    margin-left: 0;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .company-heading {
+    flex-wrap: wrap;
+  }
+  .company-actions {
+    margin-left: 0;
+  }
+  .supplier-information .section-head {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .company-cert {
+    grid-template-columns: 1fr;
+  }
+  .account-menu > div {
+    right: auto;
+    left: 0;
+  }
+  .company-heading h2 {
+    overflow-wrap: anywhere;
+  }
+  .company-container > .form-actions {
+    flex-wrap: wrap;
+  }
+}

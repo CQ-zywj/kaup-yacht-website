@@ -70,3 +70,32 @@ test("parseable but invalid RFQ records rejected", () => {
     ),
   );
 });
+test("checkbox group validation marks every option without crashing", () => {
+  const { u } = boot({ getItem: () => null });
+  let marked = 0;
+  const options = [0, 1].map(() => ({
+    classList: {
+      add() {
+        marked++;
+      },
+    },
+    setAttribute() {},
+  }));
+  const target = { innerHTML: "" };
+  const form = {
+    elements: { namedItem: () => options },
+    querySelectorAll: () => [],
+    querySelector: (s) => (s.includes("data-error") ? target : null),
+  };
+  assert.equal(u.errors(form, { main_categories: "required" }), false);
+  assert.equal(marked, 2);
+  assert.match(target.innerHTML, /required/);
+});
+test("return page query merges without second question mark", () => {
+  const { u } = boot({ getItem: () => null });
+  const v = u.url("rfq.html?product=p01&v=prd3", { lang: "en" });
+  assert.equal(v.split("?").length, 2);
+  const url = new URL(v, "http://localhost/");
+  assert.equal(url.searchParams.get("product"), "p01");
+  assert.equal(url.searchParams.get("v"), "prd3");
+});

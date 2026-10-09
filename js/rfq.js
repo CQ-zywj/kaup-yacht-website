@@ -1,11 +1,19 @@
 const productId = new URLSearchParams(location.search).get("product");
 const product = productId ? U.product(productId) : null;
-if (productId && !product) {
+const rfqUser = AccountUI.getUser();
+if (rfqUser?.role !== "buyer") {
+  const back = location.pathname.split("/").pop() + location.search;
+  document.getElementById("main").innerHTML =
+    `<div class="container section">${U.empty("authRequired", "loginDemo", "buyer-auth.html", "buyerSignIn")}</div>`;
+  document.querySelector("#main .empty a").href = U.url("buyer-auth.html", {
+    return: back,
+  });
+} else if (productId && !product) {
   document.getElementById("main").innerHTML =
     `<div class="container section">${U.empty("notFound", "adjust", "products.html", "backBrowse")}</div>`;
 } else {
   document.getElementById("main").innerHTML =
-    `<div class="container"><div class="page-intro"><div class="eyebrow">${U.tr("rfqEyebrow")}</div><h1>${U.tr("rfqTitle")}</h1><p>${U.tr("rfqDesc")}</p></div><div class="form-layout"><form id="rfq-form" novalidate>${U.context(product)}<section class="panel"><h2>${U.tr("generalRfq")}</h2><div class="form-grid">${U.field("company", "company", "text", "", true)}${U.field("buyerCountry", "buyer_country", "text", "", true, "countryHint")}${U.field("quantity", "quantity", "number", "", true)}${U.field("targetCountry", "target_country", "text", "", true, "targetHint")}${U.field("delivery", "expected_delivery", "date", "", true)}<div class="field"><label for="rfq-terms">${U.tr("terms")}</label><select id="rfq-terms" name="incoterms"><option>EXW</option><option selected>FOB</option><option>CIF</option></select></div>${U.area("message", "message", "", true, "messageHint")}<div class="field full"><label for="rfq-attachments">${U.tr("attachments")}</label><input id="rfq-attachments" type="file" multiple><p class="muted">${U.tr("attachmentHint")}</p><div id="rfq-files"></div></div></div></section><div class="form-actions"><button class="button" type="submit">${U.tr("submitRfq")} →</button></div></form><aside class="form-aside"><div class="form-note"><h3>${U.tr("rfq")}</h3><p>${U.tr("quoteDesc")}</p><p>${U.tr("demo")}</p></div></aside></div></div>`;
+    `<div class="container"><div class="page-intro"><div class="eyebrow">${U.tr("rfqEyebrow")}</div><h1>${U.tr("rfqTitle")}</h1><p>${U.tr("rfqDesc")}</p></div><div class="form-layout"><form id="rfq-form" novalidate>${U.context(product)}<section class="panel"><h2>${U.tr("generalRfq")}</h2><div class="form-grid">${U.field("company", "company", "text", rfqUser.company || "", true)}${U.field("buyerCountry", "buyer_country", "text", "", true, "countryHint")}${U.field("quantity", "quantity", "number", "", true)}${U.field("targetCountry", "target_country", "text", "", true, "targetHint")}${U.field("delivery", "expected_delivery", "date", "", true)}<div class="field"><label for="rfq-terms">${U.tr("terms")}</label><select id="rfq-terms" name="incoterms"><option>EXW</option><option selected>FOB</option><option>CIF</option></select></div>${U.area("message", "message", "", true, "messageHint")}<div class="field full"><label for="rfq-attachments">${U.tr("attachments")}</label><input id="rfq-attachments" type="file" multiple><p class="muted">${U.tr("attachmentHint")}</p><div id="rfq-files"></div></div></div></section><div class="form-actions"><button class="button" type="submit">${U.tr("submitRfq")} →</button></div></form><aside class="form-aside"><div class="form-note"><h3>${U.tr("rfq")}</h3><p>${U.tr("quoteDesc")}</p><p>${U.tr("demo")}</p></div></aside></div></div>`;
   const form = document.getElementById("rfq-form");
   let files = [];
   document.getElementById("rfq-attachments").onchange = (e) => {
@@ -14,6 +22,13 @@ if (productId && !product) {
   };
   form.onsubmit = (e) => {
     e.preventDefault();
+    if (
+      AccountUI.getUser()?.id !== rfqUser.id ||
+      AccountUI.getUser()?.role !== "buyer"
+    ) {
+      U.notice("authRequired", "loginDemo", "buyer-auth.html", "buyerSignIn");
+      return;
+    }
     if (!U.errors(form, U.validate(form))) return;
     const d = Object.fromEntries(new FormData(form));
     const row = {
@@ -23,6 +38,7 @@ if (productId && !product) {
         company: d.company.trim(),
         country: d.buyer_country.trim(),
         type: "buyer",
+        id: rfqUser.id,
       },
       quantity: Number(d.quantity),
       target_country: d.target_country.trim(),
