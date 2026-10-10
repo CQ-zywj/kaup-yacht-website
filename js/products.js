@@ -1,6 +1,8 @@
 const qp = new URLSearchParams(location.search);
 let filters = {
-  category: qp.get("category") || "",
+  industry: qp.get("industry") || (qp.get("category") ? (U.industry(qp.get("category"))?.id || MarineCore.industryForCategory(qp.get("category"))) : ""),
+  category: U.industry(qp.get("category")) ? "" : qp.get("category") || "",
+  supplier: qp.get("supplier") || "",
   subcategory: qp.get("subcategory") || "",
   q: qp.get("q") || "",
   cert: (qp.get("cert") || "").split(",").filter(Boolean),
@@ -19,7 +21,7 @@ for (const [key, value] of qp) {
 }
 function sync() {
   const q = new URLSearchParams({ lang: U.lang });
-  for (const k of ["category", "subcategory", "q"])
+  for (const k of ["industry", "category", "subcategory", "supplier", "q"])
     if (filters[k]) q.set(k, filters[k]);
   if (filters.cert.length) q.set("cert", filters.cert.join(","));
   q.set("sort", sort);
@@ -41,18 +43,31 @@ function paramFilter(f) {
   return "";
 }
 function renderFilters() {
+  const industry = U.industry(filters.industry);
+  const groups = MarineData.categories.filter(c => !industry || industry.category_ids.includes(c.id));
+  if (industry?.category_ids.length === 1) filters.category = industry.category_ids[0];
   const c = U.cat(filters.category);
+  const supplierProducts = U.products().filter(p => !filters.industry || MarineCore.industryForCategory(p.category_id) === filters.industry || (p.supplier_id || p.supplier.id) === filters.supplier);
+  const suppliers = [...new Map(supplierProducts.map(p => [p.supplier_id || p.supplier.id, { id: p.supplier_id || p.supplier.id, name: p.supplier.name }])).values()];
+  const certs = filters.industry && filters.industry !== 'marine' ? ['ISO 9001', 'SGS', 'CE'] : ['CCS', 'ABS', 'DNV', 'ISO 9001', 'SGS', 'CE'];
   document.getElementById("filter-panel").innerHTML =
-    `<div class="filter-top"><h3>${U.tr("filters")}</h3><button type="button" class="link-button" id="reset">${U.tr("reset")}</button></div><div class="filter-group"><h4>${U.tr("category")}</h4><select id="category" aria-label="${U.t("category")}"><option value="">${U.t("all")}</option>${U.options(MarineData.categories, filters.category)}</select></div>${c ? `<div class="filter-group"><h4>${U.tr("subcategory")}</h4><select id="subcategory" aria-label="${U.t("subcategory")}"><option value="">${U.t("all")}</option>${U.options(c.subcategories, filters.subcategory)}</select></div>${c.fields.map(paramFilter).join("")}` : ""}<div class="filter-group"><h4>${U.tr("certs")}</h4>${["CCS", "ABS", "DNV"].map((t) => `<label class="check"><input data-cert type="checkbox" value="${t}" ${filters.cert.includes(t) ? "checked" : ""}>${t}</label>`).join("")}</div>`;
+    `<div class="filter-top"><h3>${U.tr("filters")}</h3><button type="button" class="link-button" id="reset">${U.tr("reset")}</button></div><div class="filter-group"><h4>${U.tr("industry")}</h4><select id="industry-filter" aria-label="${U.t("industry")}"><option value="">${U.t("all")}</option>${U.options(MarineData.industries, filters.industry)}</select></div>${!industry || groups.length > 1 ? `<div class="filter-group"><h4>${U.tr("productGroup")}</h4><select id="category" aria-label="${U.t("productGroup")}"><option value="">${U.t("all")}</option>${U.options(groups, filters.category)}</select></div>` : ''}${c ? `<div class="filter-group"><h4>${U.tr("productType")}</h4><select id="subcategory" aria-label="${U.t("productType")}"><option value="">${U.t("all")}</option>${U.options(c.subcategories, filters.subcategory)}</select></div>${c.fields.map(paramFilter).join("")}` : ""}<div class="filter-group"><h4>${U.tr("supplierInfo")}</h4><select id="supplier-filter" aria-label="${U.t("supplierInfo")}"><option value="">${U.t("all")}</option>${U.options(suppliers, filters.supplier)}</select></div><div class="filter-group"><h4>${U.tr("certs")}</h4>${certs.map(t => `<label class="check"><input data-cert type="checkbox" value="${t}" ${filters.cert.includes(t) ? 'checked' : ''}>${t}</label>`).join('')}</div>`;
+  document.getElementById("industry-filter").onchange = e => {
+    filters.industry = e.target.value;
+    filters.category = ''; filters.subcategory = ''; filters.supplier = ''; filters.params = {}; filters.cert = [];
+    currentPage = 1; renderFilters(); renderResults();
+  };
+  document.getElementById("supplier-filter").onchange = e => { filters.supplier = e.target.value; currentPage = 1; renderResults(); };
   document.getElementById("reset").onclick = reset;
-  document.getElementById("category").onchange = (e) => {
+  document.getElementById("category")?.addEventListener("change", (e) => {
     filters.category = e.target.value;
+    if (filters.category) filters.industry = MarineCore.industryForCategory(filters.category);
     filters.subcategory = "";
     filters.params = {};
     currentPage = 1;
     renderFilters();
     renderResults();
-  };
+  });
   document.getElementById("subcategory")?.addEventListener("change", (e) => {
     filters.subcategory = e.target.value;
     currentPage = 1;
@@ -90,7 +105,7 @@ function renderFilters() {
   AccountUI.refreshContext();
 }
 function reset() {
-  filters = { category: "", subcategory: "", q: "", cert: [], params: {} };
+  filters = { industry: "", category: "", subcategory: "", supplier: "", q: "", cert: [], params: {} };
   currentPage = 1;
   document.getElementById("catalog-search").value = "";
   document.getElementById("global-search").value = "";
@@ -112,7 +127,12 @@ function renderResults() {
         .slice((currentPage - 1) * size, currentPage * size)
         .map((p) => U.card(p))
         .join("")}</div>`
-    : U.empty("noResults", "adjust", "rfq.html", "generalRfq");
+    : U.empty(
+      filters.industry && !MarineCore.filterProducts(U.products(), { industry: filters.industry }).length ? 'noIndustryProducts' : 'noResults',
+      'emptyIndustryHint',
+      AccountUI.permissions().role === 'supplier' ? U.url('publish.html', { industry: filters.industry }) : U.url('rfq.html', { industry: filters.industry }),
+      AccountUI.permissions().role === 'supplier' ? 'publish' : 'generalRfq'
+    );
   document.getElementById("pagination").innerHTML = items.length
     ? `<button data-page="${currentPage - 1}" ${currentPage === 1 ? "disabled" : ""}>${U.tr("previous")}</button>${Array.from({ length: pages }, (_, i) => `<button data-page="${i + 1}" class="${currentPage === i + 1 ? "active" : ""}">${i + 1}</button>`).join("")}<button data-page="${currentPage + 1}" ${currentPage === pages ? "disabled" : ""}>${U.tr("next")}</button>`
     : "";

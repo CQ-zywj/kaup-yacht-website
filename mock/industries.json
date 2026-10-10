@@ -1,0 +1,89 @@
+[
+  {
+    "id": "marine",
+    "name": {
+      "zh": "船舶与游艇",
+      "en": "Vessels & yachts"
+    },
+    "description": {
+      "zh": "整艇、配件设备、涂装养护与服务",
+      "en": "Vessels, equipment, coatings and services"
+    },
+    "category_ids": [
+      "boats",
+      "equipment",
+      "coatings",
+      "services"
+    ]
+  },
+  {
+    "id": "bearings",
+    "name": {
+      "zh": "轴承",
+      "en": "Bearings"
+    },
+    "description": {
+      "zh": "精密传动与工业配套",
+      "en": "Precision components for industrial applications"
+    },
+    "category_ids": [
+      "bearings"
+    ]
+  },
+  {
+    "id": "machine-tools",
+    "name": {
+      "zh": "机床",
+      "en": "Machine tools"
+    },
+    "description": {
+      "zh": "数控加工与智能制造",
+      "en": "CNC machining and manufacturing"
+    },
+    "category_ids": [
+      "machine-tools"
+    ]
+  },
+  {
+    "id": "agriculture",
+    "name": {
+      "zh": "农产品",
+      "en": "Agricultural products"
+    },
+    "description": {
+      "zh": "粮食、油料与特色农产",
+      "en": "Grains, oilseeds and specialty crops"
+    },
+    "category_ids": [
+      "agriculture"
+    ]
+  },
+  {
+    "id": "forestry",
+    "name": {
+      "zh": "木材与林产",
+      "en": "Timber & forestry"
+    },
+    "description": {
+      "zh": "木材加工与林产供应",
+      "en": "Timber processing and forest products"
+    },
+    "category_ids": [
+      "forestry"
+    ]
+  },
+  {
+    "id": "chemicals",
+    "name": {
+      "zh": "石化与化工",
+      "en": "Petrochemicals & chemicals"
+    },
+    "description": {
+      "zh": "工业原料与精细化工",
+      "en": "Industrial materials and specialty chemicals"
+    },
+    "category_ids": [
+      "chemicals"
+    ]
+  }
+]

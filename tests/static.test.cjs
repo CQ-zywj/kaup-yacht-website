@@ -25,7 +25,7 @@ test("all pages use existing local classic scripts and stylesheet without build"
       assert.ok(fs.existsSync(path), page + ": " + path);
   }
 });
-test("seed JS equals JSON references and contains four products per category", () => {
+test("seed JS equals JSON references and retains marine seed products and empty new industries", () => {
   const c = { window: {} };
   vm.createContext(c);
   vm.runInContext(fs.readFileSync("mock/data.js", "utf8"), c);
@@ -38,9 +38,11 @@ test("seed JS equals JSON references and contains four products per category", (
     d.categories,
     JSON.parse(fs.readFileSync("mock/categories.json")),
   );
+  assert.deepEqual(d.industries, JSON.parse(fs.readFileSync("mock/industries.json")));
+  assert.equal(d.industries.length, 6);
   assert.equal(d.products.length, 16);
   for (const cat of d.categories) {
-    assert.equal(d.products.filter((p) => p.category_id === cat.id).length, 4);
+    assert.equal(d.products.filter((p) => p.category_id === cat.id).length, cat.industry_id === "marine" ? 4 : 0);
     assert.ok(cat.subcategories.length);
     for (const f of cat.fields) assert.ok(f.label.zh && f.label.en);
   }

@@ -3,7 +3,7 @@
     "id": "boats",
     "name": {
       "zh": "整艇",
-      "en": "Vessels & yachts"
+      "en": "Complete vessels"
     },
     "description": {
       "zh": "从休闲游艇到商用工作艇",
@@ -149,7 +149,8 @@
         "options": [],
         "required": true
       }
-    ]
+    ],
+    "industry_id": "marine"
   },
   {
     "id": "equipment",
@@ -237,7 +238,8 @@
         "options": [],
         "required": true
       }
-    ]
+    ],
+    "industry_id": "marine"
   },
   {
     "id": "coatings",
@@ -363,7 +365,8 @@
         "options": [],
         "required": true
       }
-    ]
+    ],
+    "industry_id": "marine"
   },
   {
     "id": "services",
@@ -472,6 +475,472 @@
         "type": "textarea",
         "options": [],
         "required": true
+      }
+    ],
+    "industry_id": "marine"
+  },
+  {
+    "id": "bearings",
+    "industry_id": "bearings",
+    "name": {
+      "zh": "轴承",
+      "en": "Bearings"
+    },
+    "description": {
+      "zh": "精密传动与工业配套",
+      "en": "Precision components for industrial applications"
+    },
+    "subcategories": [
+      {
+        "id": "ball",
+        "name": {
+          "zh": "球轴承",
+          "en": "Ball bearings"
+        }
+      },
+      {
+        "id": "roller",
+        "name": {
+          "zh": "滚子轴承",
+          "en": "Roller bearings"
+        }
+      },
+      {
+        "id": "special",
+        "name": {
+          "zh": "专用轴承",
+          "en": "Special bearings"
+        }
+      }
+    ],
+    "fields": [
+      {
+        "key": "inner_diameter",
+        "label": {
+          "zh": "内径（mm）",
+          "en": "Bore diameter (mm)"
+        },
+        "type": "number",
+        "options": [],
+        "required": true
+      },
+      {
+        "key": "precision",
+        "label": {
+          "zh": "精度等级",
+          "en": "Precision class"
+        },
+        "type": "enum",
+        "options": [
+          {
+            "value": "P0",
+            "label": {
+              "zh": "P0",
+              "en": "P0"
+            }
+          },
+          {
+            "value": "P6",
+            "label": {
+              "zh": "P6",
+              "en": "P6"
+            }
+          },
+          {
+            "value": "P5",
+            "label": {
+              "zh": "P5",
+              "en": "P5"
+            }
+          },
+          {
+            "value": "P4",
+            "label": {
+              "zh": "P4",
+              "en": "P4"
+            }
+          }
+        ],
+        "required": true
+      },
+      {
+        "key": "bearing_material",
+        "label": {
+          "zh": "材质",
+          "en": "Material"
+        },
+        "type": "enum",
+        "options": [
+          {
+            "value": "chrome",
+            "label": {
+              "zh": "轴承钢",
+              "en": "Chrome steel"
+            }
+          },
+          {
+            "value": "stainless",
+            "label": {
+              "zh": "不锈钢",
+              "en": "Stainless steel"
+            }
+          }
+        ],
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "machine-tools",
+    "industry_id": "machine-tools",
+    "name": {
+      "zh": "机床",
+      "en": "Machine tools"
+    },
+    "description": {
+      "zh": "数控加工与智能制造",
+      "en": "CNC machining and manufacturing"
+    },
+    "subcategories": [
+      {
+        "id": "lathe",
+        "name": {
+          "zh": "车床",
+          "en": "Lathes"
+        }
+      },
+      {
+        "id": "milling",
+        "name": {
+          "zh": "铣床",
+          "en": "Milling machines"
+        }
+      },
+      {
+        "id": "grinding",
+        "name": {
+          "zh": "磨床",
+          "en": "Grinding machines"
+        }
+      }
+    ],
+    "fields": [
+      {
+        "key": "machining_type",
+        "label": {
+          "zh": "加工类型",
+          "en": "Machining type"
+        },
+        "type": "enum",
+        "options": [
+          {
+            "value": "turning",
+            "label": {
+              "zh": "车削",
+              "en": "Turning"
+            }
+          },
+          {
+            "value": "milling",
+            "label": {
+              "zh": "铣削",
+              "en": "Milling"
+            }
+          },
+          {
+            "value": "grinding",
+            "label": {
+              "zh": "磨削",
+              "en": "Grinding"
+            }
+          }
+        ],
+        "required": true
+      },
+      {
+        "key": "spindle_speed",
+        "label": {
+          "zh": "主轴转速（rpm）",
+          "en": "Spindle speed (rpm)"
+        },
+        "type": "number",
+        "options": [],
+        "required": true
+      },
+      {
+        "key": "travel_x",
+        "label": {
+          "zh": "X 轴行程（mm）",
+          "en": "X-axis travel (mm)"
+        },
+        "type": "number",
+        "options": [],
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "agriculture",
+    "industry_id": "agriculture",
+    "name": {
+      "zh": "农产品",
+      "en": "Agricultural products"
+    },
+    "description": {
+      "zh": "粮食、油料与特色农产",
+      "en": "Grains, oilseeds and specialty crops"
+    },
+    "subcategories": [
+      {
+        "id": "grain",
+        "name": {
+          "zh": "粮食",
+          "en": "Grains"
+        }
+      },
+      {
+        "id": "oilseed",
+        "name": {
+          "zh": "油料作物",
+          "en": "Oilseeds"
+        }
+      },
+      {
+        "id": "specialty",
+        "name": {
+          "zh": "特色农产品",
+          "en": "Specialty crops"
+        }
+      }
+    ],
+    "fields": [
+      {
+        "key": "origin",
+        "label": {
+          "zh": "产地",
+          "en": "Origin"
+        },
+        "type": "text",
+        "options": [],
+        "required": true
+      },
+      {
+        "key": "crop_year",
+        "label": {
+          "zh": "收获年份",
+          "en": "Harvest year"
+        },
+        "type": "number",
+        "options": [],
+        "required": true
+      },
+      {
+        "key": "grade",
+        "label": {
+          "zh": "等级",
+          "en": "Grade"
+        },
+        "type": "enum",
+        "options": [
+          {
+            "value": "A",
+            "label": {
+              "zh": "A",
+              "en": "A"
+            }
+          },
+          {
+            "value": "B",
+            "label": {
+              "zh": "B",
+              "en": "B"
+            }
+          },
+          {
+            "value": "C",
+            "label": {
+              "zh": "C",
+              "en": "C"
+            }
+          }
+        ],
+        "required": true
+      },
+      {
+        "key": "packaging",
+        "label": {
+          "zh": "包装规格",
+          "en": "Packaging"
+        },
+        "type": "text",
+        "options": [],
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "forestry",
+    "industry_id": "forestry",
+    "name": {
+      "zh": "木材与林产",
+      "en": "Timber & forestry"
+    },
+    "description": {
+      "zh": "木材加工与林产供应",
+      "en": "Timber processing and forest products"
+    },
+    "subcategories": [
+      {
+        "id": "timber",
+        "name": {
+          "zh": "原木与板材",
+          "en": "Logs & lumber"
+        }
+      },
+      {
+        "id": "panels",
+        "name": {
+          "zh": "人造板",
+          "en": "Wood panels"
+        }
+      },
+      {
+        "id": "forest-products",
+        "name": {
+          "zh": "林产品",
+          "en": "Forest products"
+        }
+      }
+    ],
+    "fields": [
+      {
+        "key": "species",
+        "label": {
+          "zh": "树种",
+          "en": "Wood species"
+        },
+        "type": "enum",
+        "options": [
+          {
+            "value": "pine",
+            "label": {
+              "zh": "松木",
+              "en": "Pine"
+            }
+          },
+          {
+            "value": "birch",
+            "label": {
+              "zh": "桦木",
+              "en": "Birch"
+            }
+          },
+          {
+            "value": "oak",
+            "label": {
+              "zh": "橡木",
+              "en": "Oak"
+            }
+          }
+        ],
+        "required": true
+      },
+      {
+        "key": "moisture",
+        "label": {
+          "zh": "含水率（%）",
+          "en": "Moisture content (%)"
+        },
+        "type": "number",
+        "options": [],
+        "required": true
+      },
+      {
+        "key": "dimensions",
+        "label": {
+          "zh": "尺寸规格",
+          "en": "Dimensions"
+        },
+        "type": "text",
+        "options": [],
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "chemicals",
+    "industry_id": "chemicals",
+    "name": {
+      "zh": "石化与化工",
+      "en": "Petrochemicals & chemicals"
+    },
+    "description": {
+      "zh": "工业原料与精细化工",
+      "en": "Industrial materials and specialty chemicals"
+    },
+    "subcategories": [
+      {
+        "id": "petrochemical",
+        "name": {
+          "zh": "石化原料",
+          "en": "Petrochemicals"
+        }
+      },
+      {
+        "id": "specialty",
+        "name": {
+          "zh": "精细化工",
+          "en": "Specialty chemicals"
+        }
+      },
+      {
+        "id": "materials",
+        "name": {
+          "zh": "化工材料",
+          "en": "Chemical materials"
+        }
+      }
+    ],
+    "fields": [
+      {
+        "key": "chemical_name",
+        "label": {
+          "zh": "化学品名称",
+          "en": "Chemical name"
+        },
+        "type": "text",
+        "options": [],
+        "required": true
+      },
+      {
+        "key": "cas_number",
+        "label": {
+          "zh": "CAS 编号",
+          "en": "CAS number"
+        },
+        "type": "text",
+        "options": [],
+        "required": true
+      },
+      {
+        "key": "purity",
+        "label": {
+          "zh": "纯度（%）",
+          "en": "Purity (%)"
+        },
+        "type": "number",
+        "options": [],
+        "required": true
+      },
+      {
+        "key": "msds",
+        "label": {
+          "zh": "MSDS 链接",
+          "en": "MSDS URL"
+        },
+        "type": "url",
+        "options": [],
+        "required": false
       }
     ]
   }

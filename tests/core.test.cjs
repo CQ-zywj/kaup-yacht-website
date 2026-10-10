@@ -46,6 +46,13 @@ test("unknown category and invalid range", () => {
     0,
   );
 });
+test("platform industry filters include legacy marine groups and isolate empty new industries", () => {
+  assert.deepEqual(C.filterProducts(items, { industry: 'marine' }).map(p => p.id), ['a', 'b']);
+  assert.deepEqual(C.filterProducts(items, { industry: 'bearings' }).map(p => p.id), []);
+  const bearing = { ...items[0], id: 'bearing', category_id: 'bearings', supplier_id: 'supplier-2' };
+  assert.deepEqual(C.filterProducts([...items, bearing], { industry: 'bearings', supplier: 'supplier-2' }).map(p => p.id), ['bearing']);
+  assert.deepEqual(C.filterProducts([bearing], { industry: 'bearings', supplier: 'supplier-1' }), []);
+});
 test("sort uses price, date and relevance", () => {
   assert.equal(C.sortProducts(items, "price", "")[0].id, "a");
   assert.equal(C.sortProducts(items, "updated", "")[0].id, "b");
@@ -154,4 +161,14 @@ test('new inquiries can omit target country and delivery and retain product taxo
  const records = C.readArray({getItem:()=>JSON.stringify([inquiry])},'rfq_drafts');
  assert.equal(records[0].category_id,'boats');
  assert.equal(records[0].expected_delivery,undefined);
+});
+
+test("new industry products survive draft storage and join the correct marketplace", () => {
+  const seed = require("../mock/products.json")[0];
+  for (const category_id of ["bearings", "machine-tools", "agriculture", "forestry", "chemicals"]) {
+    const draft = {...seed, id: "new-" + category_id, category_id, industry_id: category_id, status: "published"};
+    const restored = C.readArray({getItem: () => JSON.stringify([draft])}, "draft_products");
+    assert.equal(C.filterProducts(restored, {industry: category_id}).length, 1);
+    assert.equal(C.filterProducts(restored, {industry: "marine"}).length, 0);
+  }
 });

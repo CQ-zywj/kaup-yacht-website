@@ -23,7 +23,7 @@ function boot(storage) {
   };
   const c = {
     MarineCore,
-    MarineData: { categories: [], products: [] },
+    MarineData: { categories: [], industries: [], products: [] },
     MarineI18n: { language: ["English", "中文"] },
     document: doc,
     location: { search: "", href: "http://127.0.0.1/index.html" },
@@ -31,6 +31,7 @@ function boot(storage) {
     URL,
     history: { replaceState() {} },
     setTimeout: () => {},
+    queueMicrotask,
     window: { dispatchEvent() {} },
     Event: function () {},
   };
@@ -116,4 +117,30 @@ test("optional localized delivery dates reject impossible days and accept empty 
   assert.equal(u.validate(form).expected_delivery, undefined);
   date.value = '';
   assert.equal(u.validate(form).expected_delivery, undefined);
+});
+
+test("platform section links preserve anchors and query parameters", () => {
+  const { u } = boot({ getItem: () => null });
+  const url = new URL(u.url("index.html?ref=directory#suppliers"), "http://localhost/");
+  assert.equal(url.hash, "#suppliers");
+  assert.equal(url.searchParams.get("ref"), "directory");
+  assert.equal(url.searchParams.get("lang"), "zh");
+});
+
+test("resetting taxonomy restores the original product group before its subtype callback", async () => {
+  const {u, nodes} = boot({getItem: () => null});
+  let reset;
+  let callbackGroup;
+  const industry = {value: "marine", form: {addEventListener: (_, callback) => {reset = callback;}}};
+  nodes.set("rfq-industry", industry);
+  u.industry = () => ({category_ids: ["boats", "coatings"]});
+  u.options = (_, selected) => selected;
+  const group = {value: "coatings", disabled:false, closest: () => ({}), dispatchEvent() {}};
+  Object.defineProperty(group, "innerHTML", {set(selected) {this.value = selected || "boats";}});
+  u.bindIndustrySelect("rfq", group, () => {callbackGroup = group.value;});
+  group.value = "boats";
+  reset();
+  await new Promise(resolve => queueMicrotask(resolve));
+  assert.equal(group.value, "coatings");
+  assert.equal(callbackGroup, "coatings");
 });

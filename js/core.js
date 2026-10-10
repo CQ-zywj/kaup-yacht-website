@@ -25,6 +25,9 @@
     );
   };
   const api = {
+    industryForCategory(id) {
+      return ["boats", "equipment", "coatings", "services"].includes(id) ? "marine" : id;
+    },
     pageNumber(value) {
       const n = Number(value);
       return Number.isFinite(n) && n >= 1 ? Math.floor(n) : 1;
@@ -34,6 +37,8 @@
     },
     filterProducts(products, f = {}) {
       return products.filter((p) => {
+        if (f.industry && api.industryForCategory(p.category_id) !== f.industry) return false;
+        if (f.supplier && (p.supplier_id || p.supplier?.id) !== f.supplier) return false;
         if (f.category && p.category_id !== f.category) return false;
         if (f.subcategory && p.subcategory_id !== f.subcategory) return false;
         if (f.q && !text(p).includes(f.q.trim().toLowerCase())) return false;
@@ -137,7 +142,7 @@
             !p.i18n?.en ||
             !str(p.i18n.zh.title) ||
             !str(p.i18n.en.title) ||
-            !["boats", "equipment", "coatings", "services"].includes(
+            !["boats", "equipment", "coatings", "services", "bearings", "machine-tools", "agriculture", "forestry", "chemicals"].includes(
               p.category_id,
             ) ||
             !p.trade ||

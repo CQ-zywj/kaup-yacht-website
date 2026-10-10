@@ -78,6 +78,7 @@ const AccountUI = {
       ? `<h4>${U.tr("buyerWorkspace")}</h4><a href="${U.url("my-rfq.html")}">${U.tr("myInquiries")}</a><a href="${U.url("products.html")}">${U.tr("browse")}</a><a href="${U.url("rfq.html")}">${U.tr("generalRfq")}</a>`
       : `<h4>${U.tr("supplier")}</h4><a href="${U.url("company.html")}">${U.tr("companyProfile")}</a><a href="${U.url("publish.html")}">${U.tr("publish")}</a><a href="${U.url("inbox.html")}">${U.tr("inbox")}</a><a href="${U.url("supplier.html")}">${U.tr("myProducts")}</a>`;
     if (document.body.dataset.page === "home") {
+      window.renderPortalWorkspace?.();
       const supplier = policy.role === "supplier";
       for (const [selector, buyerKey, sellerKey] of [[".hero-copy .eyebrow", "heroNote", "supplierHeroNote"], [".hero-copy h1", "heroTitle", "supplierHeroTitle"], [".hero-copy > p", "heroDesc", "supplierHeroDesc"], [".quote-banner h2", "quoteTitle", "supplierQuoteTitle"], [".quote-banner p", "quoteDesc", "supplierQuoteDesc"]]) {
         const node = document.querySelector(selector);

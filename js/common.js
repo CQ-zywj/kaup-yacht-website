@@ -31,7 +31,8 @@ const U = (window.MarineUI = {
     return `<span data-zh="${this.e(o.zh)}" data-en="${this.e(o.en)}">${this.e(o[this.lang] || o.zh)}</span>`;
   },
   url(page, params = {}) {
-    const [base, existingQuery = ""] = page.split("?");
+    const [path, hash = ""] = page.split("#");
+    const [base, existingQuery = ""] = path.split("?");
     const q = new URLSearchParams(existingQuery);
     for (const [key, value] of Object.entries({
       v: "prd3",
@@ -39,7 +40,7 @@ const U = (window.MarineUI = {
       lang: this.lang,
     }))
       q.set(key, value);
-    return `${base}?${q}`;
+    return `${base}?${q}${hash ? "#" + hash : ""}`;
   },
   read(key) {
     try {
@@ -103,6 +104,35 @@ const U = (window.MarineUI = {
   cat(id) {
     return MarineData.categories.find((c) => c.id === id);
   },
+  industry(id) {
+    return MarineData.industries?.find(i => i.id === id);
+  },
+  industryOf(category) {
+    return this.industry(MarineCore.industryForCategory(category));
+  },
+  industryField(prefix, category = "") {
+    return `<div class="field"><label for="${prefix}-industry">${this.tr("industry")} <b>*</b></label><select id="${prefix}-industry" name="industry_id" required><option value="" data-i18n="select">${this.t("select")}</option>${this.options(MarineData.industries, this.industryOf(category)?.id || "")}</select><small class="error" data-error="industry_id"></small></div>`;
+  },
+  bindIndustrySelect(prefix, categorySelect, afterReset) {
+    const industrySelect = document.getElementById(prefix + "-industry");
+    const initialCategory = categorySelect.value;
+    const update = (initial = false, selectedCategory = null) => {
+      const ids = this.industry(industrySelect.value)?.category_ids || [];
+      const previous = selectedCategory ?? (initial ? categorySelect.value : "");
+      categorySelect.innerHTML = (ids.length ? "" : `<option value="">${this.t("select")}</option>`) + this.options(MarineData.categories.filter(c => ids.includes(c.id)), previous);
+      categorySelect.disabled = !ids.length;
+      categorySelect.required = true;
+      categorySelect.closest(".field").hidden = ids.length === 1;
+      if (!initial) categorySelect.dispatchEvent(new Event("change"));
+      this.translate();
+    };
+    industrySelect.onchange = () => update();
+    industrySelect.form?.addEventListener("reset", () => queueMicrotask(() => {
+      update(false, initialCategory);
+      afterReset?.();
+    }));
+    update(true);
+  },
   badges(p) {
     return (p.certifications || [])
       .map((c) => `<span class="badge">${this.e(c.type)}</span>`)
@@ -148,11 +178,12 @@ const U = (window.MarineUI = {
       .forEach((n) => (n.placeholder = this.t(n.dataset.i18nPlaceholder)));
     document.querySelectorAll("a[href]").forEach((a) => {
       const href = a.getAttribute("href");
-      if (/\.html(?:\?|$)/.test(href)) {
-        const [page, q] = href.split("?");
+      if (/\.html(?:[?#]|$)/.test(href) && !/^(?:https?:)?\/\//.test(href)) {
+        const [path, hash = ""] = href.split("#");
+        const [page, q] = path.split("?");
         const params = new URLSearchParams(q);
         params.set("lang", this.lang);
-        a.setAttribute("href", page + "?" + params);
+        a.setAttribute("href", page + "?" + params + (hash ? "#" + hash : ""));
       }
     });
     const button = document.getElementById("language");
@@ -263,9 +294,9 @@ const U = (window.MarineUI = {
 if (!["zh", "en"].includes(U.lang)) U.lang = "zh";
 const page = document.body.dataset.page;
 document.getElementById("header").innerHTML =
-  `<header class="main-header"><div class="container header-row"><a class="brand" href="${U.url("index.html")}"><svg width="38" height="38" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 27 19 6v19l14 2-5 8H12Z" fill="currentColor"/><path d="m22 8 11 15H22Z" fill="#eb7435"/></svg><div>MARINEX<small>蓝屿航贸 · MARINE SOURCING</small></div></a><form class="header-search" action="products.html"><label class="sr-only" for="global-search">${U.tr("search")}</label><input id="global-search" name="q" data-i18n-placeholder="search" placeholder="${U.t("search")}" value="${U.e(new URLSearchParams(location.search).get("q") || "")}"><input type="hidden" name="lang" value="${U.lang}"><button data-i18n-aria="searchButton" aria-label="${U.t("searchButton")}">${U.tr("searchButton")}</button></form><button class="language" id="language" type="button">${U.t("language")}</button><a id="primary-action" class="button compact" href="${U.url("publish.html")}">${U.tr("publish")} <span>↗</span></a></div></header><nav class="main-nav"><div class="container"><a class="${page === "home" ? "active" : ""}" href="${U.url("index.html")}">${U.tr("home")}</a><a class="${page === "products" || page === "product" ? "active" : ""}" href="${U.url("products.html")}">${U.tr("browse")}</a><a class="${page === "rfq" ? "active" : ""}" href="${U.url("rfq.html")}">${U.tr("generalRfq")}</a><div class="nav-spacer"></div><a class="${page === "supplier" ? "active" : ""}" href="${U.url("supplier.html")}">${U.tr("myProducts")}</a><a class="${page === "inbox" ? "active" : ""}" href="${U.url("inbox.html")}">${U.tr("inbox")}</a></div></nav>`;
+  `<header class="main-header"><div class="container header-row"><a class="brand" href="${U.url("index.html")}"><svg width="38" height="38" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 27 19 6v19l14 2-5 8H12Z" fill="currentColor"/><path d="m22 8 11 15H22Z" fill="#eb7435"/></svg><div>${U.tr("brandName")}<small>GLOBAL SOURCING PLATFORM</small></div></a><form class="header-search" action="products.html"><label class="sr-only" for="global-search">${U.tr("search")}</label><input id="global-search" name="q" data-i18n-placeholder="search" placeholder="${U.t("search")}" value="${U.e(new URLSearchParams(location.search).get("q") || "")}"><input type="hidden" name="lang" value="${U.lang}"><button data-i18n-aria="searchButton" aria-label="${U.t("searchButton")}">${U.tr("searchButton")}</button></form><button class="language" id="language" type="button">${U.t("language")}</button><a id="primary-action" class="button compact" href="${U.url("publish.html")}">${U.tr("publish")} <span>↗</span></a></div></header><nav class="main-nav"><div class="container"><a class="${page === "home" ? "active" : ""}" href="${U.url("index.html")}">${U.tr("home")}</a><a class="${page === "products" || page === "product" ? "active" : ""}" href="${U.url("products.html")}">${U.tr("browse")}</a><a href="${U.url("index.html")}#suppliers">${U.tr("suppliersNav")}</a><a class="${page === "rfq" ? "active" : ""}" href="${U.url("rfq.html")}">${U.tr("generalRfq")}</a><div class="nav-spacer"></div><a class="${page === "supplier" ? "active" : ""}" href="${U.url("supplier.html")}">${U.tr("myProducts")}</a><a class="${page === "inbox" ? "active" : ""}" href="${U.url("inbox.html")}">${U.tr("inbox")}</a></div></nav>`;
 document.getElementById("footer").innerHTML =
-  `<footer><div class="container footer-grid"><div><a class="footer-brand" href="${U.url("index.html")}">MARINEX<span>蓝屿航贸</span></a><p>${U.tr("footerTag")}</p></div><div><h4>${U.tr("category")}</h4>${MarineData.categories.map((c) => `<a href="${U.url("products.html", { category: c.id })}">${U.bi(c.name)}</a>`).join("")}</div><div id="workspace-links"><h4>${U.tr("supplier")}</h4><a href="${U.url("publish.html")}">${U.tr("publish")}</a><a href="${U.url("inbox.html")}">${U.tr("inbox")}</a><a href="${U.url("supplier.html")}">${U.tr("myProducts")}</a></div></div><div class="container footer-bottom"><span>${U.tr("footerCopy")}</span><span>${U.tr("demo")}</span><button id="footer-language" class="language" type="button" data-i18n="language" style="color:inherit">${U.tr("language")}</button></div></footer>`;
+  `<footer><div class="container footer-grid"><div><a class="footer-brand" href="${U.url("index.html")}">${U.tr("brandName")}</a><p>${U.tr("footerTag")}</p></div><div><h4>${U.tr("category")}</h4>${MarineData.industries.map((c) => `<a href="${U.url("products.html", { industry: c.id })}">${U.bi(c.name)}</a>`).join("")}</div><div id="workspace-links"><h4>${U.tr("supplier")}</h4><a href="${U.url("publish.html")}">${U.tr("publish")}</a><a href="${U.url("inbox.html")}">${U.tr("inbox")}</a><a href="${U.url("supplier.html")}">${U.tr("myProducts")}</a></div></div><div class="container footer-bottom"><span>${U.tr("footerCopy")}</span><span>${U.tr("demo")}</span><button id="footer-language" class="language" type="button" data-i18n="language" style="color:inherit">${U.tr("language")}</button></div></footer>`;
 U.switchLanguage = () => {
   U.lang = U.lang === "zh" ? "en" : "zh";
   try {
@@ -282,3 +313,13 @@ document.getElementById("language").onclick = () => U.switchLanguage();
 document.getElementById("footer-language").onclick = () => U.switchLanguage();
 U.translate();
 if (U.storageFailed) setTimeout(() => U.notice("storageError"), 0);
+
+if (MarineData.industries?.length) {
+const industryNav = document.createElement("nav");
+industryNav.className = "industry-nav";
+industryNav.dataset.i18nAria = "industry";
+industryNav.setAttribute("aria-label", U.t("industry"));
+industryNav.innerHTML = `<div class="container"><a class="industry-nav-all" href="${U.url("index.html")}#industries">${U.tr("allIndustries")}</a>${MarineData.industries.map(i => `<a href="${U.url("products.html", { industry: i.id })}">${U.bi(i.name)}</a>`).join("")}</div>`;
+document.getElementById("header").append(industryNav);
+U.translate();
+}
