@@ -157,6 +157,7 @@ const U = (window.MarineUI = {
     });
     const button = document.getElementById("language");
     if (button) button.textContent = this.t("language");
+    window.MarineFormControls?.enhance();
   },
   notice(key, desc, link, label, extraLinks = []) {
     const modal = document.getElementById("feedback");
@@ -222,6 +223,10 @@ const U = (window.MarineUI = {
       )
         errors[i.name] = "validNumber";
       else if (!i.checkValidity()) errors[i.name] = "validation";
+    }
+    for (const i of form.querySelectorAll("[data-local-date]")) {
+      if (i.value && (!MarineCore.validDate(i.value) || (i.min && i.value < i.min) || (i.max && i.value > i.max)))
+        errors[i.name] = "validDate";
     }
     return errors;
   },

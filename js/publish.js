@@ -113,6 +113,7 @@
     row.innerHTML = `<div class="field"><label>${U.tr("certType")}<select data-cert-type>${["CCS", "ABS", "DNV"].map((v) => `<option ${c.type === v ? "selected" : ""}>${v}</option>`).join("")}</select></label></div><div class="field"><label>${U.tr("certNumber")}<input name="${certName}" data-cert-number required value="${U.e(c.number || "")}"></label><small class="error" data-error="${certName}"></small></div><div class="field cert-file"><label>${U.tr("certImage")}<input type="file" data-cert-file accept="image/*"></label>${c.image ? `<small>${U.e(c.image)}</small>` : ""}</div><button type="button" class="remove" data-i18n-aria="remove" aria-label="${U.t("remove")}">×</button>`;
     row.querySelector("button").onclick = () => row.remove();
     document.getElementById("cert-rows").append(row);
+    U.translate();
   }
   function previews() {
     document.getElementById("previews").innerHTML = media

@@ -107,3 +107,13 @@ test("validation scrolls the first invalid field into view before focusing", () 
   assert.equal(u.errors(form, { email: 'required' }), false);
   assert.deepEqual(calls, ['scroll', 'focus']);
 });
+test("optional localized delivery dates reject impossible days and accept empty dates", () => {
+  const { u } = boot({ getItem: () => null });
+  const date = { name: 'expected_delivery', value: '2026-02-30', min: '', max: '' };
+  const form = { querySelectorAll: selector => selector === '[data-local-date]' ? [date] : [] };
+  assert.equal(u.validate(form).expected_delivery, 'validDate');
+  date.value = '2028-02-29';
+  assert.equal(u.validate(form).expected_delivery, undefined);
+  date.value = '';
+  assert.equal(u.validate(form).expected_delivery, undefined);
+});
