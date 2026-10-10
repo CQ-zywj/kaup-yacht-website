@@ -13,7 +13,7 @@
         "description": "Hailan 42 Flybridge Yacht, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": ["assets/media/boats.svg", "assets/media/boats-detail.svg"],
+    "media": ["assets/media/p01.jpg", "assets/media/boats-detail.jpg"],
     "parameters": {
       "boat_type": "yacht",
       "material": "FRP",
@@ -64,7 +64,7 @@
         "description": "Voyager 18m Aluminum Workboat, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": ["assets/media/boats.svg", "assets/media/boats-detail.svg"],
+    "media": ["assets/media/p02.jpg", "assets/media/boats-detail.jpg"],
     "parameters": {
       "boat_type": "workboat",
       "material": "Aluminum",
@@ -115,7 +115,7 @@
         "description": "Qingyuan 10m Electric Cruiser, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": ["assets/media/boats.svg", "assets/media/boats-detail.svg"],
+    "media": ["assets/media/p03.jpg", "assets/media/boats-detail.jpg"],
     "parameters": {
       "boat_type": "yacht",
       "material": "FRP",
@@ -166,7 +166,7 @@
         "description": "Bluebay 38 Offshore Sailboat, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": ["assets/media/boats.svg", "assets/media/boats-detail.svg"],
+    "media": ["assets/media/p04.jpg", "assets/media/boats-detail.jpg"],
     "parameters": {
       "boat_type": "sailboat",
       "material": "FRP",
@@ -218,8 +218,8 @@
       }
     },
     "media": [
-      "assets/media/equipment.svg",
-      "assets/media/equipment-detail.svg"
+      "assets/media/p05.jpg",
+      "assets/media/equipment-detail.jpg"
     ],
     "parameters": {
       "compatible": "all",
@@ -270,8 +270,8 @@
       }
     },
     "media": [
-      "assets/media/equipment.svg",
-      "assets/media/equipment-detail.svg"
+      "assets/media/p06.jpg",
+      "assets/media/equipment-detail.jpg"
     ],
     "parameters": {
       "compatible": "commercial",
@@ -322,8 +322,8 @@
       }
     },
     "media": [
-      "assets/media/equipment.svg",
-      "assets/media/equipment-detail.svg"
+      "assets/media/p07.jpg",
+      "assets/media/equipment-detail.jpg"
     ],
     "parameters": {
       "compatible": "yacht",
@@ -374,8 +374,8 @@
       }
     },
     "media": [
-      "assets/media/equipment.svg",
-      "assets/media/equipment-detail.svg"
+      "assets/media/p08.jpg",
+      "assets/media/equipment-detail.jpg"
     ],
     "parameters": {
       "compatible": "all",
@@ -425,7 +425,7 @@
         "description": "BlueShield Low-VOC Antifouling, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": ["assets/media/coatings.svg", "assets/media/coatings-detail.svg"],
+    "media": ["assets/media/p09.jpg", "assets/media/coatings-detail.jpg"],
     "parameters": {},
     "certifications": [
       {
@@ -477,7 +477,7 @@
         "description": "SeaGuard Epoxy Marine Primer, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": ["assets/media/coatings.svg", "assets/media/coatings-detail.svg"],
+    "media": ["assets/media/p10.jpg", "assets/media/coatings-detail.jpg"],
     "parameters": {},
     "certifications": [
       {
@@ -529,7 +529,7 @@
         "description": "Yacht Deck Care Cleaner, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": ["assets/media/coatings.svg", "assets/media/coatings-detail.svg"],
+    "media": ["assets/media/p11.jpg", "assets/media/coatings-detail.jpg"],
     "parameters": {},
     "certifications": [
       {
@@ -581,7 +581,7 @@
         "description": "Antifouling Sample · Compliance Pending, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": ["assets/media/coatings.svg", "assets/media/coatings-detail.svg"],
+    "media": ["assets/media/p12.jpg", "assets/media/coatings-detail.jpg"],
     "parameters": {},
     "certifications": [
       {
@@ -629,7 +629,7 @@
         "description": "Pre-delivery Vessel Inspection, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": ["assets/media/services.svg", "assets/media/services-detail.svg"],
+    "media": ["assets/media/p13.jpg", "assets/media/services-detail.jpg"],
     "parameters": {
       "service_type": "inspection",
       "region": "asia",
@@ -681,7 +681,7 @@
         "description": "Cross-border Yacht Shipping, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": ["assets/media/services.svg", "assets/media/services-detail.svg"],
+    "media": ["assets/media/p14.jpg", "assets/media/services-detail.jpg"],
     "parameters": {
       "service_type": "logistics",
       "region": "global",
@@ -733,7 +733,7 @@
         "description": "Marine Structural Design, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": ["assets/media/services.svg", "assets/media/services-detail.svg"],
+    "media": ["assets/media/p15.jpg", "assets/media/services-detail.jpg"],
     "parameters": {
       "service_type": "design",
       "region": "global",
@@ -785,7 +785,7 @@
         "description": "European Port Survey & Delivery, a structured sourcing example for marine buyers. Specifications and export terms can be discussed for your project. All information is demo data."
       }
     },
-    "media": ["assets/media/services.svg", "assets/media/services-detail.svg"],
+    "media": ["assets/media/p16.jpg", "assets/media/services-detail.jpg"],
     "parameters": {
       "service_type": "inspection",
       "region": "europe",

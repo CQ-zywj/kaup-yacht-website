@@ -57,7 +57,7 @@
     const list = BuyerRfq.select(owned, MarineAccounts.user(localStorage), state);
     document.getElementById('buyer-inquiry-list').innerHTML = list.length ? list.map(row => {
       const p = row.product_id ? U.product(row.product_id) : null;
-      return `<button type="button" class="inquiry-item" data-buyer-inquiry="${U.e(row.id)}"><img src="${U.e(p ? U.img(p) : 'assets/media/services.svg')}" alt=""><div><h3>${title(row)}</h3><p>${row.category_id ? U.bi(U.cat(row.category_id)?.name) : U.e(row.buyer.company)}</p></div><div class="inquiry-meta"><p>${U.tr('quantity')} ${U.e(row.quantity)} · ${U.tr('targetCountry')} ${U.e(row.target_country || '—')}</p><p>${U.e(U.date(row.created_at))}</p></div><div class="status-cell"><span class="status ${U.e(row.status)}">${U.tr(statuses[row.status])}</span></div></button>`;
+      return `<button type="button" class="inquiry-item" data-buyer-inquiry="${U.e(row.id)}"><img src="${U.e(p ? U.img(p) : 'assets/media/services.jpg')}" alt=""><div><h3>${title(row)}</h3><p>${row.category_id ? U.bi(U.cat(row.category_id)?.name) : U.e(row.buyer.company)}</p></div><div class="inquiry-meta"><p>${U.tr('quantity')} ${U.e(row.quantity)} · ${U.tr('targetCountry')} ${U.e(row.target_country || '—')}</p><p>${U.e(U.date(row.created_at))}</p></div><div class="status-cell"><span class="status ${U.e(row.status)}">${U.tr(statuses[row.status])}</span></div></button>`;
     }).join('') : owned.length ? U.empty('noFilteredInquiries', 'changeInquiryFilter') : U.empty('noBuyerInquiries', 'startBuyerInquiry', 'products.html', 'backBrowse');
     main.querySelectorAll('[data-buyer-inquiry]').forEach(button => button.onclick = () => openInquiry(button.dataset.buyerInquiry));
     if (selectedId) {

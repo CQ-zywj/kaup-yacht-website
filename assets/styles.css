@@ -2226,10 +2226,11 @@ body[data-page="supplier-auth"] .page-intro { padding: 0; margin: 24px 0; }
 .portal-carousel { overflow: hidden; border: 1px solid #203f52; border-radius: 8px; background: #123447; min-width: 0; color: white; box-shadow: 0 8px 22px #102c4012; }
 .carousel-window { min-height: 300px; position: relative; touch-action: pan-y; }
 .carousel-slide { position: relative; overflow: hidden; padding: 28px 26px; min-height: 300px; isolation: isolate; animation: slide-in 350ms ease-out; }
-.slide-platform { background: #123447; }
-.slide-precision { background: #163c48; }
-.slide-agriculture { background: #254a40; }
-.carousel-art { position: absolute; width: 48%; height: 90%; right: -2%; bottom: -4%; object-fit: contain; opacity: .65; z-index: -1; pointer-events: none; }
+.slide-platform { background: #123447; --hero-scrim: 18,52,71; }
+.slide-precision { background: #163c48; --hero-scrim: 22,60,72; }
+.slide-agriculture { background: #254a40; --hero-scrim: 37,74,64; }
+.carousel-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .85; z-index: -1; pointer-events: none; }
+.carousel-slide::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(90deg, rgba(var(--hero-scrim,18,52,71),.97) 0%, rgba(var(--hero-scrim,18,52,71),.93) 38%, rgba(var(--hero-scrim,18,52,71),.74) 62%, rgba(var(--hero-scrim,18,52,71),.28) 100%); }
 .slide-copy { max-width: 75%; }
 .slide-copy .eyebrow { font-size: 10px; color: #a0d9df; letter-spacing: 1.5px; }
 .slide-copy h2 { font-size: clamp(25px,2.2vw,32px); font-weight: 750; letter-spacing: -.7px; line-height: 1.24; white-space: pre-line; margin: 17px 0 14px; text-wrap: balance; color: white; }
@@ -2295,7 +2296,8 @@ body[data-page="supplier-auth"] .page-intro { padding: 0; margin: 24px 0; }
   .slide-copy { max-width: 92%; }
   .slide-copy h2 { font-size: 27px; }
   .slide-copy p { max-width: 95%; font-size: 12px; }
-  .carousel-art { width: 48%; height: 80%; right: -12%; opacity: .23; }
+  .carousel-art { opacity: .72; }
+  .carousel-slide::after { background: linear-gradient(180deg, rgba(var(--hero-scrim,18,52,71),.96) 0%, rgba(var(--hero-scrim,18,52,71),.9) 58%, rgba(var(--hero-scrim,18,52,71),.6) 100%); }
   .carousel-dots .dot-label { display: none; }
   .carousel-dots button { min-width: 32px; min-height: 44px; justify-content: center; }
   .carousel-arrows button { min-width: 36px; min-height: 44px; }
@@ -2373,8 +2375,8 @@ body[data-page="home"] .main-header .container { padding-top: 26px; padding-bott
 #quick-request input, #quick-request select { width: 100%; min-width: 0; min-height: 42px; margin-bottom: 4px; }
 #quick-request .button { margin-top: 8px; font-size: 12px; }
 .carousel-window, .carousel-slide { min-height: 430px; }
-.carousel-slide .slide-copy { max-width: 88%; }
-.carousel-art { width: 62%; opacity: .7; }
+.carousel-slide .slide-copy { max-width: 62%; }
+.carousel-art { opacity: .82; }
 .slide-copy { padding: 32px 28px; }
 .carousel-slide h2 { font-size: clamp(26px,2.3vw,36px); }
 .carousel-controls { padding: 7px 12px; }
@@ -2431,7 +2433,7 @@ body[data-page="home"] .main-header .container { padding-top: 26px; padding-bott
 .article-body h1 { font-size: clamp(26px,3vw,36px); line-height: 1.4; margin: 16px 0; }
 .article-meta { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
 .article-cover { height: 300px; margin: 24px 0; background: #143b50; }
-.article-cover img { object-fit: contain; }
+.article-cover img { object-fit: cover; }
 .article-intro { font-weight: 600; line-height: 1.9; font-size: 17px; }
 .article-paragraphs p { line-height: 2; margin: 22px 0; color: #415767; font-size: 16px; }
 .content-aside { align-self: start; padding: 24px; }

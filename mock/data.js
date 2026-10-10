@@ -1051,8 +1051,8 @@ window.MarineData = {
         }
       },
       "media": [
-        "assets/media/boats.svg",
-        "assets/media/boats-detail.svg"
+        "assets/media/p01.jpg",
+        "assets/media/boats-detail.jpg"
       ],
       "parameters": {
         "boat_type": "yacht",
@@ -1109,8 +1109,8 @@ window.MarineData = {
         }
       },
       "media": [
-        "assets/media/boats.svg",
-        "assets/media/boats-detail.svg"
+        "assets/media/p02.jpg",
+        "assets/media/boats-detail.jpg"
       ],
       "parameters": {
         "boat_type": "workboat",
@@ -1167,8 +1167,8 @@ window.MarineData = {
         }
       },
       "media": [
-        "assets/media/boats.svg",
-        "assets/media/boats-detail.svg"
+        "assets/media/p03.jpg",
+        "assets/media/boats-detail.jpg"
       ],
       "parameters": {
         "boat_type": "yacht",
@@ -1225,8 +1225,8 @@ window.MarineData = {
         }
       },
       "media": [
-        "assets/media/boats.svg",
-        "assets/media/boats-detail.svg"
+        "assets/media/p04.jpg",
+        "assets/media/boats-detail.jpg"
       ],
       "parameters": {
         "boat_type": "sailboat",
@@ -1283,8 +1283,8 @@ window.MarineData = {
         }
       },
       "media": [
-        "assets/media/equipment.svg",
-        "assets/media/equipment-detail.svg"
+        "assets/media/p05.jpg",
+        "assets/media/equipment-detail.jpg"
       ],
       "parameters": {
         "compatible": "all",
@@ -1339,8 +1339,8 @@ window.MarineData = {
         }
       },
       "media": [
-        "assets/media/equipment.svg",
-        "assets/media/equipment-detail.svg"
+        "assets/media/p06.jpg",
+        "assets/media/equipment-detail.jpg"
       ],
       "parameters": {
         "compatible": "commercial",
@@ -1395,8 +1395,8 @@ window.MarineData = {
         }
       },
       "media": [
-        "assets/media/equipment.svg",
-        "assets/media/equipment-detail.svg"
+        "assets/media/p07.jpg",
+        "assets/media/equipment-detail.jpg"
       ],
       "parameters": {
         "compatible": "yacht",
@@ -1451,8 +1451,8 @@ window.MarineData = {
         }
       },
       "media": [
-        "assets/media/equipment.svg",
-        "assets/media/equipment-detail.svg"
+        "assets/media/p08.jpg",
+        "assets/media/equipment-detail.jpg"
       ],
       "parameters": {
         "compatible": "all",
@@ -1507,8 +1507,8 @@ window.MarineData = {
         }
       },
       "media": [
-        "assets/media/coatings.svg",
-        "assets/media/coatings-detail.svg"
+        "assets/media/p09.jpg",
+        "assets/media/coatings-detail.jpg"
       ],
       "parameters": {},
       "certifications": [
@@ -1566,8 +1566,8 @@ window.MarineData = {
         }
       },
       "media": [
-        "assets/media/coatings.svg",
-        "assets/media/coatings-detail.svg"
+        "assets/media/p10.jpg",
+        "assets/media/coatings-detail.jpg"
       ],
       "parameters": {},
       "certifications": [
@@ -1625,8 +1625,8 @@ window.MarineData = {
         }
       },
       "media": [
-        "assets/media/coatings.svg",
-        "assets/media/coatings-detail.svg"
+        "assets/media/p11.jpg",
+        "assets/media/coatings-detail.jpg"
       ],
       "parameters": {},
       "certifications": [
@@ -1684,8 +1684,8 @@ window.MarineData = {
         }
       },
       "media": [
-        "assets/media/coatings.svg",
-        "assets/media/coatings-detail.svg"
+        "assets/media/p12.jpg",
+        "assets/media/coatings-detail.jpg"
       ],
       "parameters": {},
       "certifications": [
@@ -1739,8 +1739,8 @@ window.MarineData = {
         }
       },
       "media": [
-        "assets/media/services.svg",
-        "assets/media/services-detail.svg"
+        "assets/media/p13.jpg",
+        "assets/media/services-detail.jpg"
       ],
       "parameters": {
         "service_type": "inspection",
@@ -1798,8 +1798,8 @@ window.MarineData = {
         }
       },
       "media": [
-        "assets/media/services.svg",
-        "assets/media/services-detail.svg"
+        "assets/media/p14.jpg",
+        "assets/media/services-detail.jpg"
       ],
       "parameters": {
         "service_type": "logistics",
@@ -1857,8 +1857,8 @@ window.MarineData = {
         }
       },
       "media": [
-        "assets/media/services.svg",
-        "assets/media/services-detail.svg"
+        "assets/media/p15.jpg",
+        "assets/media/services-detail.jpg"
       ],
       "parameters": {
         "service_type": "design",
@@ -1916,8 +1916,8 @@ window.MarineData = {
         }
       },
       "media": [
-        "assets/media/services.svg",
-        "assets/media/services-detail.svg"
+        "assets/media/p16.jpg",
+        "assets/media/services-detail.jpg"
       ],
       "parameters": {
         "service_type": "inspection",

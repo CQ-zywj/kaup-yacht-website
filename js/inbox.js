@@ -30,7 +30,7 @@ function renderList() {
     ? list
         .map((r) => {
           const p = U.product(r.product_id);
-          return `<button type="button" class="inquiry-item" data-inquiry="${U.e(r.id)}"><img src="${U.e(p ? U.img(p) : "assets/media/services.svg")}" alt=""><div><h3>${p ? U.bi({ zh: p.i18n.zh.title, en: p.i18n.en.title }) : U.tr("general")}</h3><p>${U.e(r.buyer.company)} · ${U.e(r.buyer.country)}</p></div><div class="inquiry-meta"><p>${U.tr("quantity")} ${U.e(r.quantity)} · ${U.e(r.target_country || "")}</p><p>${U.e(U.date(r.created_at))}</p></div><div class="status-cell"><span class="status ${U.e(r.status)}">${U.tr(r.status)}</span></div></button>`;
+          return `<button type="button" class="inquiry-item" data-inquiry="${U.e(r.id)}"><img src="${U.e(p ? U.img(p) : "assets/media/services.jpg")}" alt=""><div><h3>${p ? U.bi({ zh: p.i18n.zh.title, en: p.i18n.en.title }) : U.tr("general")}</h3><p>${U.e(r.buyer.company)} · ${U.e(r.buyer.country)}</p></div><div class="inquiry-meta"><p>${U.tr("quantity")} ${U.e(r.quantity)} · ${U.e(r.target_country || "")}</p><p>${U.e(U.date(r.created_at))}</p></div><div class="status-cell"><span class="status ${U.e(r.status)}">${U.tr(r.status)}</span></div></button>`;
         })
         .join("")
     : U.empty("noInquiries", "noInquiriesHint", "rfq.html", "generalRfq");

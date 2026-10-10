@@ -19,7 +19,7 @@ test('news, exhibitions and procurement leads have stable bilingual detail data'
         if(type==='leads') assert.ok(row.quantity[language] && row.country[language] && row.brief[language]);
         else {assert.ok(row.summary[language] && row.body.length);for(const paragraph of row.body) assert.ok(paragraph[language]);}
       }
-      if(type!=='leads') assert.ok(fs.existsSync(`assets/media/banner-${row.art}.svg`));
+      if(type!=='leads') assert.ok(fs.existsSync(`assets/media/banner-${row.art}.jpg`));
       if(type==='exhibitions') assert.ok(row.date<=row.end && row.location.zh && row.location.en);
     }
   }

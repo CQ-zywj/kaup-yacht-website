@@ -198,7 +198,7 @@
       },
       media: media.length
         ? media
-        : ["assets/media/" + currentCategory + ".svg"],
+        : ["assets/media/" + currentCategory + ".jpg"],
       parameters:
         currentCategory === "coatings"
           ? {}
