@@ -2659,3 +2659,40 @@ body[data-page="home"] .brand small { white-space:nowrap; font-size:8px; letter-
  .portal-supplier-grid { grid-template-columns:1fr; }
  .portal-supplier .text-link,.directory-company-footer .text-link { white-space:normal; }
 }
+
+/* Keep signed-in home actions together, with work links inside the account menu. */
+.home-header-actions { flex-wrap:nowrap; max-width:none; gap:12px; }
+.home-header-actions .account-nav { flex-shrink:0; }
+.account-menu summary { display:flex; align-items:center; gap:10px; list-style:none; border:1px solid var(--line); border-radius:6px; background:#fff; padding:9px 12px; }
+.account-menu summary::-webkit-details-marker { display:none; }
+.account-avatar { display:grid; place-items:center; width:32px; height:32px; flex-shrink:0; border-radius:50%; background:#eaf3f4; color:var(--ocean); font-size:14px; font-weight:700; }
+.account-identity { min-width:0; display:block; }
+.account-name { display:block; max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:13px; font-weight:600; }
+.account-menu summary small { font-size:10px; line-height:1.4; }
+.account-chevron { color:var(--muted); font-size:16px; }
+.account-menu[open] summary { border-color:var(--ocean); }
+.account-menu > div { margin-top:8px; border-radius:6px; }
+@media(min-width:768px) and (max-width:1100px) {
+ body[data-page="home"] .header-row { grid-template-columns:180px minmax(0,1fr); }
+ .home-header-actions { grid-column:1/-1; flex-direction:row; justify-content:flex-end; padding:0; }
+}
+@media(max-width:767px) {
+ .home-header-actions { flex-wrap:wrap; justify-content:flex-end; max-width:200px; }
+ .home-header-actions .account-menu summary { padding:7px 9px; max-width:200px; }
+ .account-name { max-width:115px; }
+ .account-avatar { width:28px; height:28px; }
+ body[data-page="home"] .header-row:has(.account-menu) { grid-template-columns:1fr; gap:12px; }
+ body[data-page="home"] .header-row:has(.account-menu) .home-header-actions { grid-column:1; grid-row:2; max-width:none; padding:0; justify-content:flex-start; }
+ body[data-page="home"] .header-row:has(.account-menu) .home-search-group { grid-row:3; }
+}
+@media(max-width:767px) {
+ body[data-page="home"] .header-row:has(.account-menu) { position:relative; }
+ body[data-page="home"] .header-row:has(.account-menu) .home-header-actions { display:grid; grid-template-columns:auto minmax(0,1fr); width:100%; gap:10px; }
+ body[data-page="home"] .header-row:has(.account-menu) .home-header-actions .language { position:absolute; top:18px; right:18px; }
+ body[data-page="home"] .header-row:has(.account-menu) .account-nav { min-width:0; }
+ body[data-page="home"] .header-row:has(.account-menu) .account-menu { width:100%; }
+ body[data-page="home"] .header-row:has(.account-menu) .account-menu summary { max-width:none; gap:7px; }
+ body[data-page="home"] .header-row:has(.account-menu) .account-identity { flex:1; }
+ body[data-page="home"] .header-row:has(.account-menu) .account-name { max-width:100%; }
+ body[data-page="home"] .header-row:has(.account-menu) .account-menu > div { max-width:calc(100vw - 36px); }
+}

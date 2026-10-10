@@ -87,7 +87,7 @@ function renderAuth() {
     else if (input.name === "name" || input.name === "contact") input.autocomplete = "name";
     else if (input.name === "company") input.autocomplete = "organization";
   }
-  if (query.has("return")) {
+  if (query.has("return") && tab === "register") {
     const hint = document.createElement("p");
     hint.className = "auth-return";
     hint.innerHTML = U.tr("authReturnHint");
@@ -252,6 +252,10 @@ async function submitAuth(e) {
     }
     AccountUI.refreshHeader();
     f.reset();
+    if (tab === "login") {
+      location.replace(U.url("index.html"));
+      return;
+    }
     const target = query.has("return")
       ? returnTo
       : role === "supplier"

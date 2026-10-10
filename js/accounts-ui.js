@@ -60,9 +60,9 @@ const AccountUI = {
     const policy = this.permissions();
     const nav = document.querySelector(".main-nav .container");
     if (nav) {
-      nav.closest(".main-nav").hidden = document.body.dataset.page === "home" && policy.role === "guest";
+      nav.closest(".main-nav").hidden = document.body.dataset.page === "home";
       nav.querySelector('[data-buyer-nav]')?.remove();
-      if (policy.role === 'buyer') {
+      if (policy.role === 'buyer' && document.body.dataset.page !== 'home') {
         const link = document.createElement('a');
         link.dataset.buyerNav = '';
         link.href = U.url('my-rfq.html');
@@ -115,7 +115,7 @@ const AccountUI = {
     const source = new URLSearchParams(location.search).get("return");
     const authParams = source ? { return: MarineAccounts.safeReturn(source) } : {};
     a.innerHTML = u
-      ? `<details class="account-menu"><summary aria-label="${U.t("accountMenu")}">${U.e(u.role === "supplier" ? u.company || u.name : u.name)} <small>${U.tr(u.role === "supplier" ? "identitySupplier" : "identityBuyer")}</small></summary><div>${u.role === "supplier" ? `<a href="${U.url("company.html")}">${U.tr("companyProfile")}</a><a href="${U.url("supplier.html")}">${U.tr("myProducts")}</a><a href="${U.url("inbox.html")}">${U.tr("inbox")}</a>` : `<a href="${U.url("my-rfq.html")}">${U.tr("myInquiries")}</a><a href="${U.url("rfq.html")}">${U.tr("generalRfq")}</a>`}<button type="button" id="sign-out" class="link-button">${U.tr("logout")}</button></div></details>`
+      ? `<details class="account-menu"><summary aria-label="${U.t("accountMenu")}"><span class="account-avatar" aria-hidden="true">${U.e((u.name || u.company || "U").slice(0,1))}</span><span class="account-identity"><span class="account-name" title="${U.e(u.role === "supplier" ? u.company || u.name : u.name)}">${U.e(u.role === "supplier" ? u.company || u.name : u.name)}</span><small>${U.tr(u.role === "supplier" ? "identitySupplier" : "identityBuyer")}</small></span><span class="account-chevron" aria-hidden="true">⌄</span></summary><div>${u.role === "supplier" ? `<a href="${U.url("company.html")}">${U.tr("companyProfile")}</a><a href="${U.url("supplier.html")}">${U.tr("myProducts")}</a><a href="${U.url("inbox.html")}">${U.tr("inbox")}</a>` : `<a href="${U.url("my-rfq.html")}">${U.tr("myInquiries")}</a><a href="${U.url("rfq.html")}">${U.tr("generalRfq")}</a>`}<button type="button" id="sign-out" class="link-button">${U.tr("logout")}</button></div></details>`
       : `<a href="${U.url(authPage, { ...authParams, tab: "login" })}">${U.tr("login")}</a><a href="${U.url(authPage, { ...authParams, tab: "register" })}">${U.tr("register")}</a>`;
     (document.body.dataset.page === "home" ? document.querySelector(".home-header-actions") || nav : nav).append(a);
     a.querySelector("#personal-center")?.addEventListener("click", () =>
