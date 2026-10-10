@@ -541,7 +541,7 @@ window.MarineI18n = {
   ],
   noData: ["暂无数据", "No data available"],
   footerTag: ["多品类跨境采购 · 连接中国与全球", "Multi-industry sourcing. China to the world."],
-  footerCopy: ["© 2026 北贸汇 · 前端演示原型", "© 2026 NORTHLINK · Frontend demonstration"],
+  footerCopy: ["© 2026 智御无疆", "© 2026 Kaup"],
   navHint: ["买家发现 · 供应商发布 · 询盘收发", "Discover · List · Inquire"],
   viewMsds: ["查看 MSDS 样例", "View sample MSDS"],
   cover: ["主图", "Cover"],
