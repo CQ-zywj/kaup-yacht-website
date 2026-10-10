@@ -9,14 +9,14 @@
     function render(state) {
       slides.forEach((slide, index) => {slide.hidden = index !== state.index;});
       dots.forEach((dot, index) => dot.setAttribute('aria-pressed', String(index === state.index)));
-      pause.hidden = state.reducedMotion;
+      if (pause) pause.hidden = state.reducedMotion;
       // Hover/focus suspensions are temporary; this button controls the user's persistent pause.
-      pause.dataset.i18nAria = state.userPaused ? 'carouselPlay' : 'carouselPause';
-      pause.setAttribute('aria-label', U.t(pause.dataset.i18nAria));
-      pause.querySelector('span').textContent = state.userPaused ? '▷' : 'Ⅱ';
+      if (pause) pause.dataset.i18nAria = state.userPaused ? 'carouselPlay' : 'carouselPause';
+      if (pause) pause.setAttribute('aria-label', U.t(pause.dataset.i18nAria));
+      if (pause) pause.querySelector('span').textContent = state.userPaused ? '▷' : 'Ⅱ';
       if (state.manual) status.textContent = `${state.index + 1} / ${slides.length}: ${U.t(slides[state.index].dataset.titleKey)}`;
     }
-    const carousel = MarineCarousel.createCarousel({count:slides.length, reducedMotion:reduced.matches, onChange:render});
+    const carousel = MarineCarousel.createCarousel({count:slides.length, interval:5000, reducedMotion:reduced.matches, onChange:render});
     carouselRoot.addEventListener('mouseenter', () => carousel.pause('hover'));
     carouselRoot.addEventListener('mouseleave', () => carousel.resume('hover'));
     carouselRoot.addEventListener('focusin', () => carousel.pause('focus'));
@@ -30,6 +30,7 @@
       else if (action === 'previous') carousel.previous();
     });
     carouselRoot.addEventListener('keydown', event => {
+      if (event.code === 'Space' && event.target === carouselRoot) {event.preventDefault();carousel.toggle();return;}
       if (!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return;
       event.preventDefault();
       if (event.key === 'ArrowRight') carousel.next();

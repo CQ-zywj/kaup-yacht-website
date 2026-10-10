@@ -1,0 +1,38 @@
+(() => {
+  const params=new URLSearchParams(location.search);
+  const mode=document.body.dataset.page;
+  const main=document.getElementById('main');
+  const listPage=type=>type==='exhibitions'?'exhibitions.html':'news.html';
+  const detailURL=(type,id)=>U.url('content.html',{type,id});
+  function card(type,r){return `<article class="content-card"><a href="${detailURL(type,r.id)}" class="editorial-art" aria-label="${U.e(r.title[U.lang])}"><img src="assets/media/banner-${U.e(r.art)}.svg" alt=""></a><div><span class="editorial-tag">${U.tr(type==='news'?'demoEditorial':'demoEvent')}</span><h2><a href="${detailURL(type,r.id)}">${U.bi(r.title)}</a></h2><p>${U.bi(r.summary)}</p><small>${U.e(r.date)}${r.location?' · '+U.bi(r.location):''}</small><a class="text-link" href="${detailURL(type,r.id)}">${U.tr(type==='news'?'readMore':'eventDetails')} →</a></div></article>`;}
+  function render(){
+    if(mode==='inquiry-detail'){
+      if(AccountUI.getUser()?.role!=='supplier'){
+        main.innerHTML=`<div class="container content-shell">${U.empty('sellerOnlyTitle','supplierAccessHint','supplier-auth.html','switchSupplier')}</div>`;
+        main.querySelector('.empty a').href=U.url('supplier-auth.html',{return:location.pathname.split('/').pop()+location.search});
+        U.translate();return;
+      }
+      const lead=PlatformContent.find('leads',params.get('id'));
+      if(!lead){missing('index.html#home-leads');return;}
+      document.title=lead.title[U.lang]+' | NORTHLINK';
+      main.innerHTML=`<div class="container content-shell"><div class="breadcrumbs"><a href="${U.url('index.html')}#home-leads">${U.tr('supplierLeads')}</a> / ${U.tr('leadDetails')}</div><div class="content-detail-grid"><article class="panel article-body"><span class="editorial-tag">${U.tr('demoLead')}</span><h1>${U.bi(lead.title)}</h1><p class="content-disclaimer">${U.tr('leadHint')}</p><dl class="event-facts"><div><dt>${U.tr('industry')}</dt><dd>${U.bi(U.industry(lead.industry).name)}</dd></div><div><dt>${U.tr('buyerRegion')}</dt><dd>${U.bi(lead.country)}</dd></div><div><dt>${U.tr('quantity')}</dt><dd>${U.bi(lead.quantity)}</dd></div></dl><h2>${U.tr('leadBrief')}</h2><p>${U.bi(lead.brief)}</p><button type="button" class="button" id="demo-contact">${U.tr('contactBuyer')}</button></article><aside class="content-aside panel"><h2>${U.tr('supplierEntryNav')}</h2><p>${U.tr('demoContactHint')}</p><a class="button full-width" href="${U.url('company.html')}">${U.tr('companyProfile')}</a><a class="text-link" href="${U.url('inbox.html')}">${U.tr('receivedInquiries')} →</a></aside></div></div>`;
+      document.getElementById('demo-contact').onclick=()=>U.notice('demoContact','demoContactHint','company.html','companyProfile');
+    }else if(mode==='content'){
+      const type=params.get('type')==='exhibitions'?'exhibitions':'news', r=PlatformContent.find(type,params.get('id'));
+      if(!r){missing(listPage(type));return;}
+      const event=type==='exhibitions';
+      document.title=(r.title[U.lang])+' | NORTHLINK';
+      main.innerHTML=`<div class="container content-shell"><div class="breadcrumbs"><a href="${U.url('index.html')}">${U.tr('home')}</a> / <a href="${U.url(listPage(type))}">${U.tr(event?'exhibitionsNav':'newsNav')}</a></div><div class="content-detail-grid"><article class="panel article-body"><span class="editorial-tag">${U.tr(event?'demoEvent':'demoEditorial')}</span><h1>${U.bi(r.title)}</h1><p class="article-meta">${U.e(r.date)} · ${U.bi(U.industry(r.industry).name)}</p><div class="article-cover editorial-art"><img src="assets/media/banner-${r.art}.svg" alt=""></div>${event?`<dl class="event-facts"><div><dt>${U.tr('eventDate')}</dt><dd>${r.date} — ${r.end}</dd></div><div><dt>${U.tr('eventLocation')}</dt><dd>${U.bi(r.location)}</dd></div></dl>`:''}<p class="article-intro">${U.bi(r.summary)}</p><div class="article-paragraphs">${r.body.map(p=>`<p>${U.bi(p)}</p>`).join('')}</div><p class="content-disclaimer">${U.tr(event?'demoEvent':'demoEditorial')}</p><a class="text-link" href="${U.url(listPage(type))}">← ${U.tr('backList')}</a></article><aside class="content-aside panel"><h2>${U.tr('relatedContent')}</h2>${PlatformContent[type].filter(x=>x.id!==r.id).map(x=>`<a class="related-story" href="${detailURL(type,x.id)}"><strong>${U.bi(x.title)}</strong><small>${x.date}</small></a>`).join('')}<a class="button full-width" href="${U.url('rfq.html',{industry:r.industry})}">${U.tr('generalRfq')} →</a><a class="text-link" href="${U.url('products.html',{industry:r.industry})}">${U.tr('channelOpen')} →</a></aside></div></div>`;
+    }else{
+      const type=mode==='exhibitions'?'exhibitions':'news',event=type==='exhibitions';
+      const q=params.get('q')||'', industry=params.get('industry')||'';
+      const items=PlatformContent[type].filter(r=>(!industry||r.industry===industry)&&(!q||(r.title[U.lang]+' '+r.summary[U.lang]).toLowerCase().includes(q.toLowerCase())));
+      document.title=U.t(event?'exhibitionsNav':'newsNav')+' | NORTHLINK';
+      main.innerHTML=`<div class="container content-shell"><div class="page-intro"><div class="eyebrow">NORTHLINK · ${U.tr('contentAll')}</div><h1>${U.tr(event?'exhibitionsNav':'newsNav')}</h1><p>${U.tr(event?'eventsHint':'newsHint')}</p></div><div class="content-list-toolbar"><form action="${listPage(type)}" class="header-search"><label class="sr-only" for="content-search">${U.tr('contentSearch')}</label><input id="content-search" name="q" value="${U.e(q)}" placeholder="${U.t('searchContent')}"><input type="hidden" name="lang" value="${U.lang}"><input type="hidden" name="industry" value="${U.e(industry)}"><button>${U.tr('searchButton')}</button></form><span class="muted">${items.length} ${U.tr(event?'eventCount':'newsCount')}</span></div><p class="content-disclaimer">${U.tr(event?'demoEvent':'demoEditorial')}</p><div class="news-category-links"><a href="${U.url(listPage(type))}">${U.tr('all')}</a>${[...new Set(PlatformContent[type].map(row=>row.industry))].map(id=>`<a href="${U.url(listPage(type),{industry:id})}" ${industry===id?'aria-current="page"':''}>${U.bi(U.industry(id).name)}</a>`).join('')}</div><div class="content-grid">${items.map(r=>card(type,r)).join('') || U.empty('contentMissing','contentMissingHint',listPage(type),'backList')}</div></div>`;
+    }
+    U.translate();AccountUI.refreshContext();
+  }
+  function missing(back){main.innerHTML=`<div class="container content-shell">${U.empty('contentMissing','contentMissingHint',back,'backList')}</div>`;U.translate();}
+  render();window.addEventListener('languagechange',render);
+  window.addEventListener('storage',event=>{if(event.key==='current_user')render();});
+})();

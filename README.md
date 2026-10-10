@@ -1,4 +1,4 @@
-# 蓝屿航贸 / LANYU TRADE
+# 北贸汇 / NORTHLINK
 
 多品类跨境 B2B 平台前端静态原型（船舶 / 游艇为一个行业），按所附 PRD v0.3 实现。无需安装依赖、无需构建，没有后端。
 
@@ -88,3 +88,10 @@ node --test tests/*.test.cjs
 首页提供行业目录、采购入口、行业专区与多供应商展示。船舶与游艇、轴承、机床、农产品、木材与林产、石化与化工为六个一级行业；除船舶外，当前种子商品为空。发布表单与列表支持各行业独立参数模板。
 
 `mock/industries.json` 是一级行业目录，`mock/categories.json` 是专业分类与参数模板。旧船舶分类 ID 和本地记录保持兼容，新增记录包含 `industry_id`。浏览列表支持 `industry` 与 `supplier` URL 参数；模拟账号与存储键名保持兼容。
+
+## 资讯门户首页（2026-10-10）
+
+- 首页移除独立船舶游艇专区，仍保留船舶行业分类、产品列表与详情。
+- 新闻列表 news.html、展会列表 exhibitions.html、内容详情 content.html?type=news&id=precision-sourcing。
+- 供应商首页显示本地询盘与演示采购线索；inquiry-detail.html 展示演示线索详情。
+- 新闻为演示编辑内容；展会与线索不是实时业务数据。

@@ -111,5 +111,7 @@ window.addEventListener("storage", (e) => {
 window.addEventListener("focus", renderList);
 window.addEventListener("languagechange", renderList);
 renderList();
+const requestedInquiry=new URLSearchParams(location.search).get("inquiry");
+if(requestedInquiry && rows().some(row=>row.id===requestedInquiry)) openInquiry(requestedInquiry);
 
 })();
