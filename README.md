@@ -55,7 +55,8 @@ python3 -m http.server 4173 --bind 127.0.0.1
 - 16 件手写示例商品，每类 4 件；p12 为涂装合规缺项样例。
 - js/i18n.js 集中维护中英文案，类目及枚举双语字段在 mock/categories.json 中。
 - 修改 JSON 后同步更新 mock/data.js 中的对应数组，页面不通过网络读取 JSON。
-- draft_products 存储商品草稿与模拟提交；rfq_drafts 存储用户运行时提交的询盘；marine_lang 存储语言。
+- draft_products 存储商品草稿与模拟提交；rfq_drafts 存储用户运行时提交的询盘；marine_lang 存储语言偏好。
+- 默认语言为英文；首次访问或 marine_lang 无有效值时按英文渲染，切换后写入 marine_lang，也可用 `?lang=zh` 直接进入中文。
 - 询盘状态为 submitted（未读）、viewed（已读）、replied（已回复）。已回复条目再次查看不会降级。
 - 询盘和商品均未预置于 localStorage。测试演示时创建的记录只在测试所用浏览器内。
 - 存储损坏会提示并阻止覆盖；存储被禁用或配额不足时不显示保存成功。请备份原有内容后再自行修复损坏的存储键。

@@ -1,6 +1,6 @@
-let initialLanguage = "zh";
+let initialLanguage = "en";
 try {
-  initialLanguage = localStorage.getItem("marine_lang") || "zh";
+  initialLanguage = localStorage.getItem("marine_lang") || "en";
 } catch {}
 const U = (window.MarineUI = {
   badStorage: new Set(),
@@ -291,7 +291,7 @@ const U = (window.MarineUI = {
     });
   },
 });
-if (!["zh", "en"].includes(U.lang)) U.lang = "zh";
+if (!["zh", "en"].includes(U.lang)) U.lang = "en";
 const page = document.body.dataset.page;
 document.getElementById("header").innerHTML =
   `<header class="main-header"><div class="container header-row"><a class="brand" href="${U.url("index.html")}"><svg width="38" height="38" viewBox="0 0 40 40" aria-hidden="true"><path d="M5 34V6h8l14 19V6h8v28h-8L13 15v19Z" fill="currentColor"/><path d="M27 6h8v8h-8Z" fill="#d45428"/></svg><div>${U.tr("brandName")}<small>GLOBAL SOURCING PLATFORM</small></div></a><form class="header-search" action="products.html"><label class="sr-only" for="global-search">${U.tr("search")}</label><input id="global-search" name="q" data-i18n-placeholder="search" placeholder="${U.t("search")}" value="${U.e(new URLSearchParams(location.search).get("q") || "")}"><input type="hidden" name="lang" value="${U.lang}"><button data-i18n-aria="searchButton" aria-label="${U.t("searchButton")}">${U.tr("searchButton")}</button></form><button class="language" id="language" type="button">${U.t("language")}</button><a id="primary-action" class="button compact" href="${U.url("publish.html")}">${U.tr("publish")} <span>↗</span></a></div></header><nav class="main-nav"><div class="container"><a class="${page === "home" ? "active" : ""}" href="${U.url("index.html")}">${U.tr("home")}</a><a class="${page === "products" || page === "product" ? "active" : ""}" href="${U.url("products.html")}">${U.tr("browse")}</a><a class="${page === "suppliers" ? "active" : ""}" href="${U.url("suppliers.html")}">${U.tr("suppliersNav")}</a><a class="${page === "rfq" ? "active" : ""}" href="${U.url("rfq.html")}">${U.tr("generalRfq")}</a><a href="${U.url("news.html")}">${U.tr("newsNav")}</a><a href="${U.url("exhibitions.html")}">${U.tr("exhibitionsNav")}</a><div class="nav-spacer"></div><a class="${page === "supplier" ? "active" : ""}" href="${U.url("supplier.html")}">${U.tr("myProducts")}</a><a class="${page === "inbox" ? "active" : ""}" href="${U.url("inbox.html")}">${U.tr("inbox")}</a></div></nav>`;

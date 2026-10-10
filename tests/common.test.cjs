@@ -124,7 +124,7 @@ test("platform section links preserve anchors and query parameters", () => {
   const url = new URL(u.url("index.html?ref=directory#suppliers"), "http://localhost/");
   assert.equal(url.hash, "#suppliers");
   assert.equal(url.searchParams.get("ref"), "directory");
-  assert.equal(url.searchParams.get("lang"), "zh");
+  assert.equal(url.searchParams.get("lang"), "en");
 });
 
 test("resetting taxonomy restores the original product group before its subtype callback", async () => {
