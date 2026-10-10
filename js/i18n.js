@@ -336,10 +336,6 @@ window.MarineI18n = {
   rfq: ["发起询盘", "Send inquiry"],
   generalRfq: ["发布采购需求", "Post buying request"],
   all: ["全部", "All"],
-  demo: [
-    "静态原型 · 所有产品与认证均为演示数据",
-    "Static prototype · All products and certifications are demo data",
-  ],
   global: ["连接中国供应与全球采购", "Connecting Chinese suppliers and global buyers"],
   heroTitle: ["中国优质供应，全球采购平台", "Source from China. Connect across industries."],
   heroDesc: ["船舶游艇、轴承、机床、农产品等多行业供应，一站发现专业供应商。", "Discover suppliers in marine, bearings, machine tools, agriculture and more."],
