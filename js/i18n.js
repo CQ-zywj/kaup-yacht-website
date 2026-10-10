@@ -458,7 +458,7 @@ window.MarineI18n = {
     "Marine sourcing for a connected world",
   ],
   footerCopy: [
-    "© 2026 MARINEX 海贸通 · 前端演示原型",
+    "© 2026 MARINEX 蓝屿航贸 · 前端演示原型",
     "© 2026 MARINEX · Frontend demonstration",
   ],
   navHint: ["买家发现 · 供应商发布 · 询盘收发", "Discover · List · Inquire"],
