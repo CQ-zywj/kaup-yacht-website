@@ -4,6 +4,17 @@
       const role = ["buyer", "supplier"].includes(user?.role) ? user.role : "guest";
       return { role, buy: role !== "supplier", sell: role === "supplier" };
     },
+    serviceEntry(user, role) {
+      return user?.role === role
+        ? (role === "supplier" ? "supplier.html" : "my-rfq.html")
+        : (role === "supplier" ? "supplier-auth.html" : "buyer-auth.html");
+    },
+    authRedirect(user, role, returnTo) {
+      if (user?.role !== role) return null;
+      const target = this.safeReturn(returnTo);
+      if (returnTo && target === returnTo && !/^(buyer|supplier)-auth\.html(?:\?|$)/.test(target)) return target;
+      return this.serviceEntry(user, role);
+    },
     assertProfile(p) {
       if (!p || typeof p !== "object" || Array.isArray(p))
         throw Error("invalid profile");

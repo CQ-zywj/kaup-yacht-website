@@ -183,3 +183,19 @@ test('role policy gives buyers procurement and suppliers selling actions', () =>
   assert.deepEqual(A.permissions(null), { role: 'guest', buy: true, sell: false });
   assert.deepEqual(A.permissions({ role: 'unknown' }), { role: 'guest', buy: true, sell: false });
 });
+
+test('service entry bypasses authentication only for the matching signed-in identity', () => {
+  assert.equal(A.serviceEntry({role:'supplier'},'supplier'),'supplier.html');
+  assert.equal(A.serviceEntry({role:'buyer'},'buyer'),'my-rfq.html');
+  assert.equal(A.serviceEntry(null,'supplier'),'supplier-auth.html');
+  assert.equal(A.serviceEntry({role:'buyer'},'supplier'),'supplier-auth.html');
+  assert.equal(A.serviceEntry({role:'supplier'},'buyer'),'buyer-auth.html');
+});
+test('same-role auth redirect preserves safe return without a self-redirect loop', () => {
+  assert.equal(A.authRedirect({role:'supplier'},'supplier'), 'supplier.html');
+  assert.equal(A.authRedirect({role:'supplier'},'supplier','publish.html?draft=demo'), 'publish.html?draft=demo');
+  assert.equal(A.authRedirect({role:'supplier'},'supplier','supplier-auth.html?tab=login'), 'supplier.html');
+  assert.equal(A.authRedirect({role:'supplier'},'supplier','https://example.com'), 'supplier.html');
+  assert.equal(A.authRedirect({role:'buyer'},'supplier','supplier.html'), null);
+  assert.equal(A.authRedirect(null,'buyer'), null);
+});

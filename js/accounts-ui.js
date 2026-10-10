@@ -96,6 +96,8 @@ const AccountUI = {
     }
     for (const link of document.querySelectorAll('a[href]')) {
       const filename = new URL(link.href, location.href).pathname.split('/').pop();
+      if (filename === "supplier-auth.html" && policy.role === "supplier") link.href = U.url(MarineAccounts.serviceEntry(this.getUser(), "supplier"));
+      if (filename === "buyer-auth.html" && policy.role === "buyer") link.href = U.url(MarineAccounts.serviceEntry(this.getUser(), "buyer"));
       // Public browsing stays available to both roles. Work actions follow identity.
       if (["publish.html", "supplier.html", "inbox.html", "company.html"].includes(filename)) link.hidden = !policy.sell;
       if (filename === "rfq.html") link.hidden = !policy.buy;
