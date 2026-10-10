@@ -2606,3 +2606,56 @@ body[data-page="home"] .brand small { white-space:nowrap; font-size:8px; letter-
 }
 
 .supplier-search-panel > .text-link { border:0; background:transparent; cursor:pointer; font:inherit; color:var(--ocean); }
+
+/* Small-screen navigation and comfortable touch targets. */
+.mobile-menu-toggle { display:none; }
+@media(max-width:767px) {
+ body:not([data-page="home"]) .header-row { display:flex; flex-wrap:wrap; gap:12px; }
+ body:not([data-page="home"]) .header-row .brand { min-width:0; }
+ body:not([data-page="home"]) .header-row .brand small { font-size:7px; letter-spacing:1px; }
+ body:not([data-page="home"]) .header-row .language { min-height:44px; }
+ .mobile-menu-toggle { display:inline-flex; gap:7px; align-items:center; justify-content:center; min-height:44px; padding:8px 12px; border:1px solid var(--line); border-radius:5px; background:#fff; color:var(--ink); font:inherit; font-size:12px; cursor:pointer; }
+ .mobile-menu-toggle[aria-expanded="true"] { background:#edf5f6; border-color:var(--ocean); }
+ body:not([data-page="home"]) .main-nav:not(.mobile-open) { display:none; }
+ body:not([data-page="home"]) .main-nav.mobile-open .container { display:grid; grid-template-columns:1fr 1fr; gap:4px 10px; padding-block:12px; }
+ body:not([data-page="home"]) .main-nav a { min-height:44px; padding:10px 12px; border-radius:4px; }
+ body:not([data-page="home"]) .main-nav a.active { background:#edf5f6; border-bottom:0; }
+ body:not([data-page="home"]) .main-nav .account-nav { grid-column:1/-1; margin:6px 0 0; width:100%; padding-top:10px; border-top:1px solid var(--line); }
+ body:not([data-page="home"]) .main-nav .account-menu { width:100%; }
+ body:not([data-page="home"]) .main-nav .account-menu summary { max-width:100%; min-height:44px; }
+ .industry-nav .container { gap:16px; scrollbar-width:thin; }
+ .industry-nav a { min-height:44px; }
+ .portal-service-nav .container { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:4px 8px; overflow:visible; padding-block:10px; }
+ .portal-service-nav a { min-width:0; padding:10px 2px; font-size:11px; line-height:1.4; gap:6px; }
+ .portal-service-nav a > .service-icon { width:34px; height:34px; font-size:21px; }
+ .home-header-actions .account-nav > a { min-height:40px; }
+ .supplier-search-panel input,.supplier-search-panel select,.form-grid input:not([type="checkbox"]):not([type="radio"]),.form-grid select,.form-grid textarea { font-size:16px; }
+ .supplier-search-panel .button,.supplier-search-panel > .text-link { min-height:48px; }
+ .directory-company-heading { align-items:flex-start; gap:12px; }
+ .directory-company-heading h3 { font-size:16px; overflow-wrap:anywhere; }
+ .directory-company-footer .text-link { display:inline-flex; align-items:center; min-height:44px; }
+ .supplier-product-preview img { height:82px; }
+ .pagination { flex-wrap:wrap; gap:8px; }
+ .pagination button { min-width:44px; min-height:44px; }
+}
+@media(max-width:359px) {
+ body[data-page="home"] .header-row { grid-template-columns:1fr; gap:12px; }
+ body[data-page="home"] .home-header-actions { justify-content:flex-start; max-width:none; }
+ body[data-page="home"] .home-search-group { grid-row:3; }
+ body[data-page="home"] .brand small { font-size:7px; }
+ .supplier-search-panel { padding:14px; }
+ .directory-company { padding:16px; }
+ .supplier-product-preview { gap:6px; }
+}
+@media(max-width:359px) {
+ body:not([data-page="home"]) .header-row { gap:8px; }
+ body:not([data-page="home"]) .header-row .brand { font-size:18px; }
+ body:not([data-page="home"]) .header-row .brand small { font-size:6px; letter-spacing:.7px; }
+ body:not([data-page="home"]) .header-row .brand svg { width:26px; }
+ .mobile-menu-toggle { width:44px; padding:8px; }
+ .mobile-menu-toggle > [data-i18n] { display:none; }
+}
+@media(max-width:450px) {
+ .portal-supplier-grid { grid-template-columns:1fr; }
+ .portal-supplier .text-link,.directory-company-footer .text-link { white-space:normal; }
+}

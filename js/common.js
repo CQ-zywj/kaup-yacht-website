@@ -295,6 +295,32 @@ if (!["zh", "en"].includes(U.lang)) U.lang = "zh";
 const page = document.body.dataset.page;
 document.getElementById("header").innerHTML =
   `<header class="main-header"><div class="container header-row"><a class="brand" href="${U.url("index.html")}"><svg width="38" height="38" viewBox="0 0 40 40" aria-hidden="true"><path d="M5 34V6h8l14 19V6h8v28h-8L13 15v19Z" fill="currentColor"/><path d="M27 6h8v8h-8Z" fill="#d45428"/></svg><div>${U.tr("brandName")}<small>GLOBAL SOURCING PLATFORM</small></div></a><form class="header-search" action="products.html"><label class="sr-only" for="global-search">${U.tr("search")}</label><input id="global-search" name="q" data-i18n-placeholder="search" placeholder="${U.t("search")}" value="${U.e(new URLSearchParams(location.search).get("q") || "")}"><input type="hidden" name="lang" value="${U.lang}"><button data-i18n-aria="searchButton" aria-label="${U.t("searchButton")}">${U.tr("searchButton")}</button></form><button class="language" id="language" type="button">${U.t("language")}</button><a id="primary-action" class="button compact" href="${U.url("publish.html")}">${U.tr("publish")} <span>↗</span></a></div></header><nav class="main-nav"><div class="container"><a class="${page === "home" ? "active" : ""}" href="${U.url("index.html")}">${U.tr("home")}</a><a class="${page === "products" || page === "product" ? "active" : ""}" href="${U.url("products.html")}">${U.tr("browse")}</a><a class="${page === "suppliers" ? "active" : ""}" href="${U.url("suppliers.html")}">${U.tr("suppliersNav")}</a><a class="${page === "rfq" ? "active" : ""}" href="${U.url("rfq.html")}">${U.tr("generalRfq")}</a><a href="${U.url("news.html")}">${U.tr("newsNav")}</a><a href="${U.url("exhibitions.html")}">${U.tr("exhibitionsNav")}</a><div class="nav-spacer"></div><a class="${page === "supplier" ? "active" : ""}" href="${U.url("supplier.html")}">${U.tr("myProducts")}</a><a class="${page === "inbox" ? "active" : ""}" href="${U.url("inbox.html")}">${U.tr("inbox")}</a></div></nav>`;
+// Compact navigation on small screens; desktop retains the full navigation row.
+if (page !== "home") {
+  const navigation = document.querySelector(".main-nav");
+  navigation.id = "mobile-primary-navigation";
+  const menu = document.createElement("button");
+  menu.type = "button";
+  menu.className = "mobile-menu-toggle";
+  menu.setAttribute("aria-expanded", "false");
+  menu.setAttribute("aria-controls", navigation.id);
+  menu.setAttribute("data-i18n-aria", "navigationMenu");
+  menu.setAttribute("aria-label", U.t("navigationMenu"));
+  menu.innerHTML = `<span aria-hidden="true">☰</span>${U.tr("navigationMenu")}`;
+  document.querySelector(".header-row").append(menu);
+  const closeMenu = () => {
+    navigation.classList.remove("mobile-open");
+    menu.setAttribute("aria-expanded", "false");
+  };
+  menu.onclick = () => {
+    const open = navigation.classList.toggle("mobile-open");
+    menu.setAttribute("aria-expanded", String(open));
+  };
+  navigation.addEventListener("keydown", event => {
+    if (event.key === "Escape") { closeMenu(); menu.focus(); }
+  });
+  window.addEventListener("languagechange", closeMenu);
+}
 document.getElementById("footer").innerHTML =
   `<footer><div class="container footer-grid"><div><a class="footer-brand" href="${U.url("index.html")}">${U.tr("brandName")}</a><p>${U.tr("footerTag")}</p></div><div><h4>${U.tr("category")}</h4>${MarineData.industries.map((c) => `<a href="${U.url("products.html", { industry: c.id })}">${U.bi(c.name)}</a>`).join("")}</div><div id="workspace-links"><h4>${U.tr("supplier")}</h4><a href="${U.url("publish.html")}">${U.tr("publish")}</a><a href="${U.url("inbox.html")}">${U.tr("inbox")}</a><a href="${U.url("supplier.html")}">${U.tr("myProducts")}</a></div></div><div class="container footer-bottom"><span>${U.tr("footerCopy")}</span><span>${U.tr("demo")}</span><button id="footer-language" class="language" type="button" data-i18n="language" style="color:inherit">${U.tr("language")}</button></div></footer>`;
 U.switchLanguage = () => {

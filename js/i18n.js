@@ -1,4 +1,5 @@
 window.MarineI18n = {
+  navigationMenu: ["菜单", "Menu"],
   supplierDirectoryTitle: ["寻找合适的供应商", "Find the right supplier"],
   supplierDirectoryHint: ["按企业名称和主营行业筛选，查看在售产品与演示认证信息。", "Search by company name and industry, then explore products and demo verification information."],
   supplierSearch: ["搜索供应商", "Search suppliers"],
