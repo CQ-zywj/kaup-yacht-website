@@ -34,12 +34,6 @@ window.renderPortalWorkspace = () => {
   if(leads){leads.hidden=!seller;leads.innerHTML=seller?`<div class="platform-section-head"><div><h2>${U.tr('supplierLeads')}</h2><p>${U.tr('leadHint')}</p></div><a class="text-link" href="${U.url('inbox.html')}">${U.tr('receivedInquiries')} →</a></div><div class="lead-grid">${PlatformContent.leads.map(r=>`<a class="lead-card" href="${U.url('inquiry-detail.html',{id:r.id})}"><span class="editorial-tag">${U.tr('demoLead')}</span><h3>${U.bi(r.title)}</h3><p>${U.bi(r.country)} · ${U.bi(r.quantity)}</p><small>${U.tr('leadDetails')} →</small></a>`).join('')}</div>`:'';}
 };
 
-function emptyIndustry(id) {
-  const i = U.industry(id);
-  const available = MarineCore.filterProducts(products, {industry:id});
-  if (available.length) return `<article class="industry-preview"><div class="platform-section-head"><h3>${U.bi(i.name)}</h3><a class="text-link" href="${industryLink(id)}">${U.tr('viewAll')} →</a></div><div class="product-grid">${available.slice(0,2).map(p=>U.card(p)).join('')}</div></article>`;
-  return `<article class="empty-industry"><div class="empty-industry-icon">${industryIcon(id)}</div><div><small>${U.tr('emptyChannel')}</small><h3>${U.bi(i.name)}</h3><p>${U.tr('emptyChannelHint')}</p><div class="industry-chips">${U.cat(i.category_ids[0]).subcategories.map(c => `<a href="${U.url('products.html', {industry:id,category:i.category_ids[0],subcategory:c.id})}">${U.bi(c.name)}</a>`).join('')}</div></div><a class="text-link" href="${industryLink(id)}">${U.tr('channelOpen')} →</a></article>`;
-}
 document.getElementById('main').innerHTML = `<div class="container platform-home">
 <h1 class="sr-only">${U.tr("portalTitle")}</h1><section class="portal-top">
 <aside class="industry-directory" id="industries"><h2>${U.tr('allIndustries')}</h2>${MarineData.industries.map(i => `<div class="directory-entry"><a href="${industryLink(i.id)}">${industryIcon(i.id)}<span>${U.bi(i.name)}<small>${U.bi(i.description)}</small></span></a><button type="button" class="directory-toggle" aria-expanded="false" aria-controls="menu-${i.id}" data-i18n-aria="expandIndustry" aria-label="${U.t('expandIndustry')}">›</button><div class="industry-flyout" id="menu-${i.id}" hidden><div class="flyout-head"><h3>${U.bi(i.name)}</h3><a class="text-link" href="${industryLink(i.id)}">${U.tr('industryBrowse')} →</a></div>${i.category_ids.map(id=>`<div class="flyout-group"><a class="flyout-group-name" href="${industryLink(i.id,id)}">${U.bi(U.cat(id).name)}</a><div>${U.cat(id).subcategories.map(c=>`<a href="${U.url('products.html',{industry:i.id,category:id,subcategory:c.id})}">${U.bi(c.name)}</a>`).join('')}</div></div>`).join('')}</div></div>`).join('')}</aside>
@@ -54,16 +48,12 @@ document.getElementById('main').innerHTML = `<div class="container platform-home
 <div class="platform-benefits">${['certified','compliant','worldwide'].map((key,i) => `<div><span aria-hidden="true">${['⌕','▦','↗'][i]}</span><p><strong>${U.tr(key)}</strong><small>${U.tr('trustDesc'+(i+1))}</small></p></div>`).join('')}</div>
 <section class="platform-section editorial-home" id="market-updates"><div class="editorial-news"><div class="platform-section-head"><div><h2>${U.tr('newsNav')}</h2><p>${U.tr('newsHint')}</p></div><a class="text-link" href="${U.url('news.html')}">${U.tr('viewMore')} →</a></div><div class="news-category-links">${['machine-tools','agriculture','bearings'].map(id=>`<a href="${U.url('news.html',{industry:id})}">${U.bi(U.industry(id).name)}</a>`).join('')}</div><div class="news-home-grid">${PlatformContent.news.map((r,index)=>`<a class="news-home-card ${index?'':'news-featured'}" href="${U.url('content.html',{type:'news',id:r.id})}">${index?'':`<div class="editorial-art"><img src="assets/media/banner-${r.art}.svg" alt=""></div>`}<div><span class="editorial-tag">${U.tr('demoEditorial')}</span><h3>${U.bi(r.title)}</h3><p>${U.bi(r.summary)}</p><small>${U.e(r.date)} · ${U.tr('readMore')} →</small></div></a>`).join('')}</div></div><div class="editorial-events"><div class="platform-section-head"><div><h2>${U.tr('exhibitionsNav')}</h2><p>${U.tr('eventsHint')}</p></div><a class="text-link" href="${U.url('exhibitions.html')}">${U.tr('viewMore')} →</a></div>${PlatformContent.exhibitions.map(r=>`<a class="event-home-card" href="${U.url('content.html',{type:'exhibitions',id:r.id})}"><div class="event-calendar"><strong>${r.date.slice(8)}</strong><small>${r.date.slice(0,7)}</small></div><div><span class="editorial-tag">${U.tr('demoEvent')}</span><h3>${U.bi(r.title)}</h3><p>${U.bi(r.location)}</p><small>${U.tr('eventDetails')} →</small></div></a>`).join('')}</div></section>
 <section class="platform-section" id="industry-channels"><div class="platform-section-head"><div><h2>${U.tr('industryChannels')}</h2><p>${U.tr('industryChannelsDesc')}</p></div><a class="text-link" href="${U.url('products.html')}">${U.tr('viewAll')} →</a></div><div class="industry-channel-grid">${MarineData.industries.map(i => `<a class="industry-channel" href="${industryLink(i.id)}"><div class="industry-channel-icon">${industryIcon(i.id)}</div><div><h3>${U.bi(i.name)}</h3><p>${U.bi(i.description)}</p><small>${U.tr('channelOpen')} →</small></div></a>`).join('')}</div></section>
-<section class="platform-section"><div class="platform-section-head"><div><h2>${U.tr('industrialFocus')}</h2><p>${U.tr('industrialFocusDesc')}</p></div></div><div class="empty-industry-grid">${['bearings','machine-tools','agriculture','forestry','chemicals'].map(emptyIndustry).join('')}</div></section>
 <section class="platform-section" id="suppliers"><div class="platform-section-head"><div><h2>${U.tr('supplierSelection')}</h2><p>${U.tr('supplierSelectionDesc')}</p></div><small class="muted">${U.tr('platformTrust')}</small></div><div class="portal-supplier-grid">${suppliers.slice(0,4).map(s=>`<article class="portal-supplier"><div class="supplier-avatar" aria-hidden="true">${U.e(s.name.en.slice(0,1))}</div><h3>${U.bi(s.name)}</h3><p>${U.e(s.country)} · ${U.tr('activeProducts')} ${products.filter(p=>(p.supplier_id || p.supplier.id)===s.id).length}</p><div class="supplier-category">${[...new Set(products.filter(p=>(p.supplier_id || p.supplier.id)===s.id).map(p=>U.industryOf(p.category_id)?.id))].map(id=>U.bi(U.industry(id)?.name)).join(' · ')}</div><a class="text-link" href="${U.url('products.html',{supplier:s.id})}">${U.tr('viewSupplierProducts')} →</a></article>`).join('')}</div></section>
 <section class="platform-section"><div class="quote-banner"><div><h2>${U.tr('quoteTitle')}</h2><p>${U.tr('quoteDesc')}</p></div><a class="button dark" href="${U.url('rfq.html')}">${U.tr('generalRfq')} →</a></div></section>
 </div>`;
 window.renderPortalWorkspace();
 U.translate();
 AccountUI.refreshContext();
-window.addEventListener('languagechange', () => {
-
-});
 
 const serviceItems=[['▦','browse','products.html'],['⌕','suppliersNav','index.html#suppliers'],['↗','generalRfq','rfq.html'],['▤','newsNav','news.html'],['▣','exhibitionsNav','exhibitions.html'],['◎','buyerEntryNav','buyer-auth.html'],['▥','supplierEntryNav','supplier-auth.html']];
 const serviceNav=document.createElement('nav');serviceNav.className='portal-service-nav';serviceNav.setAttribute('aria-label',U.t('home'));
@@ -73,7 +63,13 @@ document.getElementById('header').append(serviceNav);
 const headerSearch=document.querySelector('.main-header .header-search');
 const searchScopes=document.createElement('div');searchScopes.className='search-scope-nav';
 searchScopes.innerHTML=`<a class="active" href="${U.url('products.html')}">${U.tr('browse')}</a><a href="${U.url('news.html')}">${U.tr('newsNav')}</a><a href="${U.url('exhibitions.html')}">${U.tr('exhibitionsNav')}</a>`;
-headerSearch.prepend(searchScopes);
+const searchGroup=document.createElement('div');searchGroup.className='home-search-group';
+headerSearch.before(searchGroup);searchGroup.append(searchScopes,headerSearch);
+const headerActions=document.createElement('div');headerActions.className='home-header-actions';
+const languageControl=document.getElementById('language'),publishControl=document.getElementById('primary-action');
+languageControl.before(headerActions);headerActions.append(languageControl,publishControl);
+const accountControl=document.querySelector("[data-account-nav]");
+if(accountControl) headerActions.append(accountControl);
 
 window.addEventListener('storage',event=>{if(event.key==='rfq_drafts'){window.renderPortalWorkspace();U.translate();}});
 window.addEventListener('focus',()=>{if(AccountUI.getUser()?.role==='supplier'){window.renderPortalWorkspace();U.translate();}});

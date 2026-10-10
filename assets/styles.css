@@ -2515,3 +2515,53 @@ body[data-page="home"] .main-header .header-search { overflow:visible; }
  .received-list a + a { border-top:1px solid #cde3e6; padding-top:14px; }
  .received-heading { flex-wrap:wrap; }
 }
+/* A centered search column, with tabs in normal flow instead of floating above it. */
+body[data-page="home"] .header-row { display:grid; grid-template-columns:220px minmax(0,1fr) auto; gap:32px; align-items:center; }
+body[data-page="home"] .main-header .container { padding-block:22px; }
+.home-search-group { min-width:0; display:grid; gap:10px; }
+.home-search-group .search-scope-nav { position:static; padding:0; gap:24px; }
+.home-search-group .search-scope-nav a { font-size:13px; padding-bottom:5px; border-bottom:2px solid transparent; }
+.home-search-group .search-scope-nav a.active { border-bottom-color:var(--ocean); font-weight:600; }
+body[data-page="home"] .main-header .header-search { width:100%; max-width:none; margin:0; overflow:hidden; border:1px solid #b6cbd5; border-radius:6px; min-height:50px; box-shadow:0 2px 6px #16394d05; }
+body[data-page="home"] .main-header .header-search input { background:#fff; padding:14px 18px; font-size:14px; }
+body[data-page="home"] .main-header .header-search button { min-width:88px; }
+.home-header-actions { display:flex; align-items:center; gap:16px; padding-top:24px; }
+.home-header-actions .language { padding:8px 0; }
+body[data-page="home"] .main-nav .container { min-height:32px; }
+@media(min-width:768px) and (max-width:1100px) {
+ body[data-page="home"] .header-row { grid-template-columns:190px minmax(0,1fr) auto; gap:22px; }
+ .home-header-actions { flex-direction:column; gap:8px; padding-top:0; }
+ .home-header-actions .button { font-size:12px; padding:9px 12px; }
+}
+@media(max-width:767px) {
+ body[data-page="home"] .header-row { grid-template-columns:minmax(0,1fr) auto; gap:18px 14px; }
+ body[data-page="home"] .main-header .container { padding-block:18px; }
+ .home-search-group { grid-column:1/-1; grid-row:2; gap:8px; }
+ .home-header-actions { padding-top:0; gap:10px; flex-direction:column; align-items:flex-end; }
+ .home-header-actions .button { font-size:11px; padding:7px 10px; min-height:32px; }
+ .home-header-actions .language { padding:4px 0; }
+ .home-search-group .search-scope-nav { gap:22px; }
+ .home-search-group .search-scope-nav a { font-size:12px; }
+ body[data-page="home"] .main-header .header-search { min-height:46px; }
+ body[data-page="home"] .main-header .header-search input { font-size:13px; padding:12px; }
+ body[data-page="home"] .main-header .header-search button { min-width:70px; padding:0 14px; }
+ body[data-page="home"] .brand { font-size:23px; }
+}
+body[data-page="home"] .brand small { white-space:nowrap; font-size:8px; letter-spacing:1.1px; }
+
+/* Account access belongs beside language and publishing actions on the home header. */
+.home-header-actions { flex-wrap:wrap; justify-content:flex-end; max-width:260px; }
+.home-header-actions .account-nav { display:flex; align-items:center; gap:8px; margin:0; }
+.home-header-actions .account-nav > a { display:inline-flex; align-items:center; justify-content:center; min-height:38px; padding:8px 14px; border:1px solid #cbd9df; border-radius:5px; font-size:13px; font-weight:600; color:var(--navy); text-decoration:none; transition:background 160ms,border-color 160ms; }
+.home-header-actions .account-nav > a:hover { background:#edf5f6; border-color:var(--ocean); }
+.home-header-actions .account-nav > a:last-child { background:var(--navy); color:#fff; border-color:var(--navy); }
+.home-header-actions .account-nav > a:last-child:hover { background:var(--ocean); border-color:var(--ocean); }
+.home-header-actions .account-menu > div { z-index:30; }
+@media(max-width:1100px) { .home-header-actions { max-width:190px; } }
+@media(max-width:767px) {
+ .home-header-actions { flex-direction:row; max-width:200px; gap:8px; }
+ .home-header-actions .account-nav { gap:6px; }
+ .home-header-actions .account-nav > a { min-height:34px; padding:6px 10px; font-size:12px; }
+}
+
+@media(max-width:767px) { body[data-page="home"] .brand small { font-size:6px; letter-spacing:.7px; } }

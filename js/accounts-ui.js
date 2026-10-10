@@ -60,6 +60,7 @@ const AccountUI = {
     const policy = this.permissions();
     const nav = document.querySelector(".main-nav .container");
     if (nav) {
+      nav.closest(".main-nav").hidden = document.body.dataset.page === "home" && policy.role === "guest";
       nav.querySelector('[data-buyer-nav]')?.remove();
       if (policy.role === 'buyer') {
         const link = document.createElement('a');
@@ -105,7 +106,7 @@ const AccountUI = {
   refreshHeader() {
     const nav = document.querySelector(".main-nav .container");
     if (!nav) return;
-    nav.querySelector("[data-account-nav]")?.remove();
+    document.querySelector("[data-account-nav]")?.remove();
     const u = this.getUser();
     const a = document.createElement("div");
     a.dataset.accountNav = "";
@@ -116,7 +117,7 @@ const AccountUI = {
     a.innerHTML = u
       ? `<details class="account-menu"><summary aria-label="${U.t("accountMenu")}">${U.e(u.role === "supplier" ? u.company || u.name : u.name)} <small>${U.tr(u.role === "supplier" ? "identitySupplier" : "identityBuyer")}</small></summary><div>${u.role === "supplier" ? `<a href="${U.url("company.html")}">${U.tr("companyProfile")}</a><a href="${U.url("supplier.html")}">${U.tr("myProducts")}</a><a href="${U.url("inbox.html")}">${U.tr("inbox")}</a>` : `<a href="${U.url("my-rfq.html")}">${U.tr("myInquiries")}</a><a href="${U.url("rfq.html")}">${U.tr("generalRfq")}</a>`}<button type="button" id="sign-out" class="link-button">${U.tr("logout")}</button></div></details>`
       : `<a href="${U.url(authPage, { ...authParams, tab: "login" })}">${U.tr("login")}</a><a href="${U.url(authPage, { ...authParams, tab: "register" })}">${U.tr("register")}</a>`;
-    nav.append(a);
+    (document.body.dataset.page === "home" ? document.querySelector(".home-header-actions") || nav : nav).append(a);
     a.querySelector("#personal-center")?.addEventListener("click", () =>
       U.notice("buyerAuthHint"),
     );
