@@ -49,8 +49,10 @@ const AccountUI = {
   },
   permissions() { return MarineAccounts.permissions(this.getUser()); },
   requireSupplier() {
-    if (this.permissions().sell) return true;
-    document.getElementById("main").innerHTML = `<div class="container section">${U.empty("sellerOnlyTitle", "sellerOnlyHint", "rfq.html", "generalRfq")}<a class="button secondary" href="${U.url("supplier-auth.html", { return: location.pathname.split("/").pop() + location.search })}">${U.tr("switchSupplier")}</a></div>`;
+    if (this.getUser()?.role === "supplier") return true;
+    document.querySelectorAll("dialog[open]").forEach(dialog=>dialog.close());
+    document.getElementById("main").innerHTML = `<div class="container section">${U.empty("sellerOnlyTitle", "supplierAccessHint", "supplier-auth.html", "switchSupplier")}</div>`;
+    document.querySelector("#main .empty a").href = U.url("supplier-auth.html", {return:location.pathname.split("/").pop()+location.search});
     U.translate();
     return false;
   },
@@ -74,7 +76,9 @@ const AccountUI = {
       mainAction.innerHTML = `${U.tr(policy.role === "buyer" ? "publishPurchase" : "publish")} <span>↗</span>`;
     }
     const footer = document.getElementById("workspace-links");
-    if (footer) footer.innerHTML = policy.role === "buyer"
+    if (footer) footer.innerHTML = policy.role === "guest"
+      ? `<h4>${U.tr("accountMenu")}</h4><a href="${U.url("buyer-auth.html")}">${U.tr("buyerEntryNav")}</a><a href="${U.url("supplier-auth.html")}">${U.tr("supplierEntryNav")}</a>`
+      : policy.role === "buyer"
       ? `<h4>${U.tr("buyerWorkspace")}</h4><a href="${U.url("my-rfq.html")}">${U.tr("myInquiries")}</a><a href="${U.url("products.html")}">${U.tr("browse")}</a><a href="${U.url("rfq.html")}">${U.tr("generalRfq")}</a>`
       : `<h4>${U.tr("supplier")}</h4><a href="${U.url("company.html")}">${U.tr("companyProfile")}</a><a href="${U.url("publish.html")}">${U.tr("publish")}</a><a href="${U.url("inbox.html")}">${U.tr("inbox")}</a><a href="${U.url("supplier.html")}">${U.tr("myProducts")}</a>`;
     if (document.body.dataset.page === "home") {

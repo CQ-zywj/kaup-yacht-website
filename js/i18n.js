@@ -1,5 +1,5 @@
 window.MarineI18n = {
-  supplierAccessHint: ["查看采购线索需要供应商身份，请登录或切换供应商账号。", "Sign in or switch to a supplier account to view buying leads."],
+  supplierAccessHint: ["查看询盘、管理商品等供应商功能需要登录供应商账号。", "Sign in to a supplier account to view inquiries and manage listings."],
   viewMore: ["查看更多", "View more"],
   eventCount: ["场展会", "events"],
   newsNav: ["行业新闻", "Industry news"],

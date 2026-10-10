@@ -1,5 +1,5 @@
 (function(root) {
-  function createCarousel({count, onChange = () => {}, interval = 8000, reducedMotion = false, setTimer = setTimeout, clearTimer = clearTimeout}) {
+  function createCarousel({count, onChange = () => {}, interval = 5000, reducedMotion = false, setTimer = setTimeout, clearTimer = clearTimeout}) {
     let index = 0, timer, destroyed = false, userPaused = false;
     const reasons = new Set(reducedMotion ? ['reduced'] : []);
     const state = () => ({index, userPaused, paused: userPaused || reasons.size > 0, reducedMotion: reasons.has('reduced')});
@@ -12,7 +12,6 @@
     function go(value) {
       if (destroyed || count < 1) return;
       index = ((value % count) + count) % count;
-      userPaused = true;
       emit(true);
     }
     const api = {

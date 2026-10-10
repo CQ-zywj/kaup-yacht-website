@@ -7,6 +7,7 @@
     const pause = carouselRoot.querySelector('[data-carousel="pause"]');
     const status = carouselRoot.querySelector('#carousel-status');
     function render(state) {
+      carouselRoot.dataset.autoplay = state.paused ? 'paused' : 'running';
       slides.forEach((slide, index) => {slide.hidden = index !== state.index;});
       dots.forEach((dot, index) => dot.setAttribute('aria-pressed', String(index === state.index)));
       if (pause) pause.hidden = state.reducedMotion;
@@ -19,7 +20,10 @@
     const carousel = MarineCarousel.createCarousel({count:slides.length, interval:5000, reducedMotion:reduced.matches, onChange:render});
     carouselRoot.addEventListener('mouseenter', () => carousel.pause('hover'));
     carouselRoot.addEventListener('mouseleave', () => carousel.resume('hover'));
-    carouselRoot.addEventListener('focusin', () => carousel.pause('focus'));
+    carouselRoot.addEventListener('focusin', event => {
+      // Keep controls stable during autoplay; pause only while a slide link has focus.
+      event.target.closest('[data-slide] a') ? carousel.pause('focus') : carousel.resume('focus');
+    });
     carouselRoot.addEventListener('focusout', event => {if (!carouselRoot.contains(event.relatedTarget)) carousel.resume('focus');});
     carouselRoot.addEventListener('click', event => {
       const dot = event.target.closest('[data-slide-to]');

@@ -1,7 +1,7 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
-const content=require('../mock/content.js');
+const content=require('../mock/editorial-data.js');
 test('content lookup rejects unknown and inherited type names without exposing records',()=>{
   for(const type of ['missing','__proto__','constructor']) assert.equal(content.find(type,'precision-sourcing'),null);
   assert.equal(content.find('news','not-found'),null);

@@ -5,9 +5,10 @@ let selectedId = null;
 document.getElementById("main").innerHTML =
   `<div class="container"><div class="page-intro"><div class="eyebrow">${U.tr("supplierMode")}</div><h1>${U.tr("inboxTitle")}</h1><p>${U.tr("inboxDesc")}</p></div><div class="metrics"><div class="metric"><strong id="unread-count">0</strong><span>${U.tr("unread")}</span></div><div class="metric"><strong id="all-count">0</strong><span>${U.tr("allInquiries")}</span></div></div><div class="panel"><div class="inbox-toolbar"><div class="field"><label for="status-filter">${U.tr("status")}</label><select id="status-filter"><option value="" data-i18n="all"></option>${["submitted", "viewed", "replied"].map((s) => `<option value="${s}" data-i18n="${s}"></option>`).join("")}</select></div>${U.field("dateFrom", "date-from", "date")}${U.field("dateTo", "date-to", "date")}<div class="field"><label for="time-sort">${U.tr("sort")}</label><select id="time-sort"><option value="newest" data-i18n="newest"></option><option value="oldest" data-i18n="oldest"></option></select></div></div></div><section id="inquiry-list" aria-live="polite"></section></div><dialog class="drawer" id="inquiry-drawer" aria-label="${U.t("inquiryDetails")}"></dialog>`;
 function rows() {
-  return U.read("rfq_drafts");
+  return AccountUI.getUser()?.role === "supplier" ? U.read("rfq_drafts") : [];
 }
 function renderList() {
+  if (!AccountUI.requireSupplier()) return;
   const all = rows();
   document.getElementById("unread-count").textContent = all.filter(
     (r) => r.status === "submitted",
@@ -39,6 +40,7 @@ function renderList() {
   U.translate();
 }
 function openInquiry(id) {
+  if (!AccountUI.requireSupplier()) return;
   selectedId = id;
   const list = rows();
   let row = list.find((r) => r.id === id);
@@ -78,6 +80,7 @@ function openInquiry(id) {
   };
   document.getElementById("reply-form").onsubmit = (e) => {
     e.preventDefault();
+    if (!AccountUI.requireSupplier()) return;
     if (!U.errors(e.target, U.validate(e.target))) return;
     const list = rows(),
       index = list.findIndex((r) => r.id === id);
@@ -106,6 +109,7 @@ for (const [id, key] of [
     renderList();
   };
 window.addEventListener("storage", (e) => {
+  if (e.key === "current_user" && !AccountUI.requireSupplier()) return;
   if (e.key === "rfq_drafts" || e.key === "draft_products") renderList();
 });
 window.addEventListener("focus", renderList);

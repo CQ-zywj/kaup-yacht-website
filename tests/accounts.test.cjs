@@ -180,6 +180,6 @@ test("draft edits restore unless reusable company profile was updated", () => {
 test('role policy gives buyers procurement and suppliers selling actions', () => {
   assert.deepEqual(A.permissions({ role: 'buyer' }), { role: 'buyer', buy: true, sell: false });
   assert.deepEqual(A.permissions({ role: 'supplier' }), { role: 'supplier', buy: false, sell: true });
-  assert.deepEqual(A.permissions(null), { role: 'guest', buy: true, sell: true });
-  assert.deepEqual(A.permissions({ role: 'unknown' }), { role: 'guest', buy: true, sell: true });
+  assert.deepEqual(A.permissions(null), { role: 'guest', buy: true, sell: false });
+  assert.deepEqual(A.permissions({ role: 'unknown' }), { role: 'guest', buy: true, sell: false });
 });

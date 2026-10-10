@@ -25,12 +25,20 @@ test('overlapping focus, hover and hidden pauses cannot resume prematurely', () 
   s.carousel.resume('focus'); assert.equal(s.scheduled(), true);
   s.carousel.pause('hidden'); s.tick(); assert.equal(s.carousel.state().index, 0);
 });
-test('manual navigation stops autoplay until explicitly resumed', () => {
+test('manual navigation restarts the automatic cycle without a persistent pause', () => {
   const s = setup();
   s.carousel.go(2); assert.equal(s.carousel.state().index, 2);
-  assert.equal(s.carousel.state().userPaused, true);
-  assert.equal(s.scheduled(), false);
-  s.carousel.toggle(); s.tick(); assert.equal(s.carousel.state().index, 0);
+  assert.equal(s.carousel.state().userPaused, false);
+  assert.equal(s.scheduled(), true);
+  s.tick(); assert.equal(s.carousel.state().index, 0);
+  s.carousel.pause('hover');s.carousel.next();
+  assert.equal(s.scheduled(),false);
+  s.carousel.resume('hover');s.tick();assert.equal(s.carousel.state().index,2);
+});
+test('explicit keyboard pause survives manual slide selection', () => {
+  const s=setup();s.carousel.toggle();s.carousel.next();
+  assert.equal(s.scheduled(),false);
+  s.carousel.toggle();s.tick();assert.equal(s.carousel.state().index,2);
 });
 test('reduced motion disables autoplay while keeping manual navigation', () => {
   const s = setup(true);

@@ -2,7 +2,7 @@
   const A = {
     permissions(user) {
       const role = ["buyer", "supplier"].includes(user?.role) ? user.role : "guest";
-      return { role, buy: role !== "supplier", sell: role !== "buyer" };
+      return { role, buy: role !== "supplier", sell: role === "supplier" };
     },
     assertProfile(p) {
       if (!p || typeof p !== "object" || Array.isArray(p))
