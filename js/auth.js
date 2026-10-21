@@ -177,7 +177,7 @@ async function submitAuth(e) {
       // Repair only the built-in demo account from an earlier prototype test.
       const builtIn = accounts.find(
         (item) =>
-          item.id === "demo-" + role &&
+          (item.id === "demo-" + role || (role === "supplier" && item.id === "s1")) &&
           item.email === role + "@marinex.demo" &&
           item.role === role,
       );
@@ -198,7 +198,7 @@ async function submitAuth(e) {
         !accounts.some((a) => a.role === role && a.email === d.email)
       ) {
         a = {
-          id: "demo-" + role,
+          id: role === "supplier" ? "s1" : "demo-buyer",
           role,
           email: d.email,
           name: role === "buyer" ? "Alex Morgan" : "王海",
@@ -226,6 +226,13 @@ async function submitAuth(e) {
       if (!a) {
         error.innerHTML = U.tr("loginError");
         return;
+      }
+      // Link the built-in supplier demo to the seed supplier s1 so storefront,
+      // console and received inquiries stay in one scope.
+      if (a && role === "supplier" && a.email === "supplier@marinex.demo" && a.id !== "s1") {
+        const index = accounts.indexOf(a);
+        a = { ...a, id: "s1" };
+        if (index >= 0) accounts[index] = a;
       }
     }
     const keys = ["accounts", "current_user", "supplier_profile"],
@@ -258,13 +265,15 @@ async function submitAuth(e) {
     AccountUI.refreshHeader();
     f.reset();
     if (tab === "login") {
-      location.replace(U.url("index.html"));
+      location.replace(
+        U.url(role === "supplier" ? "seller-dashboard.html" : "index.html"),
+      );
       return;
     }
     const target = query.has("return")
       ? returnTo
       : role === "supplier"
-        ? "supplier.html"
+        ? "seller-dashboard.html"
         : "index.html";
     U.notice(
       tab === "register" && role === "supplier"

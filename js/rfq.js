@@ -14,8 +14,40 @@ if (rfqUser?.role !== "buyer") {
   document.getElementById("main").innerHTML =
     `<div class="container section">${U.empty("notFound", "adjust", "products.html", "backBrowse")}</div>`;
 } else {
+  const targetSupplierId =
+    new URLSearchParams(location.search).get("supplier_id") ||
+    product?.supplier_id ||
+    product?.supplier?.id ||
+    "";
+  const targetSupplier = (() => {
+    if (!targetSupplierId) return null;
+    try {
+      const found = U.read("accounts").find(
+        (a) => a.id === targetSupplierId && a.role === "supplier",
+      );
+      if (found) return found;
+    } catch {}
+    try {
+      const stored = MarineAccounts.readProfile(localStorage);
+      if (stored.id === targetSupplierId) return stored;
+    } catch {}
+    const owned = U.products().find(
+      (v) => (v.supplier_id || v.supplier?.id) === targetSupplierId,
+    );
+    if (owned)
+      return {
+        id: targetSupplierId,
+        company: owned.supplier.name.zh,
+        company_en: owned.supplier.name.en,
+        verification_status: owned.supplier.verified ? "verified" : "pending",
+      };
+    return null;
+  })();
+  const supplierCard = targetSupplier
+    ? `<div class="supplier-target"><div class="supplier-target-main"><div class="eyebrow">${U.tr("supplierTarget")}</div><h3>${U.bi({ zh: targetSupplier.company || "", en: targetSupplier.company_en || targetSupplier.company || "" })}</h3><p class="muted">${U.tr("supplierTargetHint")}</p></div><div class="supplier-target-side"><span class="status ${targetSupplier.verification_status === "verified" ? "verified" : "pending"}">${U.tr(targetSupplier.verification_status === "verified" ? "verifiedStatus" : "pendingStatus")}</span><a class="text-link" href="${U.url("storefront.html", { supplier_id: targetSupplierId })}">${U.tr("consoleStorefront")} ↗</a><a class="link-button" href="${U.url("rfq.html", product ? { product: product.id } : {})}">${U.tr("supplierTargetClear")}</a></div></div>`
+    : "";
   document.getElementById("main").innerHTML =
-    `<div class="container"><div class="page-intro"><div class="eyebrow">${U.tr("rfqEyebrow")}</div><h1>${U.tr("rfqTitle")}</h1><p>${U.tr("rfqDesc")}</p></div><div class="form-layout"><form id="rfq-form" novalidate><div id="rfq-product-context">${U.context(product)}</div><section class="panel"><h2>${U.tr("generalRfq")}</h2><div class="form-grid">${U.industryField("rfq", initialCategory)}<div class="field"><label for="rfq-category">${U.tr("productGroup")} <b>*</b></label><select id="rfq-category" name="category_id" required><option value="" data-i18n="select">${U.t("select")}</option>${U.options(MarineData.categories, initialCategory)}</select><small class="error" data-error="category_id"></small></div><div class="field"><label for="rfq-subcategory">${U.tr("productType")} <b>*</b></label><select id="rfq-subcategory" name="subcategory_id" required></select><small class="error" data-error="subcategory_id"></small></div>${U.field("company", "company", "text", rfqUser.company || "", true)}${U.field("buyerCountry", "buyer_country", "text", "", true, "countryHint")}${U.field("quantity", "quantity", "number", "", true)}${U.field("delivery", "expected_delivery", "date", "", false)}<div class="field"><label for="rfq-terms">${U.tr("terms")}</label><select id="rfq-terms" name="incoterms"><option>EXW</option><option selected>FOB</option><option>CIF</option></select></div>${U.area("message", "message", "", true, "messageHint")}<div class="field full"><label for="rfq-attachments">${U.tr("attachments")}</label><input id="rfq-attachments" type="file" multiple><p class="muted">${U.tr("attachmentHint")}</p><div id="rfq-files"></div></div></div></section><div class="form-actions"><button class="button" type="submit">${U.tr("submitRfq")} →</button></div></form><aside class="form-aside"><div class="form-note"><h3>${U.tr("rfq")}</h3><p>${U.tr("quoteDesc")}</p></div></aside></div></div>`;
+    `<div class="container"><div class="page-intro"><div class="eyebrow">${U.tr("rfqEyebrow")}</div><h1>${U.tr("rfqTitle")}</h1><p>${U.tr("rfqDesc")}</p></div><div class="form-layout"><form id="rfq-form" novalidate>${supplierCard}<div id="rfq-product-context">${U.context(product)}</div><section class="panel"><h2>${U.tr("generalRfq")}</h2><div class="form-grid">${U.industryField("rfq", initialCategory)}<div class="field"><label for="rfq-category">${U.tr("productGroup")} <b>*</b></label><select id="rfq-category" name="category_id" required><option value="" data-i18n="select">${U.t("select")}</option>${U.options(MarineData.categories, initialCategory)}</select><small class="error" data-error="category_id"></small></div><div class="field"><label for="rfq-subcategory">${U.tr("productType")} <b>*</b></label><select id="rfq-subcategory" name="subcategory_id" required></select><small class="error" data-error="subcategory_id"></small></div>${U.field("company", "company", "text", rfqUser.company || "", true)}${U.field("buyerCountry", "buyer_country", "text", "", true, "countryHint")}${U.field("quantity", "quantity", "number", "", true)}${U.field("delivery", "expected_delivery", "date", "", false)}<div class="field"><label for="rfq-terms">${U.tr("terms")}</label><select id="rfq-terms" name="incoterms"><option>EXW</option><option selected>FOB</option><option>CIF</option></select></div>${U.area("message", "message", "", true, "messageHint")}<div class="field full"><label for="rfq-attachments">${U.tr("attachments")}</label><input id="rfq-attachments" type="file" multiple><p class="muted">${U.tr("attachmentHint")}</p><div id="rfq-files"></div></div></div></section><div class="form-actions"><button class="button" type="submit">${U.tr("submitRfq")} →</button></div></form><aside class="form-aside"><div class="form-note"><h3>${U.tr("rfq")}</h3><p>${U.tr("quoteDesc")}</p></div></aside></div></div>`;
   const form = document.getElementById("rfq-form");
   const quick = new URLSearchParams(location.search);
   const requestedQuantity = Number(quick.get('quantity'));
@@ -57,6 +89,7 @@ if (rfqUser?.role !== "buyer") {
     const row = {
       id: "rfq-" + Date.now() + "-" + Math.random().toString(36).slice(2, 7),
       product_id: matchesProduct() ? product.id : null,
+      supplier_id: targetSupplier ? targetSupplierId : null,
       industry_id: d.industry_id,
       category_id: d.category_id,
       subcategory_id: d.subcategory_id,

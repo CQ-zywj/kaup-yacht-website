@@ -6,7 +6,7 @@
     },
     serviceEntry(user, role) {
       return user?.role === role
-        ? (role === "supplier" ? "supplier.html" : "my-rfq.html")
+        ? (role === "supplier" ? "seller-dashboard.html" : "my-rfq.html")
         : (role === "supplier" ? "supplier-auth.html" : "buyer-auth.html");
     },
     authRedirect(user, role, returnTo) {
@@ -35,6 +35,12 @@
         "founded",
         "employees",
         "password_hash",
+        "tagline",
+        "theme",
+        "banner",
+        "logo",
+        "address",
+        "video",
       ])
         if (p[k] !== undefined && typeof p[k] !== "string")
           throw Error("invalid profile field");

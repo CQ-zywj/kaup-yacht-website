@@ -71,7 +71,9 @@ const U = (window.MarineUI = {
   products() {
     const products = [
       ...MarineData.products,
-      ...this.read("draft_products").filter((x) => x.status === "published"),
+      ...this.read("draft_products").filter((x) =>
+        ["published", "active"].includes(x.status),
+      ),
     ];
     try {
       const accounts = MarineAccounts.read(localStorage, "accounts", []);
