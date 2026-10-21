@@ -1,0 +1,126 @@
+- generic [active] [ref=f19e1]:
+  - link "跳至主要内容 / Skip to content" [ref=f19e2] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=f19e3]:
+    - banner [ref=f19e4]:
+      - generic [ref=f19e5]:
+        - link "NORTHLINK GLOBAL SOURCING PLATFORM" [ref=f19e6] [cursor=pointer]:
+          - /url: index.html?v=prd3&lang=en
+          - generic [ref=f19e10]:
+            - text: NORTHLINK
+            - generic [ref=f19e11]: GLOBAL SOURCING PLATFORM
+        - generic [ref=f19e12]:
+          - generic [ref=f19e13]: Search products, specifications or suppliers
+          - textbox "Search products, specifications or suppliers" [ref=f19e14]
+          - button "Search" [ref=f19e15] [cursor=pointer]
+        - button "中文" [ref=f19e16] [cursor=pointer]
+    - navigation [ref=f19e17]:
+      - generic [ref=f19e18]:
+        - link "Home" [ref=f19e19] [cursor=pointer]:
+          - /url: index.html?v=prd3&lang=en
+        - link "Browse products" [ref=f19e20] [cursor=pointer]:
+          - /url: products.html?v=prd3&lang=en
+        - link "Suppliers" [ref=f19e21] [cursor=pointer]:
+          - /url: suppliers.html?v=prd3&lang=en
+        - link "Post buying request" [ref=f19e22] [cursor=pointer]:
+          - /url: rfq.html?v=prd3&lang=en
+        - link "Industry news" [ref=f19e23] [cursor=pointer]:
+          - /url: news.html?v=prd3&lang=en
+        - link "Exhibitions" [ref=f19e24] [cursor=pointer]:
+          - /url: exhibitions.html?v=prd3&lang=en
+        - generic [ref=f19e25]:
+          - link "Sign in" [ref=f19e26] [cursor=pointer]:
+            - /url: buyer-auth.html?v=prd3&tab=login&lang=en
+          - link "Register" [ref=f19e27] [cursor=pointer]:
+            - /url: buyer-auth.html?v=prd3&tab=register&lang=en
+    - navigation "Industry" [ref=f19e28]:
+      - generic [ref=f19e29]:
+        - link "All industries" [ref=f19e30] [cursor=pointer]:
+          - /url: index.html?v=prd3&lang=en#industries
+        - link "Vessels & yachts" [ref=f19e31] [cursor=pointer]:
+          - /url: products.html?v=prd3&industry=marine&lang=en
+        - link "Bearings" [ref=f19e32] [cursor=pointer]:
+          - /url: products.html?v=prd3&industry=bearings&lang=en
+        - link "Machine tools" [ref=f19e33] [cursor=pointer]:
+          - /url: products.html?v=prd3&industry=machine-tools&lang=en
+        - link "Agricultural products" [ref=f19e34] [cursor=pointer]:
+          - /url: products.html?v=prd3&industry=agriculture&lang=en
+        - link "Timber & forestry" [ref=f19e35] [cursor=pointer]:
+          - /url: products.html?v=prd3&industry=forestry&lang=en
+        - link "Petrochemicals & chemicals" [ref=f19e36] [cursor=pointer]:
+          - /url: products.html?v=prd3&industry=chemicals&lang=en
+  - main [ref=f19e37]:
+    - generic [ref=f19e38]:
+      - generic [ref=f19e39]:
+        - generic [ref=f19e40]: Buyer account
+        - heading "Sign in" [level=1] [ref=f19e41]
+        - paragraph [ref=f19e42]: Demo only. Use sample information; no backend is connected.
+        - navigation "Account menu" [ref=f19e43]:
+          - link "For buyers" [ref=f19e44] [cursor=pointer]:
+            - /url: buyer-auth.html?v=prd3&tab=login&lang=en
+          - link "For suppliers" [ref=f19e45] [cursor=pointer]:
+            - /url: supplier-auth.html?v=prd3&tab=login&lang=en
+      - generic [ref=f19e46]:
+        - generic [ref=f19e47]:
+          - tablist "Sign in" [ref=f19e48]:
+            - tab "Sign in" [selected] [ref=f19e49] [cursor=pointer]
+            - tab "Register" [ref=f19e50] [cursor=pointer]
+          - generic [ref=f19e51]:
+            - paragraph [ref=f19e52]: Fields marked * are required
+            - generic [ref=f19e53]:
+              - generic [ref=f19e54]:
+                - generic [ref=f19e55]: Email *
+                - textbox "Email *" [ref=f19e56]
+              - generic [ref=f19e57]:
+                - generic [ref=f19e58]: Demo password *
+                - generic [ref=f19e59]:
+                  - textbox "Demo password *" [ref=f19e60]
+                  - button "Show" [ref=f19e61] [cursor=pointer]
+              - generic [ref=f19e62] [cursor=pointer]:
+                - checkbox "Remember me (placeholder)" [ref=f19e63]
+                - generic [ref=f19e64]: Remember me (placeholder)
+            - button "Sign in" [ref=f19e65] [cursor=pointer]
+          - generic [ref=f19e67]:
+            - button "Forgot password" [ref=f19e68] [cursor=pointer]
+            - button "Use demo account" [ref=f19e69] [cursor=pointer]
+          - paragraph [ref=f19e71]: buyer@marinex.demo · Demo123!
+          - generic [ref=f19e72]:
+            - button "Google" [ref=f19e73] [cursor=pointer]
+            - button "LinkedIn" [ref=f19e74] [cursor=pointer]
+        - complementary [ref=f19e75]:
+          - generic [ref=f19e76]: NORTHLINK · GLOBAL SOURCING
+          - heading "Source across industries" [level=2] [ref=f19e81]
+          - paragraph [ref=f19e82]: From industry discovery to inquiries, move sourcing forward in one place.
+          - list [ref=f19e83]:
+            - listitem [ref=f19e84]: ↗Filter by category, specifications and certifications
+            - listitem [ref=f19e85]: ↗Send your requirements to suppliers
+          - generic [ref=f19e86]: Demo only. Use sample information; no backend is connected.
+  - contentinfo [ref=f19e88]:
+    - generic [ref=f19e89]:
+      - generic [ref=f19e90]:
+        - link "NORTHLINK" [ref=f19e91] [cursor=pointer]:
+          - /url: index.html?v=prd3&lang=en
+        - paragraph [ref=f19e92]: Multi-industry sourcing. China to the world.
+      - generic [ref=f19e93]:
+        - heading "Category" [level=4] [ref=f19e94]
+        - link "Vessels & yachts" [ref=f19e95] [cursor=pointer]:
+          - /url: products.html?v=prd3&industry=marine&lang=en
+        - link "Bearings" [ref=f19e96] [cursor=pointer]:
+          - /url: products.html?v=prd3&industry=bearings&lang=en
+        - link "Machine tools" [ref=f19e97] [cursor=pointer]:
+          - /url: products.html?v=prd3&industry=machine-tools&lang=en
+        - link "Agricultural products" [ref=f19e98] [cursor=pointer]:
+          - /url: products.html?v=prd3&industry=agriculture&lang=en
+        - link "Timber & forestry" [ref=f19e99] [cursor=pointer]:
+          - /url: products.html?v=prd3&industry=forestry&lang=en
+        - link "Petrochemicals & chemicals" [ref=f19e100] [cursor=pointer]:
+          - /url: products.html?v=prd3&industry=chemicals&lang=en
+      - generic [ref=f19e101]:
+        - heading "Account menu" [level=4] [ref=f19e102]
+        - link "For buyers" [ref=f19e103] [cursor=pointer]:
+          - /url: buyer-auth.html?v=prd3&lang=en
+        - link "For suppliers" [ref=f19e104] [cursor=pointer]:
+          - /url: supplier-auth.html?v=prd3&lang=en
+    - generic [ref=f19e105]:
+      - generic [ref=f19e106]: © 2026 Kaup
+      - button "中文" [ref=f19e107] [cursor=pointer]

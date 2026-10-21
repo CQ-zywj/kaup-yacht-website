@@ -96,3 +96,31 @@ node --test tests/*.test.cjs
 - 新闻列表 news.html、展会列表 exhibitions.html、内容详情 content.html?type=news&id=precision-sourcing。
 - 供应商首页显示本地询盘与演示采购线索；inquiry-detail.html 展示演示线索详情。
 - 新闻为演示编辑内容；展会与线索不是实时业务数据。
+
+## 供应商控制台补齐（2026-10-21）
+
+按 `docs/未实现功能清单.md` 的 M1–M11 补齐缺口，仍为纯静态原型。供应商登录后落地 `seller-dashboard.html`。
+
+| 文件 | 对应缺口 | 用途 |
+| --- | --- | --- |
+| seller-dashboard.html | M1 | 店铺总览：KPI、资料完善度评分、待办、最近询盘、商品概览、店铺卡 |
+| supplier.html | M6 | 我的商品：全部/在售/待审核/已下架/草稿/已驳回 六态筛选、上下架、删除 |
+| bulk-import.html | M6 | 批量导入：CSV 模板下载、文件或粘贴解析、逐行校验与结果 |
+| certifications.html | M3 | 认证与资质：7 类分组、有效期预警、模拟验真/驳回、关联产品 |
+| supplier-articles.html | M4 | 内容中心：富文本编辑、封面、标签、定时发布、侧栏配置 |
+| media-library.html | M5 | 素材库：按文件夹分类、标签、引用计数、删除前校验 |
+| storefront.html | M2 | 店铺主页：Banner 主题、认证墙、文章与商品聚合，公开可访问 |
+| customers.html | M11 | 客户管理：按买家公司聚合询盘与回复记录 |
+
+配套改动：
+
+- `js/supplier-core.js` 统一四类新数据（certifications / articles / media_library / blog_sidebar）的读写、校验与完善度计算；`js/supplier-shell.js` 提供控制台外壳与素材选择器。
+- M7 询盘定向：`rfq.html?supplier_id=` 显示目标供应商卡片并写入 `rfq_drafts.supplier_id`；收件箱只显示定向给当前供应商的记录与未定向的公共询盘。
+- M8 公司资料新增店铺门面字段：`tagline` / `theme` / `banner` / `logo` / `address` / `video`，可写入后再由店铺主页读取。
+- M6 发布页支持从素材库选图；商品状态机为 `draft / pending / active / inactive / rejected`，旧 `published` 自动视为 `active`。
+- M10 首页新增「进入店铺工作台」、精选商品与供应商资讯区块；`content.html?type=article&id=` 支持文章详情。
+- 种子商品（`s1` 名下 4 件）在我的商品中标记为「演示」且只读；用户自己的草稿/导入商品可完整管理。
+- 新增存储键：`certifications`、`articles`、`media_library`、`blog_sidebar`、`storefront_favorites`、`demo_supplier_seeded`。
+- 所有页面脚本缓存版本统一为 `?v=ws20261021`，避免旧脚本与旧样式混用。
+
+演示账号首次进入控制台会自动写入 5 条演示素材、4 张证书与 3 篇文章（`demo_supplier_seeded` 为幂等标记），便于直接查看各页面效果。截图见 `docs/screenshots/`（console / products / bulk / certs / articles / media / customers / storefront / company / home）。
