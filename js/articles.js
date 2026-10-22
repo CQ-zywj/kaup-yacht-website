@@ -40,7 +40,7 @@
     if (!target) return;
     target.innerHTML = rows.length
       ? rows.map(row).join("")
-      : U.empty("articleEmpty", "articleEmptyHint", "supplier-articles.html", "articleNew");
+      : U.empty("articleEmpty", "articleEmptyHint", "supplier-articles.html", "articleNew", "create-article");
     U.translate();
   }
   function sidebarConfig() {
@@ -72,6 +72,7 @@
       renderList();
     };
     document.getElementById("article-list").onclick = (event) => {
+      if (event.target.closest('[data-empty-action="create-article"]')) { renderEditor(null); return; }
       const edit = event.target.closest("[data-edit]");
       const preview = event.target.closest("[data-preview]");
       const remove = event.target.closest("[data-delete]");
@@ -116,10 +117,10 @@
     const products = U.products().filter(
       (product) => (product.supplier_id || product.supplier.id) === id,
     );
-    body.innerHTML = `<div class="page-intro"><div class="eyebrow">${U.tr("identitySupplier")}</div><h1>${U.tr(article ? "edit" : "articleNew")}</h1><p>${U.tr("articleEditorHint")}</p></div><form id="article-form" novalidate><div class="panel"><div class="form-grid"><div class="field"><label for="title_zh">${U.tr("articleTitleZh")} <b>*</b></label><input id="title_zh" name="title_zh" value="${U.e(article?.title?.zh || "")}"><small class="error" data-error="title_zh"></small></div><div class="field"><label for="title_en">${U.tr("articleTitleEn")} <b>*</b></label><input id="title_en" name="title_en" value="${U.e(article?.title?.en || "")}"><small class="error" data-error="title_en"></small></div><div class="field full"><span class="field-label">${U.tr("articleCover")}</span><div class="editor-cover"><img id="cover-preview" src="${U.e(state.cover || "assets/media/banner-platform.jpg")}" alt=""><button type="button" class="button secondary" id="cover-pick">${U.tr("articleCoverPick")}</button><input type="file" id="cover-file" accept="image/png,image/jpeg,image/webp"><small class="error" data-error="cover"></small></div></div><div class="field"><label for="article-category">${U.tr("articleCategory")}</label><select id="article-category" name="category">${MarineData.industries.map(
+    body.innerHTML = `<div class="page-intro"><div class="eyebrow">${U.tr("identitySupplier")}</div><h1>${U.tr(article ? "edit" : "articleNew")}</h1><p>${U.tr("articleEditorHint")}</p></div><form id="article-form" novalidate><div class="panel"><div class="form-grid"><div class="field full"><label for="title_en">${U.tr("articleTitleEn")} <b>*</b></label><input id="title_en" name="title_en" value="${U.e(article?.title?.en || "")}"><small class="error" data-error="title_en"></small></div><div class="field full"><span class="field-label">${U.tr("articleCover")}</span><div class="editor-cover"><img id="cover-preview" src="${U.e(state.cover || "assets/media/banner-platform.jpg")}" alt=""><button type="button" class="button secondary" id="cover-pick">${U.tr("articleCoverPick")}</button><input type="file" id="cover-file" accept="image/png,image/jpeg,image/webp"><small class="error" data-error="cover"></small></div></div><div class="field"><label for="article-category">${U.tr("articleCategory")}</label><select id="article-category" name="category">${MarineData.industries.map(
       (industry) =>
         `<option value="${industry.id}" ${article?.category === industry.id ? "selected" : ""}>${U.bi(industry.name)}</option>`,
-    ).join("")}</select></div><div class="field"><label for="article-tags">${U.tr("articleTags")}</label><input id="article-tags" name="tags" value="${U.e((article?.tags || []).join(", "))}" placeholder="整艇, 交付"></div><div class="field"><label for="publish_at">${U.tr("articleSchedule")}</label><input id="publish_at" name="publish_at" type="datetime-local" value="${U.e(article?.publish_at || "")}"><small class="error" data-error="publish_at"></small></div></div><div class="field full" style="margin-top:18px"><label>${U.tr("articleBodyZh")} <b>*</b></label>${editorToolbar("body_zh")}<div class="rich-editor" id="body_zh" contenteditable="true">${article?.content_html?.zh || ""}</div><small class="error" data-error="content_zh"></small></div><div class="field full" style="margin-top:18px"><label>${U.tr("articleBodyEn")}</label>${editorToolbar("body_en")}<div class="rich-editor" id="body_en" contenteditable="true">${article?.content_html?.en || ""}</div></div><div class="field full" style="margin-top:18px"><span class="field-label">${U.tr("articleRelated")}</span><div class="check-list">${products
+    ).join("")}</select></div><div class="field"><label for="article-tags">${U.tr("articleTags")}</label><input id="article-tags" name="tags" value="${U.e((article?.tags || []).join(", "))}" placeholder="整艇, 交付"></div><div class="field"><label for="publish_at">${U.tr("articleSchedule")}</label><input id="publish_at" name="publish_at" type="datetime-local" value="${U.e(article?.publish_at || "")}"><small class="error" data-error="publish_at"></small></div></div><div class="field full" style="margin-top:18px"><label id="body-en-label" for="body_en">${U.tr("articleBodyEn")} <b>*</b></label>${editorToolbar("body_en")}<div class="rich-editor" id="body_en" contenteditable="true" role="textbox" aria-labelledby="body-en-label" aria-multiline="true" aria-required="true">${article?.content_html?.en || ""}</div><small class="error" data-error="content_en"></small></div><div class="field full" style="margin-top:18px"><span class="field-label">${U.tr("articleRelated")}</span><div class="check-list">${products
       .map(
         (product) =>
           `<label><input type="checkbox" name="related" value="${U.e(product.id)}" ${(article?.product_ids || []).includes(product.id) ? "checked" : ""}><span>${U.bi({ zh: product.i18n.zh.title, en: product.i18n.en.title })}</span></label>`,
@@ -191,11 +192,11 @@
       id: state.editing?.id || "article-" + Date.now(),
       supplier_id: id,
       title: {
-        zh: document.getElementById("title_zh").value.trim(),
+        zh: state.editing?.title?.zh || "",
         en: document.getElementById("title_en").value.trim(),
       },
       content_html: {
-        zh: document.getElementById("body_zh").innerHTML.trim(),
+        zh: state.editing?.content_html?.zh || "",
         en: document.getElementById("body_en").innerHTML.trim(),
       },
       cover: state.cover,
@@ -229,7 +230,7 @@
   function openPreview(article) {
     if (!article) return;
     const dialog = document.getElementById("article-preview");
-    dialog.innerHTML = `<div class="drawer-header"><h2>${U.tr("articlePreview")}</h2><button type="button" class="button secondary" data-close>${U.tr("close")}</button></div><article class="article-body"><h1>${U.bi(article.title)}</h1><p class="article-meta">${U.e(article.publish_at || "")} · ${U.e(article.author || "")}</p>${article.cover ? `<div class="article-cover"><img src="${U.e(article.cover)}" alt=""></div>` : ""}<div class="article-paragraphs">${article.content_html?.[U.lang] || article.content_html?.zh || ""}</div></article>`;
+    dialog.innerHTML = `<div class="drawer-header"><h2>${U.tr("articlePreview")}</h2><button type="button" class="button secondary" data-close>${U.tr("close")}</button></div><article class="article-body"><h1>${U.bi(article.title)}</h1><p class="article-meta">${U.e(article.publish_at || "")} · ${U.e(article.author || "")}</p>${article.cover ? `<div class="article-cover"><img src="${U.e(article.cover)}" alt=""></div>` : ""}<div class="article-paragraphs">${article.content_html?.[U.lang] || article.content_html?.en || article.content_html?.zh || ""}</div></article>`;
     dialog.querySelector("[data-close]").onclick = () => dialog.close();
     dialog.showModal();
     U.translate();

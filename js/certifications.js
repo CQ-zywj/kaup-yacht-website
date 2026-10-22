@@ -59,7 +59,7 @@
     if (!target) return;
     target.innerHTML = rows.length
       ? rows.map(card).join("")
-      : U.empty("certEmpty", "certEmptyHint", "certifications.html", "certUpload");
+      : U.empty("certEmpty", "certEmptyHint", "certifications.html", "certUpload", "upload-certificate");
     document.getElementById("cert-count").textContent = rows.length;
     U.translate();
   }
@@ -203,6 +203,7 @@
     renderGrid();
   };
   document.getElementById("cert-grid").addEventListener("click", (event) => {
+    if (event.target.closest('[data-empty-action="upload-certificate"]')) { openEditor(null); return; }
     const preview = event.target.closest("[data-preview]");
     const edit = event.target.closest("[data-edit-cert]");
     const verify = event.target.closest("[data-verify]");

@@ -106,9 +106,9 @@
   }
   function validateArticle(a) {
     const e = {};
-    if (!String(a.title?.zh || "").trim()) e.title_zh = "required";
     if (!String(a.title?.en || "").trim()) e.title_en = "required";
-    if (!String(a.content_html?.zh || "").trim()) e.content_zh = "required";
+    const text = String(a.content_html?.en || "").replace(/<[^>]*>/g, "").replace(/&(?:nbsp|#0*160|#x0*a0);/gi, " ").trim();
+    if (!text) e.content_en = "required";
     if (!["draft", "published", "scheduled"].includes(a.status))
       e.status = "required";
     if (a.status === "scheduled" && !a.publish_at) e.publish_at = "required";

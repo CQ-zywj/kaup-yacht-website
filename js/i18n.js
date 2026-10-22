@@ -839,6 +839,8 @@ window.MarineI18n = {
   companyLogo: ["公司 Logo", "Company logo"],
   companyVideo: ["企业视频", "Company video"],
   companyCompleteness: ["资料完善度", "Profile completeness"],
+  companyDraftHint: ["跳转认证页前自动保存公司草稿，返回后可继续填写。草稿仅保存在当前浏览器，点击“保存公司信息”后更新对外资料。", "Before opening certifications, your company draft is saved in this browser. Return to continue editing, then save the company profile to update public details."],
+  companyDraftRestored: ["已恢复自动保存的公司草稿，请继续填写并保存。", "Your company draft has been restored. Continue editing and save when ready."],
   companySaveFirst: ["请先保存公司基础资料，再上传门面素材。", "Save the basic profile before adding storefront media."],
   companyBannerHint: ["建议 1920×480，≤3MB；演示版记录文件名或素材链接。", "Recommended 1920×480, up to 3MB. Demo stores a file name or media link."],
   companyLogoHint: ["建议 ≥400×400，≤2MB。", "Recommended 400×400 or larger, up to 2MB."],

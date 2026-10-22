@@ -19,11 +19,11 @@
       image.src = URL.createObjectURL(file); image.dataset.previewUrl = image.src; event.target.closest('.field').append(image);
     };
   }
-  async function collect(form, previous, owner) {
+  async function collect(form, previous, owner, {draft = false} = {}) {
     const rows = [...form.querySelectorAll('[data-person-index]')];
     for (const row of rows) {
       const name = row.querySelector('[name=team_name]').value.trim();
-      if (!name) throw Error(U.t('teamNameRequired'));
+      if (!name && !draft) throw Error(U.t('teamNameRequired'));
       for (const file of row.querySelector('[name=team_photo]').files) {
         const key = SupplierData.fileError(file,'team'); if (key) throw Error(U.t(key));
       }

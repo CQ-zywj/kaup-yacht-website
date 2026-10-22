@@ -118,3 +118,17 @@
   .todo-list li > span:not(.dot) { flex: 1; min-width: 0; }
   .console-table th, .console-table td { padding: 10px 6px; }
 }
+.check-list input[type="checkbox"] {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  min-height: 18px;
+  max-width: 18px;
+  padding: 0;
+  margin: 2px 0 0;
+  accent-color: var(--teal, #087f87);
+}
+.check-list label { align-items: flex-start; min-height: 44px; padding: 8px 10px; line-height: 1.5; }
+.check-list label > span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.cert-grid > .empty { grid-column: 1 / -1; }
+@media (max-width: 600px) { .check-list { grid-template-columns: 1fr; max-height: 320px; } }

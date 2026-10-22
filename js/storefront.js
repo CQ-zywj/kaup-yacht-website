@@ -110,7 +110,7 @@
         ? `<div class="article-card-grid">${articles
             .map(
               (article) =>
-                `<article class="article-card">${article.cover ? `<img src="${U.e(article.cover)}" alt="">` : ""}<div><h3><a href="${U.url("content.html", { type: "article", id: article.id })}">${U.bi(article.title)}</a></h3><p>${U.e((article.content_html?.[U.lang] || "").replace(/<[^>]+>/g, "").slice(0, 90))}</p><small>${U.e(article.publish_at || "")}</small></div></article>`,
+                `<article class="article-card">${article.cover ? `<img src="${U.e(article.cover)}" alt="">` : ""}<div><h3><a href="${U.url("content.html", { type: "article", id: article.id })}">${U.bi(article.title)}</a></h3><p>${U.e((article.content_html?.[U.lang] || article.content_html?.en || article.content_html?.zh || "").replace(/<[^>]+>/g, "").slice(0, 90))}</p><small>${U.e(article.publish_at || "")}</small></div></article>`,
             )
             .join("")}</div>`
         : `<div class="panel"><p class="muted">${U.tr("storefrontNoArticles")}</p><p class="inline-note">${U.tr("storefrontNoArticlesHint")}</p></div>`

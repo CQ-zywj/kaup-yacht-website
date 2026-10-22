@@ -12,7 +12,7 @@
     }catch{return [];}
   }
   function articleBody(article){
-    const html=String((article.content_html&&(article.content_html[U.lang]||article.content_html.zh))||'');
+    const html=String((article.content_html&&(article.content_html[U.lang]||article.content_html.en||article.content_html.zh))||'');
     return html.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/\son\w+="[^"]*"/gi,'');
   }
   function renderArticle(){
@@ -21,7 +21,7 @@
     let supplier=null;
     try{supplier=MarineAccounts.read(localStorage,'accounts',[]).find(a=>a.id===article.supplier_id&&a.role==='supplier')||null;}catch{}
     const store=U.url('storefront.html',{supplier_id:article.supplier_id});
-    document.title=(article.title[U.lang]||article.title.zh)+' | NORTHLINK';
+    document.title=(article.title[U.lang]||article.title.en||article.title.zh)+' | NORTHLINK';
     const others=list.filter(row=>row.supplier_id===article.supplier_id&&row.id!==article.id).slice(0,4);
     main.innerHTML=`<div class="container content-shell"><div class="breadcrumbs"><a href="${U.url('index.html')}">${U.tr('home')}</a> / <a href="${store}">${U.tr('consoleStorefront')}</a> / ${U.bi(article.title)}</div><div class="content-detail-grid"><article class="panel article-body"><span class="editorial-tag">${U.tr('homeSupplierArticles')}</span><h1>${U.bi(article.title)}</h1><p class="article-meta">${U.e(U.date(article.publish_at||article.created_at))}${supplier?' · '+U.e(supplier.company):''}</p>${article.cover?`<div class="article-cover editorial-art"><img src="${U.e(article.cover)}" alt=""></div>`:''}<div class="article-paragraphs">${articleBody(article)}</div>${(article.tags||[]).length?`<div class="cert-row">${article.tags.map(t=>`<span class="badge">${U.e(t)}</span>`).join('')}</div>`:''}<p class="content-disclaimer">${U.tr('demoEditorial')}</p></article><aside class="content-aside panel"><h2>${U.tr('relatedContent')}</h2>${others.map(row=>`<a class="related-story" href="${detailURL('article',row.id)}"><strong>${U.bi(row.title)}</strong><small>${U.e(U.date(row.publish_at||row.created_at))}</small></a>`).join('')||`<p class="muted">${U.tr('noData')}</p>`}<a class="button full-width" href="${store}">${U.tr('homeBrowseStore')}</a><a class="text-link" href="${U.url('rfq.html',{supplier_id:article.supplier_id})}">${U.tr('generalRfq')} →</a></aside></div></div>`;
   }
