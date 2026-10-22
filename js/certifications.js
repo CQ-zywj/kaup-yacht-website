@@ -43,7 +43,7 @@
   }
   function card(cert) {
     const products = (cert.product_ids || []).length;
-    return `<article class="cert-card"><div class="cert-thumb">CERT<small>${U.tr(categoryKey[cert.category] || "certOther")}</small></div><div class="cert-card-main"><div><span class="badge">${U.tr(categoryKey[cert.category] || "certOther")}</span> <span class="status ${statusClass[cert.status] || "pending"}">${U.tr(SupplierCore.certStatusKey(cert.status))}</span>${expiryBadge(cert)}</div><h3>${U.e(cert.name)}</h3><p class="cert-no">${U.e(cert.no)}</p><dl><dt>${U.tr("certIssuer")}</dt><dd>${U.e(cert.issuer || "—")}</dd><dt>${U.tr("certValidFrom")}</dt><dd>${U.e(cert.valid_from)} → ${U.e(cert.valid_to)}</dd><dt>${U.tr("certOwnership")}</dt><dd>${U.tr(cert.ownership === "authorized" ? "certOwnAuthorized" : "certOwnOwn")}</dd><dt>${U.tr("certProducts")}</dt><dd>${products ? products + " " + U.t("certProductCount") : U.tr("certNoProducts")}</dd></dl><div class="cert-actions">${
+    return `<article class="cert-card"><div class="cert-thumb">CERT<small>${U.tr(categoryKey[cert.category] || "certOther")}</small></div><div class="cert-card-main"><div><span class="badge">${U.tr(categoryKey[cert.category] || "certOther")}</span> <span class="status ${statusClass[cert.status] || "pending"}">${U.tr(SupplierCore.certStatusKey(cert.status))}</span>${expiryBadge(cert)}</div><h3>${U.e(cert.name)}</h3><p class="cert-no">${U.e(cert.no)}</p><dl><dt>${U.tr("certIssuer")}</dt><dd>${U.e(cert.issuer || "—")}</dd><dt>${U.tr("certValidFrom")}</dt><dd>${U.e(cert.valid_from)} → ${U.e(cert.valid_to)}</dd><dt>${U.tr("certOwnership")}</dt><dd>${U.tr(cert.ownership === "authorized" ? "certOwnAuthorized" : "certOwnOwn")}</dd><dt>${U.tr("certProducts")}</dt><dd>${products ? products + " " + U.t("certProductCount") : U.tr("certNoLinkedProducts")}</dd></dl><div class="cert-actions"><button type="button" class="link-button" data-preview="${U.e(cert.id)}">${U.tr("viewCertificate")}</button> <button type="button" class="link-button" data-edit-cert="${U.e(cert.id)}">${U.tr("edit")}</button> <span class="badge">${U.tr(SupplierData.visibility(cert) === "public" ? "visibilityPublic" : "visibilityPrivate")}</span>${
       cert.status !== "verified"
         ? `<button type="button" class="link-button" data-verify="${U.e(cert.id)}">${U.tr("certVerify")}</button>`
         : `<span class="badge verified-badge">${U.tr("certVerifiedNote")}</span>`
@@ -91,16 +91,31 @@
     dialog.innerHTML = `<form id="cert-form" novalidate><div class="drawer-header"><h2>${U.tr("certUpload")}</h2><button type="button" class="button secondary" data-close>${U.tr("close")}</button></div><div class="cert-editor"><div class="form-grid"><div class="field"><label for="cert-category">${U.tr("certCategory")} <b>*</b></label><select id="cert-category" name="category">${SupplierCore.CERT_CATEGORIES.map(
       (category) =>
         `<option value="${category}" ${cert?.category === category ? "selected" : ""}>${U.t(categoryKey[category])}</option>`,
-    ).join("")}</select><small class="error" data-error="category"></small></div><div class="field"><label for="cert-name">${U.tr("certName")} <b>*</b></label><input id="cert-name" name="name" value="${U.e(cert?.name || "")}"><small class="error" data-error="name"></small></div><div class="field"><label for="cert-no">${U.tr("certNo")} <b>*</b></label><input id="cert-no" name="no" value="${U.e(cert?.no || "")}"><small class="error" data-error="no"></small></div><div class="field"><label for="cert-issuer">${U.tr("certIssuer")} <b>*</b></label><input id="cert-issuer" name="issuer" value="${U.e(cert?.issuer || "")}"><small class="error" data-error="issuer"></small></div><div class="field"><label for="cert-from">${U.tr("certValidFrom")} <b>*</b></label><input id="cert-from" name="valid_from" type="date" value="${U.e(cert?.valid_from || "")}"><small class="error" data-error="valid_from"></small></div><div class="field"><label for="cert-to">${U.tr("certValidTo")} <b>*</b></label><input id="cert-to" name="valid_to" type="date" value="${U.e(cert?.valid_to || "")}"><small class="error" data-error="valid_to"></small></div><div class="field"><label for="cert-ownership">${U.tr("certOwnership")}</label><select id="cert-ownership" name="ownership"><option value="own" ${cert?.ownership !== "authorized" ? "selected" : ""}>${U.t("certOwnOwn")}</option><option value="authorized" ${cert?.ownership === "authorized" ? "selected" : ""}>${U.t("certOwnAuthorized")}</option></select></div><div class="field"><label for="cert-files">${U.tr("certFiles")}</label><input id="cert-files" name="files" type="file" multiple accept="image/jpeg,image/png,application/pdf"><small class="inline-note">${U.tr("certFileHint")}</small></div><div class="field"><label for="cert-auth-files">${U.tr("certAuthFiles")}</label><input id="cert-auth-files" name="auth_files" type="file" multiple accept="image/jpeg,image/png,application/pdf"><small class="inline-note">${U.tr("certAuthHint")}</small><small class="error" data-error="auth_files"></small></div><div class="field full"><label class="check-label"><input type="checkbox" name="commitment" ${cert?.commitment !== false ? "checked" : ""}>${U.tr("certCommit")}</label><small class="error" data-error="commitment"></small></div></div></div><div class="form-actions"><button class="button" type="submit">${U.tr("confirm")}</button><button class="button secondary" type="button" data-close>${U.tr("cancel")}</button></div></form>`;
+    ).join("")}</select><small class="error" data-error="category"></small></div><div class="field"><label for="cert-name">${U.tr("certName")} <b>*</b></label><input id="cert-name" name="name" value="${U.e(cert?.name || "")}"><small class="error" data-error="name"></small></div><div class="field"><label for="cert-no">${U.tr("certNo")} <b>*</b></label><input id="cert-no" name="no" value="${U.e(cert?.no || "")}"><small class="error" data-error="no"></small></div><div class="field"><label for="cert-issuer">${U.tr("certIssuer")} <b>*</b></label><input id="cert-issuer" name="issuer" value="${U.e(cert?.issuer || "")}"><small class="error" data-error="issuer"></small></div><div class="field"><label for="cert-from">${U.tr("certValidFrom")} <b>*</b></label><input id="cert-from" name="valid_from" type="date" value="${U.e(cert?.valid_from || "")}"><small class="error" data-error="valid_from"></small></div><div class="field"><label for="cert-to">${U.tr("certValidTo")} <b>*</b></label><input id="cert-to" name="valid_to" type="date" value="${U.e(cert?.valid_to || "")}"><small class="error" data-error="valid_to"></small></div><div class="field"><label for="cert-ownership">${U.tr("certOwnership")}</label><select id="cert-ownership" name="ownership"><option value="own" ${cert?.ownership !== "authorized" ? "selected" : ""}>${U.t("certOwnOwn")}</option><option value="authorized" ${cert?.ownership === "authorized" ? "selected" : ""}>${U.t("certOwnAuthorized")}</option></select></div><div class="field"><label for="cert-files">${U.tr("certFiles")}</label><input id="cert-files" name="files" type="file" multiple accept="image/jpeg,image/png,application/pdf"><small class="inline-note">${U.tr("certFileHint")}</small><small class="error" data-error="files"></small></div><div class="field"><label for="cert-auth-files">${U.tr("certAuthFiles")}</label><input id="cert-auth-files" name="auth_files" type="file" multiple accept="image/jpeg,image/png,application/pdf"><small class="inline-note">${U.tr("certAuthHint")}</small><small class="error" data-error="auth_files"></small></div><div class="field full"><label class="check-label"><input type="checkbox" name="visibility" ${cert && SupplierData.visibility(cert) === "public" ? "checked" : ""}>${U.tr("publishCertificate")}</label><small>${U.tr("publishCertificateHint")}</small></div><div class="field full"><label class="check-label"><input type="checkbox" name="commitment" ${cert?.commitment !== false ? "checked" : ""}>${U.tr("certCommit")}</label><small class="error" data-error="commitment"></small></div></div></div><div class="form-actions"><button class="button" type="submit">${U.tr("confirm")}</button><button class="button secondary" type="button" data-close>${U.tr("cancel")}</button></div></form>`;
     dialog.querySelectorAll("[data-close]").forEach(
       (button) => (button.onclick = () => dialog.close()),
     );
-    dialog.querySelector("#cert-form").onsubmit = (event) => {
+    const visibility = dialog.querySelector('[name=visibility]');
+    const updateVisibility = () => {
+      const privateOnly = ['company','authorization'].includes(dialog.querySelector('#cert-category').value);
+      visibility.disabled = privateOnly;
+      if (privateOnly) visibility.checked = false;
+    };
+    dialog.querySelector('#cert-category').onchange = updateVisibility;
+    updateVisibility();
+    if (cert?.files?.length) {
+      const saved = document.createElement('div'); saved.className = 'field full';
+      dialog.querySelector('.form-grid').append(saved);
+      SupplierFiles.links(cert.files,saved).catch(() => { saved.textContent = U.t('storageError'); });
+    }
+    dialog.querySelector("#cert-form").onsubmit = async (event) => {
       event.preventDefault();
       const form = event.currentTarget;
       const data = Object.fromEntries(new FormData(form));
-      const files = [...form.elements.files.files].map((file) => file.name);
-      const authFiles = [...form.elements.auth_files.files].map((file) => file.name);
+      const selectedFiles = [...form.elements.files.files];
+      const selectedAuth = [...form.elements.auth_files.files];
+      const files = selectedFiles.length ? selectedFiles : cert?.files || [];
+      const authFiles = selectedAuth.length ? selectedAuth : cert?.auth_files || [];
       const next = {
         id: cert?.id || "cert-" + Date.now(),
         supplier_id: id,
@@ -111,7 +126,8 @@
         valid_from: data.valid_from,
         valid_to: data.valid_to,
         ownership: data.ownership,
-        status: cert?.status || "pending",
+        status: selectedFiles.length || selectedAuth.length ? "pending" : cert?.status || "pending",
+        visibility: form.elements.visibility.checked ? "public" : "private",
         product_ids: cert?.product_ids || [],
         files: files.length ? files : cert?.files || [],
         auth_files: authFiles.length ? authFiles : cert?.auth_files || [],
@@ -120,16 +136,27 @@
         verified_at: cert?.verified_at || "",
       };
       const errors = SupplierCore.validateCert(next);
+      if (!next.files.length) errors.files = "required";
       if (!U.errors(form, errors)) return;
+      const submit = form.querySelector('[type=submit]');
+      submit.disabled = true;
       try {
+        if (AccountUI.getUser()?.id !== id || AccountUI.getUser()?.role !== 'supplier') throw Error(U.t('supplierAccessHint'));
+        for (const file of [...selectedFiles,...selectedAuth]) {
+          const error = SupplierData.fileError(file,"certificate"); if (error) throw Error(U.t(error));
+        }
+        if (selectedFiles.length) next.files = await SupplierFiles.putMany(selectedFiles,id,"certificate");
+        if (selectedAuth.length) next.auth_files = await SupplierFiles.putMany(selectedAuth,id,"certificate");
         SupplierCore.saveCert(localStorage, next);
         dialog.close();
         renderTabs();
         renderGrid();
         U.notice("certSaved");
-      } catch {
-        U.notice("storageError");
-      }
+      } catch (error) {
+        let message = form.querySelector('[data-upload-error]');
+        if (!message) { message = document.createElement('p'); message.className = 'error'; message.dataset.uploadError = ''; message.setAttribute('role','alert'); form.append(message); }
+        message.textContent = error.message || U.t('storageError');
+      } finally { submit.disabled = false; }
     };
     dialog.showModal();
     MarineFormControls.enhance();
@@ -149,7 +176,7 @@
     dialog.querySelectorAll("[data-close]").forEach(
       (button) => (button.onclick = () => dialog.close()),
     );
-    dialog.querySelector("form").onsubmit = (event) => {
+    dialog.querySelector("form").onsubmit = async (event) => {
       event.preventDefault();
       cert.product_ids = [...formElements(dialog, "product")]
         .filter((input) => input.checked)
@@ -176,12 +203,16 @@
     renderGrid();
   };
   document.getElementById("cert-grid").addEventListener("click", (event) => {
+    const preview = event.target.closest("[data-preview]");
+    const edit = event.target.closest("[data-edit-cert]");
     const verify = event.target.closest("[data-verify]");
     const reject = event.target.closest("[data-reject]");
     const link = event.target.closest("[data-link]");
     const remove = event.target.closest("[data-delete]");
     const certs = SupplierCore.certs(localStorage, id);
-    if (verify) {
+    if (preview) { const cert = certs.find(row => row.id === preview.dataset.preview); if (cert) SupplierDisplay.open(cert,true);
+    } else if (edit) { const cert = certs.find(row => row.id === edit.dataset.editCert); if (cert) openEditor(cert);
+    } else if (verify) {
       const cert = certs.find((row) => row.id === verify.dataset.verify);
       if (!cert) return;
       cert.status = "verified";

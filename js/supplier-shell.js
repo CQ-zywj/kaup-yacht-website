@@ -10,6 +10,8 @@
     ["consoleArticles", "supplier-articles.html"],
     ["consoleMedia", "media-library.html"],
     ["consoleCompany", "company.html"],
+    ["consoleDecoration", "store-decoration.html"],
+    ["consoleFinance", "finance.html"],
     ["consoleStorefront", "storefront.html"],
     ["consoleCustomers", "customers.html"],
   ];
@@ -54,7 +56,7 @@
     ).length;
     const verification = profile.verification_status || "pending";
     const main = document.getElementById("main");
-    main.innerHTML = `<div class="container"><div class="supplier-console"><aside class="console-nav" aria-label="${root.MarineUI.t("identitySupplier")}"><h2>${root.MarineUI.tr("consoleOverview")}</h2>${ITEMS.map(
+    main.innerHTML = `<div class="container"><div class="supplier-console"><aside class="console-nav" aria-label="${root.MarineUI.t("identitySupplier")}"><h2>${root.MarineUI.tr("supplier")}</h2>${ITEMS.map(
       ([key, page]) => {
         const href =
           page === "storefront.html"
@@ -67,7 +69,7 @@
         const current = key === active ? ' aria-current="page"' : "";
         return `<a href="${href}"${current}><span>${root.MarineUI.tr(key)}</span>${badge}</a>`;
       },
-    ).join("")}<div class="console-sep"></div><a href="${root.MarineUI.url("index.html")}"><span>${root.MarineUI.tr("home")}</span></a><button type="button" class="link-button" id="console-logout">${root.MarineUI.tr("consoleLogout")}</button></aside><div class="console-main"><div class="console-actions" style="justify-content:space-between;align-items:center;margin-bottom:14px"><div><strong>${root.MarineUI.e(profile.company || user.company || "")}</strong> <span class="status ${verification === "verified" ? "verified" : "pending"}">${root.MarineUI.tr(verification === "verified" ? "verifiedStatus" : verification === "rejected" ? "rejectedStatus" : "pendingStatus")}</span></div><span class="inline-note">${root.MarineUI.tr("consoleDemoNote")}</span></div><div id="console-body"></div></div></div></div>`;
+    ).join("")}<div class="console-sep"></div><a href="${root.MarineUI.url("index.html")}"><span>${root.MarineUI.tr("home")}</span></a><button type="button" class="link-button" id="console-logout">${root.MarineUI.tr("consoleLogout")}</button></aside><div class="console-main"><div class="console-context"><div><strong>${root.MarineUI.e(profile.company || user.company || "")}</strong> <span class="status ${verification === "verified" ? "verified" : "pending"}">${root.MarineUI.tr(verification === "verified" ? "verifiedStatus" : verification === "rejected" ? "rejectedStatus" : "pendingStatus")}</span></div><span class="inline-note">${root.MarineUI.tr("consoleDemoNote")}</span></div><div id="console-body"></div></div></div></div>`;
     document.getElementById("console-logout").onclick = () => {
       try {
         localStorage.removeItem("current_user");

@@ -27,6 +27,9 @@ test("all pages use existing local classic scripts and stylesheet without build"
     "storefront",
     "customers",
     "bulk-import",
+    "finance",
+    "store-decoration",
+    "company-public",
   ]) {
     const html = fs.readFileSync(page + ".html", "utf8");
     assert.match(html, /name="viewport"/);
