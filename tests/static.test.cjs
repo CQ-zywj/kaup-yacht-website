@@ -54,23 +54,23 @@ test("public pages and scripts use the KAUP LINK brand consistently", () => {
     assert.match(html, /<title>KAUP LINK \|/, page);
     assert.match(
       html,
-      /<meta name="description" content="智联无疆多行业跨境 B2B 平台"/,
+      /<meta name="description" content="智贸无疆多行业跨境 B2B 平台"/,
       page,
     );
-    assert.doesNotMatch(html, /NORTHLINK|北贸汇/, page);
+    assert.doesNotMatch(html, /NORTHLINK|北贸汇|智联无疆/, page);
   }
   const scripts = ["js/i18n.js", "js/common.js", "js/content.js"]
     .map((path) => fs.readFileSync(path, "utf8"))
     .join("\n");
-  assert.doesNotMatch(scripts, /NORTHLINK|北贸汇|Lanyu Trade/);
+  assert.doesNotMatch(scripts, /NORTHLINK|北贸汇|Lanyu Trade|智联无疆/);
   const readme = fs.readFileSync("README.md", "utf8");
   assert.match(readme, /^# kaup-link$/m);
-  assert.match(readme, /智联无疆 \/ KAUP LINK/);
+  assert.match(readme, /智贸无疆 \/ KAUP LINK/);
   const c = { window: {} };
   vm.createContext(c);
   vm.runInContext(fs.readFileSync("js/i18n.js", "utf8"), c);
   assert.deepEqual(JSON.parse(JSON.stringify(c.window.MarineI18n.brandName)), [
-    "智联无疆",
+    "智贸无疆",
     "KAUP LINK",
   ]);
   assert.deepEqual(JSON.parse(JSON.stringify(c.window.MarineI18n.footerCopy)), [

@@ -76,7 +76,7 @@ window.MarineI18n = {
   closeFilters: ["关闭筛选", "Close filters"],
   backTop: ["回到顶部", "Back to top"],
 
-  brandName: ["智联无疆", "KAUP LINK"],
+  brandName: ["智贸无疆", "KAUP LINK"],
   industry: ["一级行业", "Industry"],
   productGroup: ["专业分类", "Product group"],
   productType: ["产品类型", "Product type"],
@@ -98,7 +98,7 @@ window.MarineI18n = {
   supplierSelectionDesc: ["浏览不同企业的在售产品，直接发起采购询盘", "Explore products from different companies and send inquiries directly"],
   viewSupplierProducts: ["查看供应商产品", "View supplier products"],
   suppliersNav: ["供应商", "Suppliers"],
-  guestWelcome: ["欢迎来到智联无疆", "Welcome to KAUP LINK"],
+  guestWelcome: ["欢迎来到智贸无疆", "Welcome to KAUP LINK"],
   guestWelcomeHint: ["发现产品、联系供应商、发布采购需求", "Discover products, connect with suppliers and post requirements"],
   buyerWelcome: ["买家采购入口", "Buyer sourcing desk"],
   buyerWelcomeHint: ["发布需求，查看自己的询盘与供应商回复", "Post requirements and follow your inquiries and replies"],
