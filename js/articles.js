@@ -176,10 +176,12 @@
     document.querySelectorAll("[data-save]").forEach((button) => {
       button.onclick = () => save(button.dataset.save);
     });
+    ArticleDocumentUI.bind({onCover: url => { state.cover = url; document.getElementById("cover-preview").src = url; }});
     MarineFormControls.enhance();
     U.translate();
   }
   function save(status) {
+    if (AccountUI.getUser()?.role !== "supplier" || AccountUI.getUser()?.id !== id) { U.notice("articleSessionChanged"); return; }
     const form = document.getElementById("article-form");
     const related = [...document.querySelectorAll('[name="related"]:checked')].map(
       (input) => input.value,
@@ -197,7 +199,7 @@
       },
       content_html: {
         zh: state.editing?.content_html?.zh || "",
-        en: document.getElementById("body_en").innerHTML.trim(),
+        en: DocumentImport.sanitize(document.getElementById("body_en").innerHTML.trim()),
       },
       cover: state.cover,
       category: document.getElementById("article-category").value,
@@ -242,6 +244,6 @@
   });
   window.addEventListener("languagechange", () => {
     if (state.view === "list") renderPage();
-    else renderEditor(state.editing);
+    else U.translate();
   });
 })();

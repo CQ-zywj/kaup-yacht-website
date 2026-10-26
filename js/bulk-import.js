@@ -1,73 +1,10 @@
-/* 批量导入商品：CSV 模板下载 → 解析校验 → 逐行结果 → 写入本地草稿 */
+/* Local import: preview, correct, explicitly confirm, then persist drafts. */
 (function () {
-  const shell = SupplierShell.mount("consoleBulk");
-  if (!shell) return;
-  const { body, id, profile } = shell;
-
-  const COLUMNS = [
-    ["category_id", true],
-    ["subcategory_id", true],
-    ["title_zh", true],
-    ["title_en", true],
-    ["description_zh", true],
-    ["description_en", true],
-    ["moq", true],
-    ["lead_time", true],
-    ["price_min", true],
-    ["price_max", true],
-    ["unit", true],
-    ["incoterms", false],
-    ["image", false],
-  ];
-  const REQUIRED = COLUMNS.filter(([, required]) => required).map(([key]) => key);
-  const INCOTERMS = ["EXW", "FOB", "CIF", "DAP"];
-  const SAMPLE = [
-    ["boats", "yacht", "38 英尺豪华游艇", "38ft Luxury Yacht", "双柴油机，适合近海巡航。", "Twin diesel engines for coastal cruising.", "1", "120", "180000", "260000", "unit", "FOB", ""],
-    ["equipment", "engine", "舷外机 300HP", "Outboard Engine 300HP", "四冲程电喷，含数字油门。", "Four-stroke EFI with digital throttle.", "2", "30", "12000", "16000", "unit", "CIF", ""],
-  ];
-
-  let parsed = null;
-  let source = "";
-
-  function csvCell(value) {
-    const text = String(value ?? "");
-    return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
-  }
-  function toCsv(rows) {
-    return "\ufeff" + rows.map((row) => row.map(csvCell).join(",")).join("\r\n");
-  }
-  function parseCsv(text) {
-    const rows = [];
-    let row = [];
-    let field = "";
-    let quoted = false;
-    for (let i = 0; i < text.length; i++) {
-      const ch = text[i];
-      if (quoted) {
-        if (ch === '"') {
-          if (text[i + 1] === '"') {
-            field += '"';
-            i++;
-          } else quoted = false;
-        } else field += ch;
-      } else if (ch === '"') quoted = true;
-      else if (ch === ",") {
-        row.push(field);
-        field = "";
-      } else if (ch === "\n") {
-        row.push(field);
-        rows.push(row);
-        row = [];
-        field = "";
-      } else if (ch !== "\r") field += ch;
-    }
-    if (field.length || row.length) {
-      row.push(field);
-      rows.push(row);
-    }
-    return rows.filter((r) => r.some((cell) => String(cell).trim() !== ""));
-  }
-
+ const shell=SupplierShell.mount("consoleBulk"); if(!shell)return;
+ const {body,id,profile}=shell, B=BulkCore, COLUMNS=B.columns.map(k=>[k,k!=="incoterms"&&k!=="image"]), INCOTERMS=["EXW","FOB","CIF","DAP"];
+ let parsed=null, matrix=null, workbook=null, revision=0, mode='table';
+ const tr=k=>U.tr(k), e=v=>U.e(String(v??''));
+ function authorized(){try{const user=JSON.parse(localStorage.getItem('current_user')||'null');return user?.role==='supplier'&&user.id===id;}catch{return false;}}
   function validateRow(record, line) {
     const errors = [];
     const category = U.cat(record.category_id);
@@ -104,22 +41,6 @@
     };
   }
 
-  function build(text) {
-    const rows = parseCsv(text);
-    if (!rows.length) return { rows: [], missing: REQUIRED, header: [] };
-    const header = rows[0].map((cell) => String(cell).trim().toLowerCase());
-    const missing = REQUIRED.filter((key) => !header.includes(key));
-    if (missing.length) return { rows: [], missing, header };
-    const data = rows.slice(1).map((cells, index) => {
-      const record = {};
-      header.forEach((key, column) => {
-        record[key] = String(cells[column] ?? "").trim();
-      });
-      return validateRow(record, index + 2);
-    });
-    return { rows: data, missing: [], header };
-  }
-
   function rowToProduct(row) {
     const record = row.record;
     const category = record.category_id;
@@ -150,118 +71,36 @@
         incoterms: [row.incoterms],
         currency: "USD",
       },
-      status: "pending",
+      status: "draft",
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
   }
 
-  function render() {
-    body.innerHTML = `<div class="console-head"><div><h2>${U.tr("bulkTitle")}</h2><p class="muted">${U.tr("bulkDesc")}</p></div><div class="console-actions"><a class="button secondary" href="${U.url("supplier.html")}">${U.tr("myProducts")}</a></div></div><div class="bulk-grid"><section class="panel"><h3>${U.tr("bulkStep1")}</h3><p class="muted">${U.tr("bulkColumnGuide")}</p><button type="button" class="button secondary" id="bulk-download">${U.tr("bulkDownload")}</button><table class="param-table bulk-guide"><thead><tr><th>${U.tr("bulkCol")}</th><th>${U.tr("bulkColRequired")}</th></tr></thead><tbody>${COLUMNS.map(([key, required]) => `<tr><th scope="row">${U.e(key)}</th><td>${U.tr(required ? "bulkColYes" : "bulkColNo")}</td></tr>`).join("")}</tbody></table></section><section class="panel"><h3>${U.tr("bulkStep2")}</h3><div class="field"><label for="bulk-file">${U.tr("bulkChooseFile")}</label><input type="file" id="bulk-file" accept=".csv,text/csv"></div><div class="field"><label for="bulk-text">${U.tr("bulkPasteLabel")}</label><textarea id="bulk-text" rows="8" placeholder="${U.e(COLUMNS.map(([k]) => k).join(","))}"></textarea><small class="muted">${U.tr("bulkPasteHint")}</small></div><button type="button" class="button" id="bulk-parse">${U.tr("bulkParse")}</button></section><section class="panel bulk-result"><h3>${U.tr("bulkStep3")}</h3><p class="muted">${U.tr("bulkImportHint")}</p><div id="bulk-summary"></div><div id="bulk-preview"></div></section></div>`;
-    document.getElementById("bulk-download").onclick = download;
-    document.getElementById("bulk-file").onchange = onFile;
-    document.getElementById("bulk-parse").onclick = () => {
-      const text = document.getElementById("bulk-text").value;
-      run(text, "paste");
-    };
-    if (parsed) paint();
-    U.translate();
-  }
 
-  function download() {
-    const header = COLUMNS.map(([key]) => key);
-    const csv = toCsv([header, ...SAMPLE]);
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "product-import-template.csv";
-    document.body.append(link);
-    link.click();
-    link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
-
-  function onFile(event) {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    if (!/\.csv$/i.test(file.name)) {
-      U.notice("bulkFileError");
-      event.target.value = "";
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-      document.getElementById("bulk-text").value = String(reader.result || "");
-      run(String(reader.result || ""), file.name);
-    };
-    reader.onerror = () => U.notice("storageError");
-    reader.readAsText(file, "utf-8");
-  }
-
-  function run(text, name) {
-    source = name || "";
-    if (!String(text || "").trim()) {
-      parsed = null;
-      U.notice("bulkEmpty");
-      paint();
-      return;
-    }
-    parsed = build(text);
-    paint();
-  }
-
-  function paint() {
-    const summary = document.getElementById("bulk-summary");
-    const preview = document.getElementById("bulk-preview");
-    if (!summary || !preview) return;
-    if (!parsed) {
-      summary.innerHTML = `<p class="muted">${U.tr("bulkEmpty")}</p>`;
-      preview.innerHTML = "";
-      return;
-    }
-    if (parsed.missing.length) {
-      summary.innerHTML = `<div class="warning">${U.t("bulkHeaderError").replace("{cols}", parsed.missing.join(", "))}</div>`;
-      preview.innerHTML = "";
-      return;
-    }
-    if (!parsed.rows.length) {
-      summary.innerHTML = `<div class="warning">${U.tr("bulkNoRows")}</div>`;
-      preview.innerHTML = "";
-      return;
-    }
-    const ok = parsed.rows.filter((row) => row.valid).length;
-    const bad = parsed.rows.length - ok;
-    summary.innerHTML = `<div class="bulk-summary-row"><span class="status verified">${U.tr("bulkValid")} <b>${ok}</b></span><span class="status rejected">${U.tr("bulkInvalid")} <b>${bad}</b></span><button type="button" class="button" id="bulk-run"${ok ? "" : " disabled"}>${U.tr("bulkRun")}</button></div>`;
-    preview.innerHTML = `<div class="scroll-x"><table class="console-table"><thead><tr><th>${U.tr("bulkRowNo")}</th><th>${U.tr("titleZh")}</th><th>${U.tr("productGroup")}</th><th>${U.tr("status")}</th><th>${U.tr("bulkResultTitle")}</th></tr></thead><tbody>${parsed.rows
-      .map(
-        (row) =>
-          `<tr class="${row.valid ? "" : "row-invalid"}"><td>${row.line}</td><td>${U.e(row.record.title_zh || row.record.title_en || "—")}</td><td>${U.e(row.record.category_id || "—")}</td><td><span class="status ${row.valid ? "verified" : "rejected"}">${U.tr(row.valid ? "bulkValid" : "bulkInvalid")}</span></td><td>${row.valid ? `${U.e(row.record.unit)} · $${row.numbers.price_min}–$${row.numbers.price_max}` : U.e(row.errors.join(", "))}</td></tr>`,
-      )
-      .join("")}</tbody></table></div>`;
-    const runButton = document.getElementById("bulk-run");
-    if (runButton) runButton.onclick = () => importRows(ok, bad);
-    U.translate();
-  }
-
-  function importRows(ok, bad) {
-    const rows = U.read("draft_products");
-    parsed.rows
-      .filter((row) => row.valid)
-      .forEach((row) => rows.push(rowToProduct(row)));
-    if (!U.write("draft_products", rows)) return;
-    U.notice(
-      U.t("bulkDone").replace("{ok}", String(ok)).replace("{skip}", String(bad)),
-      null,
-      "supplier.html",
-      "myProducts",
-    );
-    parsed = null;
-    paint();
-  }
-
-  render();
-  window.addEventListener("languagechange", () => {
-    render();
-  });
+ function invalidate(){revision++;parsed=null;document.getElementById('bulk-summary').innerHTML='';document.getElementById('bulk-preview').innerHTML='';}
+ function render(){body.innerHTML=`<div class="console-head"><div><h2>${tr('bulkTitle')}</h2><p>${tr('bulkLocalHint')}</p></div><a class="button secondary" href="${U.url('supplier.html')}">${tr('myProducts')}</a></div>
+ <div class="bulk-mode"><button class="button" id="mode-table">${tr('bulkTableMode')}</button><button class="button secondary" id="mode-materials">${tr('bulkMaterialsMode')}</button></div>
+ <section class="panel" id="bulk-table"><h3>${tr('bulkStep1')}</h3><button class="button secondary" id="bulk-download">${tr('bulkDownload')}</button><div class="field"><label for="bulk-file">CSV / Excel (.xlsx, .xls)</label><input id="bulk-file" type="file" accept=".csv,.xlsx,.xls"></div><div id="bulk-sheets"></div><div class="field"><label for="bulk-text">${tr('bulkPasteLabel')}</label><textarea id="bulk-text" rows="5"></textarea></div><button id="bulk-parse" class="button">${tr('bulkParse')}</button><div id="bulk-mapping"></div></section>
+ <section class="panel" id="bulk-materials" hidden><h3>${tr('bulkMaterialsMode')}</h3><p>${tr('bulkMaterialsHint')}</p><div class="bulk-drop" id="bulk-drop" tabindex="0">${tr('bulkDrop')}<div class="field"><label for="bulk-material-files">${tr('bulkFiles')}</label><input type="file" id="bulk-material-files" multiple accept=".docx,.html,.htm,.txt,.pdf,.doc,.zip,.jpg,.jpeg,.png,.webp,.gif"></div><div class="field"><label for="bulk-folder">${tr('bulkFolder')}</label><input id="bulk-folder" type="file" multiple webkitdirectory></div></div><div id="bulk-file-results" role="status"></div></section>
+ <section class="panel bulk-result"><h3>${tr('bulkStep3')}</h3><div id="bulk-summary" aria-live="polite"></div><div id="bulk-preview"></div></section>`;
+ document.getElementById('bulk-download').onclick=download;
+ document.getElementById('bulk-file').onchange=onFile;
+ document.getElementById('bulk-text').oninput=()=>{invalidate();matrix=null;workbook=null;document.getElementById('bulk-mapping').innerHTML='';document.getElementById('bulk-sheets').innerHTML='';};
+ document.getElementById('bulk-parse').onclick=()=>{invalidate();try{setMatrix(B.parseCsv(document.getElementById('bulk-text').value));}catch(err){message(err.message);}};
+ ['table','materials'].forEach(m=>{document.getElementById('mode-'+m).setAttribute('aria-pressed',String(mode===m));document.getElementById('mode-'+m).onclick=()=>{invalidate();mode=m;['table','materials'].forEach(v=>{const button=document.getElementById('mode-'+v);button.setAttribute('aria-pressed',String(v===m));button.classList.toggle('secondary',v!==m);});document.getElementById('bulk-table').hidden=m!=='table';document.getElementById('bulk-materials').hidden=m!=='materials';};});
+ U.translate();
+ BulkMaterials.mount({invalidate,authorized,getRevision:()=>revision,show:rows=>{parsed={rows,missing:[]};paint();},message});
+ }
+ function message(text){document.getElementById('bulk-summary').textContent=text;}
+ function download(){const csv='\ufeff'+B.columns.join(',')+'\r\nboats,yacht,游艇,Yacht,产品描述,Product description,1,30,100,200,unit,FOB,';const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='product-import-template.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+ async function onFile(ev){invalidate();if(!authorized()){message(U.t('bulkAccountChanged'));return;}matrix=null;workbook=null;document.getElementById('bulk-text').value='';document.getElementById('bulk-mapping').innerHTML='';document.getElementById('bulk-sheets').innerHTML='';const token=revision,file=ev.target.files[0];if(!file)return;try{if(file.size>20*1024*1024)throw Error(U.t('bulkLimit'));if(/\.csv$/i.test(file.name)){const text=await file.text();if(token!==revision||!authorized())return;document.getElementById('bulk-text').value=text;setMatrix(B.parseCsv(text));}else if(/\.xlsx?$/i.test(file.name)){const data=await file.arrayBuffer();if(token!==revision||!authorized())return;workbook=XLSX.read(data,{type:'array'});const box=document.getElementById('bulk-sheets');box.innerHTML=`<label for="bulk-sheet">${tr('bulkSheet')}</label><select id="bulk-sheet">${workbook.SheetNames.map(n=>`<option>${e(n)}</option>`).join('')}</select>`;const select=document.getElementById('bulk-sheet');select.onchange=()=>{invalidate();loadSheet(select.value);};loadSheet(select.value);}else throw Error(U.t('bulkFileTypes'));}catch(err){if(token===revision)message(err.message);}}
+ function loadSheet(name){setMatrix(XLSX.utils.sheet_to_json(workbook.Sheets[name],{header:1,defval:'',raw:false}));}
+ function setMatrix(rows){matrix=rows;if(!rows.length){message(U.t('bulkEmpty'));return;}const map=B.mapping(rows[0]);document.getElementById('bulk-mapping').innerHTML=`<h4>${tr('bulkMap')}</h4><div class="bulk-map">${COLUMNS.map(([key,req])=>`<label>${e(key)}${req?' *':''}<select data-map="${key}"><option value="">—</option>${rows[0].map((h,i)=>`<option value="${i}" ${map[key]===i?'selected':''}>${e(h||('#'+(i+1)))}</option>`).join('')}</select></label>`).join('')}</div><button class="button" id="bulk-validate">${tr('bulkParse')}</button>`;document.querySelectorAll('[data-map]').forEach(el=>el.onchange=invalidate);document.getElementById('bulk-validate').onclick=validateTable;validateTable();}
+ function validateTable(){invalidate();const map={};document.querySelectorAll('[data-map]').forEach(el=>{if(el.value!=='')map[el.dataset.map]=Number(el.value);});const missing=COLUMNS.filter(([k,r])=>r&&map[k]===undefined).map(([k])=>k);const indices=Object.values(map);if(new Set(indices).size!==indices.length){message(U.t('bulkDuplicateMap'));return;}parsed={missing,rows:missing.length?[]:matrix.slice(1).filter(c=>c.some(v=>String(v).trim())).map((cells,i)=>{const record={};B.columns.forEach(k=>record[k]=String(cells[map[k]]??'').trim());return validateRow(record,i+2);})};paint();}
+ function paint(){const summary=document.getElementById('bulk-summary'),preview=document.getElementById('bulk-preview');if(!parsed)return;if(parsed.missing.length){message(U.t('bulkHeaderError').replace('{cols}',parsed.missing.join(', ')));return;}const ok=parsed.rows.filter(r=>r.valid).length;summary.innerHTML=`<p>${tr('bulkValid')}: ${ok} · ${tr('bulkInvalid')}: ${parsed.rows.length-ok}</p><label><input type="checkbox" id="bulk-confirm"> ${tr('bulkConfirm')}</label><button class="button" id="bulk-run" disabled>${tr('bulkSaveDrafts')}</button>`;
+ preview.innerHTML=mode==='materials'?BulkMaterials.preview(parsed.rows):`<div class="scroll-x"><table class="console-table"><thead><tr><th>${tr('bulkRowNo')}</th><th>${tr('titleZh')}</th><th>${tr('productGroup')}</th><th>${tr('bulkTradePreview')}</th><th>${tr('status')}</th></tr></thead><tbody>${parsed.rows.map(r=>`<tr><td>${r.line}</td><td>${e(r.record.title_zh||r.record.title_en)}</td><td>${e(r.record.category_id)} / ${e(r.record.subcategory_id)}</td><td>${e(r.record.price_min)}–${e(r.record.price_max)} USD / ${e(r.record.unit)} · MOQ ${e(r.record.moq)} · ${e(r.record.lead_time)} ${tr('bulkDays')}</td><td>${r.valid?tr('bulkValid'):e(r.errors.join(', '))}</td></tr>`).join('')}</tbody></table></div>`;
+ if(mode==='materials')BulkMaterials.bind(parsed.rows,validateRow,()=>paint());document.getElementById('bulk-confirm').onchange=ev=>document.getElementById('bulk-run').disabled=!ev.target.checked||!ok;document.getElementById('bulk-run').onclick=save;}
+ function save(){if(!authorized()){let error=document.getElementById('bulk-account-error');if(!error){error=document.createElement('p');error.id='bulk-account-error';document.getElementById('bulk-summary').prepend(error);}error.textContent=U.t('bulkAccountChanged');return;}if(!parsed||!document.getElementById('bulk-confirm').checked)return;try{const existing=MarineCore.readArray(localStorage,'draft_products');const incoming=parsed.rows.filter(r=>r.valid).map(r=>{const p=rowToProduct(r);p.status='draft';p.import_key=r.import_key||'table:'+JSON.stringify(B.columns.map(k=>r.record[k]||''));if(r.html)p.description_html=r.html;if(r.images?.length)p.media=r.images;return p;});const result=B.merge(existing,incoming);if(!U.write('draft_products',result.products))return;parsed=null;document.getElementById('bulk-preview').innerHTML='';message(U.t('bulkSaved').replace('{ok}',result.added).replace('{skip}',result.skipped));}catch(err){message(U.t('bulkStorageFailed'));}}
+ render();
 })();
