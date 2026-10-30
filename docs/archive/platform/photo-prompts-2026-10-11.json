@@ -1,0 +1,200 @@
+{
+  "generated": "2026-10-11",
+  "model": "image-01",
+  "style_suffix": "photorealistic commercial photography, realistic materials and textures, natural light, sharp focus, high dynamic range, catalogue quality, no text, no logo, no watermark, no illustration, no 3d render, no cartoon",
+  "notes": "Appended to every prompt; prompt_optimizer=false; response saved as PNG then converted to progressive JPEG q82.",
+  "items": [
+    {
+      "name": "banner-platform",
+      "aspect_ratio": "16:9",
+      "prompt": "Wide cinematic view of a busy container terminal at a deep water seaport during blue hour, stacked shipping containers, gantry cranes loading a large container ship, calm harbour water reflecting the docks, cool blue and teal tones, empty space for text on the left",
+      "role": "banner"
+    },
+    {
+      "name": "banner-precision",
+      "aspect_ratio": "16:9",
+      "prompt": "Inside a modern machine shop, a precision CNC milling machine cutting a steel workpiece, fine metal chips and coolant spray, tool holder in sharp focus, dark industrial workshop background with bokeh, cool steel and amber highlight tones, empty space on the left",
+      "role": "banner"
+    },
+    {
+      "name": "banner-agriculture",
+      "aspect_ratio": "16:9",
+      "prompt": "Golden wheat field ready for harvest under a warm late afternoon sky, a combine harvester working in the distance, wide cinematic farm landscape, warm sunlight and clear blue sky above, empty space on the left",
+      "role": "banner"
+    },
+    {
+      "name": "boats",
+      "aspect_ratio": "4:3",
+      "prompt": "A white fiberglass motor yacht moored in a marina, three quarter bow view, polished hull and stainless steel railings, calm water, soft daylight, clean background",
+      "role": "category"
+    },
+    {
+      "name": "boats-detail",
+      "aspect_ratio": "4:3",
+      "prompt": "Close-up detail of a yacht foredeck, stainless steel cleat and winch mounted on teak decking, mooring line coiled beside it, shallow depth of field, soft daylight",
+      "role": "category-detail"
+    },
+    {
+      "name": "equipment",
+      "aspect_ratio": "4:3",
+      "prompt": "Marine helm station of a modern yacht with several GPS chartplotter displays switched on, throttle controls, compass and switch panels, brushed metal dashboard, shallow depth of field",
+      "role": "category"
+    },
+    {
+      "name": "equipment-detail",
+      "aspect_ratio": "4:3",
+      "prompt": "Close-up of a clean marine diesel engine installed in a boat engine room, painted blue block, hoses and brass fittings, workshop lighting, shallow depth of field",
+      "role": "category-detail"
+    },
+    {
+      "name": "coatings",
+      "aspect_ratio": "4:3",
+      "prompt": "Rows of sealed metal paint cans and steel drums of marine antifouling paint on warehouse pallets, painted colour bands on the drum lids, industrial lighting",
+      "role": "category"
+    },
+    {
+      "name": "coatings-detail",
+      "aspect_ratio": "4:3",
+      "prompt": "Close-up of freshly applied glossy dark blue antifouling paint on the lower hull of a boat in a shipyard, visible roller texture, masking tape edge line, natural daylight",
+      "role": "category-detail"
+    },
+    {
+      "name": "services",
+      "aspect_ratio": "4:3",
+      "prompt": "Boatyard scene with a yacht lifted on a travel lift above a concrete hardstand, scaffolding and maintenance equipment around nearby vessels, overcast daylight",
+      "role": "category"
+    },
+    {
+      "name": "services-detail",
+      "aspect_ratio": "4:3",
+      "prompt": "Marine maintenance workbench in a shipyard workshop, rotary polisher, sanding discs, torque wrenches, measuring tools and gloves arranged neatly on a steel bench, shallow depth of field",
+      "role": "category-detail"
+    },
+    {
+      "name": "chemicals",
+      "aspect_ratio": "4:3",
+      "prompt": "Stainless steel chemical storage tanks, pipes and valves at a petrochemical plant, clear sky, industrial photography, wide view",
+      "role": "category"
+    },
+    {
+      "name": "bearings",
+      "aspect_ratio": "4:3",
+      "prompt": "Macro photograph of precision steel ball bearings, bearing rings and rollers arranged on a machined metal work surface, shiny polished steel, soft studio lighting",
+      "role": "category"
+    },
+    {
+      "name": "machine-tools",
+      "aspect_ratio": "4:3",
+      "prompt": "Row of industrial CNC lathes and machining centres on display in a bright machine tool showroom, clean epoxy floor, wide view, factory lighting",
+      "role": "category"
+    },
+    {
+      "name": "agriculture",
+      "aspect_ratio": "4:3",
+      "prompt": "Bulk harvested soybeans and wheat grain in a warehouse, burlap sacks and a wooden scoop on top of a grain pile, warm indoor lighting, close view",
+      "role": "category"
+    },
+    {
+      "name": "forestry",
+      "aspect_ratio": "4:3",
+      "prompt": "Stacks of freshly cut timber logs in a sawmill yard, sawn planks stacked beside them, forest and overcast sky in the background",
+      "role": "category"
+    },
+    {
+      "name": "p01",
+      "aspect_ratio": "4:3",
+      "prompt": "A white 42 foot flybridge motor yacht cruising on calm open water, three quarter bow view, blue sky, clean wake",
+      "role": "product"
+    },
+    {
+      "name": "p02",
+      "aspect_ratio": "4:3",
+      "prompt": "An 18 metre bare aluminium commercial workboat with a small wheelhouse moored at a harbour dock, overcast daylight",
+      "role": "product"
+    },
+    {
+      "name": "p03",
+      "aspect_ratio": "4:3",
+      "prompt": "A modern 10 metre white electric leisure cruiser with minimalist lines moored on a calm lake, soft evening light",
+      "role": "product"
+    },
+    {
+      "name": "p04",
+      "aspect_ratio": "4:3",
+      "prompt": "A 38 foot offshore sailing yacht with white sails fully raised, heeling on open blue sea, sunny day",
+      "role": "product"
+    },
+    {
+      "name": "p05",
+      "aspect_ratio": "4:3",
+      "prompt": "Close-up of a marine multifunction navigation display mounted on a boat dashboard, screen showing a simple blue nautical chart with coast lines, surrounding button bezel, shallow depth of field",
+      "role": "product"
+    },
+    {
+      "name": "p06",
+      "aspect_ratio": "4:3",
+      "prompt": "A four cylinder marine diesel engine with heat exchanger, hoses and painted blue block, standing on a workshop pallet, product photo, soft industrial light",
+      "role": "product"
+    },
+    {
+      "name": "p07",
+      "aspect_ratio": "4:3",
+      "prompt": "A polished stainless steel vertical anchor windlass mounted on the foredeck of a boat with anchor chain running through it, daylight, close view",
+      "role": "product"
+    },
+    {
+      "name": "p08",
+      "aspect_ratio": "4:3",
+      "prompt": "A compact black marine electronics transponder unit with connectors and a small whip antenna lying on a brushed metal workbench, product photo, studio light",
+      "role": "product"
+    },
+    {
+      "name": "p09",
+      "aspect_ratio": "4:3",
+      "prompt": "An open unlabelled metal paint can filled with dark blue antifouling paint next to a paint roller on a workshop bench, studio product photo",
+      "role": "product"
+    },
+    {
+      "name": "p10",
+      "aspect_ratio": "4:3",
+      "prompt": "An open unlabelled metal can of grey epoxy primer with a paint brush resting on the rim, workshop table, studio product photo",
+      "role": "product"
+    },
+    {
+      "name": "p11",
+      "aspect_ratio": "4:3",
+      "prompt": "An unlabelled spray bottle and a plastic bucket of boat deck cleaner standing on a teak yacht deck, soft daylight, product photo",
+      "role": "product"
+    },
+    {
+      "name": "p12",
+      "aspect_ratio": "4:3",
+      "prompt": "A small open sample tin of dark blue antifouling paint beside a painted fibreglass hull sample plate resting on a workbench, macro product photo",
+      "role": "product"
+    },
+    {
+      "name": "p13",
+      "aspect_ratio": "4:3",
+      "prompt": "A white yacht hull in a boatyard during a pre-delivery inspection, mobile staging platform beside the hull, survey tools on the ground, overcast daylight",
+      "role": "product"
+    },
+    {
+      "name": "p14",
+      "aspect_ratio": "4:3",
+      "prompt": "A luxury yacht secured in a steel transport cradle on the deck of a heavy lift cargo ship in port, cranes and containers in the background",
+      "role": "product"
+    },
+    {
+      "name": "p15",
+      "aspect_ratio": "4:3",
+      "prompt": "A scale model boat hull on a naval architect's desk beside rolled technical drawings and drafting tools, shallow depth of field, warm office light",
+      "role": "product"
+    },
+    {
+      "name": "p16",
+      "aspect_ratio": "4:3",
+      "prompt": "A superyacht moored in a Mediterranean marina with historic waterfront buildings behind, sunny day, wide view",
+      "role": "product"
+    }
+  ]
+}
