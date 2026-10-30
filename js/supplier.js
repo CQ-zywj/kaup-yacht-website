@@ -1,11 +1,12 @@
-/* 我的商品：状态机（草稿 / 待审核 / 上架中 / 已下架 / 未通过） */
+/* 我的商品：状态机（草稿 / 上架中 / 已下架 / 未通过）—— 二值机审，无待审核态 */
 (function () {
   const shell = SupplierShell.mount("consoleProducts");
   if (!shell) return;
   const { body, id } = shell;
   const state = { status: "", q: "" };
-  const TABS = ["", "active", "pending", "inactive", "draft", "rejected"];
-  const LOCKED = ["pending", "rejected"];
+  const TABS = ["", "active", "inactive", "draft", "rejected"];
+  /* 草稿与未通过都不能直接上架：必须回发布页重新提交并过机审 */
+  const LOCKED = ["draft", "rejected"];
 
   function all() {
     const seeds = (MarineData.products || [])
@@ -83,14 +84,12 @@
       .concat(p.updated_at ? [U.e(U.date(p.updated_at))] : [])
       .join(" · ");
     const note =
-      st === "pending"
-        ? `<p class="muted">${U.tr("productPendingNote")}</p>`
-        : st === "rejected"
-          ? `<p class="warning">${U.tr("productRejectedNote")}</p>`
-          : "";
+      st === "rejected"
+        ? `<p class="warning">${U.tr("productRejectedNote")}</p>`
+        : "";
     const actions = p._seed
       ? `<span class="badge muted-badge">${U.tr("demo")}</span><a class="link-button" href="${U.url("product.html", { id: p.id })}">${U.tr("preview")}</a>`
-      : `<a class="link-button" href="${U.url("publish.html", { draft: p.id })}">${U.tr("edit")}</a><button type="button" class="link-button" data-toggle="${U.e(p.id)}"${LOCKED.includes(st) ? " disabled" : ""}>${U.tr(st === "active" ? "productSwitchToInactive" : "productSwitchToActive")}</button>${st === "active" ? `<a class="link-button" href="${U.url("product.html", { id: p.id })}">${U.tr("preview")}</a>` : ""}<button type="button" class="link-button danger" data-delete="${U.e(p.id)}">${U.tr("delete")}</button>`;
+      : `<a class="link-button" href="${U.url("publish.html", { draft: p.id })}">${U.tr("edit")}</a>${st === "active" || st === "inactive" ? `<button type="button" class="link-button" data-toggle="${U.e(p.id)}">${U.tr(st === "active" ? "productSwitchToInactive" : "productSwitchToActive")}</button>` : ""}${st === "active" ? `<a class="link-button" href="${U.url("product.html", { id: p.id })}">${U.tr("preview")}</a>` : ""}<button type="button" class="link-button danger" data-delete="${U.e(p.id)}">${U.tr("delete")}</button>`;
     return `<article class="product-admin-card"><img src="${U.e(U.img(p))}" alt=""><div class="product-admin-body"><div class="product-admin-top"><span class="status ${st}">${U.tr(SupplierCore.statusKey(st))}</span><span class="muted">${cat ? U.bi(cat.name) : ""}</span></div><h3>${title(p)}</h3><p class="muted">${meta}</p>${note}<div class="mini-actions">${actions}</div></div></article>`;
   }
 

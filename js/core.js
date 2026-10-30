@@ -112,25 +112,46 @@
       const files = (a) =>
         Array.isArray(a) &&
         a.every((f) => f && str(f.name) && Number.isFinite(f.size));
-      if (
-        key === "rfq_drafts" &&
-        value.some(
-          (r) =>
-            !r ||
-            !str(r.id) ||
-            !r.buyer ||
-            !str(r.buyer.company) ||
-            !str(r.buyer.country) ||
-            !str(r.message) ||
-            (r.target_country !== undefined && !str(r.target_country)) ||
-            !Number.isFinite(r.quantity) ||
-            r.quantity <= 0 ||
-            !Number.isFinite(Date.parse(r.created_at)) ||
-            !["submitted", "viewed", "replied"].includes(r.status) ||
-            !files(r.attachments) ||
-            (r.reply && (!str(r.reply.message) || !files(r.reply.attachments))),
+      const THREAD_STATUSES = [
+        "submitted",
+        "viewed",
+        "replied",
+        "quoted",
+        "accepted",
+        "closed",
+      ];
+      const MESSAGE_TYPES = ["inquiry", "reply", "quote", "system"];
+      /* 线索既可能是旧版单条 message/reply，也可能是 messages[] 多轮线程。 */
+      const validThread = (r) => {
+        if (!r || !str(r.id)) return false;
+        if (!r.buyer || !str(r.buyer.company) || !str(r.buyer.country))
+          return false;
+        const messages = Array.isArray(r.messages) ? r.messages : [];
+        if (!messages.length && !str(r.message)) return false;
+        if (
+          messages.some(
+            (m) =>
+              !m ||
+              !str(m.body) ||
+              !["buyer", "supplier"].includes(m.from) ||
+              !MESSAGE_TYPES.includes(m.type),
+          )
         )
-      )
+          return false;
+        if (r.target_country !== undefined && !str(r.target_country))
+          return false;
+        if (!Number.isFinite(r.quantity) || r.quantity <= 0) return false;
+        if (!Number.isFinite(Date.parse(r.created_at))) return false;
+        if (!THREAD_STATUSES.includes(r.status)) return false;
+        if (!files(r.attachments || [])) return false;
+        if (
+          r.reply &&
+          (!str(r.reply.message) || !files(r.reply.attachments || []))
+        )
+          return false;
+        return true;
+      };
+      if (key === "rfq_drafts" && value.some((r) => !validThread(r)))
         throw Error("invalid inquiry records");
       if (
         key === "draft_products" &&

@@ -27,10 +27,10 @@
         ? `<img src="${U.e(article.cover)}" alt="">`
         : `<div style="width:96px;height:64px;background:#eef2f4;border-radius:4px;display:grid;place-items:center;font-size:11px;color:#647783">${U.tr("articleNoCover")}</div>`
     }<div><h3>${U.bi(article.title)}</h3><small><span class="status ${
-      article.status === "published" ? "active" : article.status === "scheduled" ? "pending" : "draft"
+      article.status === "published" ? "active" : article.status === "scheduled" ? "pending" : article.status === "rejected" ? "rejected" : "draft"
     }">${U.tr(SupplierCore.articleStatusKey(article.status))}</span> · ${
       article.publish_at ? U.e(U.date(article.publish_at)) : U.tr("notSet")
-    } · ${U.tr("articleViews")} ${article.views || 0}</small><div class="article-admin-actions" style="justify-content:flex-start;margin-top:8px">${(article.tags || [])
+    } · ${U.tr("articleViews")} ${article.views || 0}</small>${article.status === "rejected" && article.review?.code && window.ReviewRules ? `<p class="warning" style="margin:4px 0 0">${U.e(window.ReviewRules.messageOf(article.review.code))}</p>` : ""}<div class="article-admin-actions" style="justify-content:flex-start;margin-top:8px">${(article.tags || [])
       .map((tag) => `<span class="badge">${U.e(tag)}</span>`)
       .join("")}</div></div><div class="article-admin-actions"><button type="button" class="link-button" data-edit="${U.e(article.id)}">${U.tr("edit")}</button><button type="button" class="link-button" data-preview="${U.e(article.id)}">${U.tr("articlePreview")}</button><button type="button" class="link-button danger" data-delete="${U.e(article.id)}">${U.tr("articleDelete")}</button></div></article>`;
   }
@@ -219,6 +219,31 @@
     };
     const errors = SupplierCore.validateArticle(article);
     if (!U.errors(form, errors)) return;
+    /* 机审：发布前二值判定，驳回则落库为 rejected 并提示原因 */
+    if (status === "published" && window.ReviewRules) {
+      const review = window.ReviewRules.run("article", article);
+      article.review = {
+        code: review.code,
+        rule: review.rule,
+        at: new Date().toISOString(),
+      };
+      if (!review.pass) {
+        article.status = "rejected";
+        try {
+          SupplierCore.saveArticle(localStorage, article);
+        } catch {
+          U.notice("storageError");
+          return;
+        }
+        window.ReviewRules.showRejection(review, {
+          link: { page: "supplier-articles.html", label: "articlesTitle" },
+        });
+        state.editing = null;
+        state.cover = "";
+        renderPage();
+        return;
+      }
+    }
     try {
       SupplierCore.saveArticle(localStorage, article);
       U.notice("articleSaved");

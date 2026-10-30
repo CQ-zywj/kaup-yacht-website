@@ -8,8 +8,9 @@
     "other",
     "authorization",
   ];
-  const PRODUCT_STATUSES = ["draft", "pending", "active", "inactive", "rejected"];
-  const ARTICLE_STATUSES = ["draft", "published", "scheduled"];
+  /* 商品状态：二值机审，无「待审核」停留态。active = 机审通过并上架 */
+  const PRODUCT_STATUSES = ["draft", "active", "inactive", "rejected"];
+  const ARTICLE_STATUSES = ["draft", "published", "scheduled", "rejected"];
   const FOLDERS = ["product", "article", "company"];
   const keys = {
     certifications: "certifications",
@@ -55,14 +56,15 @@
   }
   function normalizeProductStatus(p) {
     if (!p) return "draft";
-    if (p.status === "published") return "active";
-    return PRODUCT_STATUSES.includes(p.status) ? p.status : "active";
+    if (p.status === "published") return "active"; // 兼容旧数据（含旧版 bug 写入的 published）
+    if (p.status === "pending") return "draft"; // 旧数据的待审态无从判断结果，退回草稿由用户重提
+    /* 未知状态一律落到 draft：不能让脏数据自动变成对外可见 */
+    return PRODUCT_STATUSES.includes(p.status) ? p.status : "draft";
   }
   function statusKey(status) {
     return (
       {
         draft: "statusDraft",
-        pending: "statusPending",
         active: "statusActive",
         published: "statusActive",
         inactive: "statusInactive",
@@ -83,6 +85,7 @@
         draft: "articleDraft",
         published: "articlePublished",
         scheduled: "articleScheduled",
+        rejected: "articleRejected",
       }[status] || "articleDraft"
     );
   }
@@ -109,7 +112,7 @@
     if (!String(a.title?.en || "").trim()) e.title_en = "required";
     const text = String(a.content_html?.en || "").replace(/<[^>]*>/g, "").replace(/&(?:nbsp|#0*160|#x0*a0);/gi, " ").trim();
     if (!text) e.content_en = "required";
-    if (!["draft", "published", "scheduled"].includes(a.status))
+    if (!["draft", "published", "scheduled", "rejected"].includes(a.status))
       e.status = "required";
     if (a.status === "scheduled" && !a.publish_at) e.publish_at = "required";
     if (a.status === "scheduled" && a.publish_at && Date.parse(a.publish_at) < Date.now())
@@ -190,234 +193,7 @@
       todos: sections.filter((section) => section.ratio < 1),
     };
   }
-  function seedDemo(storage, supplierId, profile) {
-    if (!["s1", "demo-supplier"].includes(supplierId)) return false;
-    if (storage.getItem("demo_supplier_seeded") === "1") return false;
-    const now = new Date().toISOString();
-    const certs = [
-      {
-        id: "cert-demo-1",
-        supplier_id: supplierId,
-        category: "company",
-        name: "营业执照",
-        no: "91210200DEMO1234X",
-        issuer: "大连市市场监督管理局",
-        valid_from: "2024-01-01",
-        valid_to: "2034-01-01",
-        ownership: "own",
-        status: "verified",
-        product_ids: [],
-        files: ["business-license.jpg"],
-        auth_files: [],
-        created_at: now,
-        verified_at: now,
-      },
-      {
-        id: "cert-demo-2",
-        supplier_id: supplierId,
-        category: "product",
-        name: "CCS 工厂认可证书",
-        no: "CCS-DEMO-2025-018",
-        issuer: "中国船级社",
-        valid_from: "2025-03-01",
-        valid_to: "2028-03-01",
-        ownership: "own",
-        status: "verified",
-        product_ids: ["p01"],
-        files: ["ccs-factory.jpg"],
-        auth_files: [],
-        created_at: now,
-        verified_at: now,
-      },
-      {
-        id: "cert-demo-3",
-        supplier_id: supplierId,
-        category: "system",
-        name: "ISO 9001 质量管理体系",
-        no: "SGS-CN-DEMO-77821",
-        issuer: "SGS",
-        valid_from: "2025-01-01",
-        valid_to: "2027-12-31",
-        ownership: "own",
-        status: "verified",
-        product_ids: [],
-        files: ["iso9001.jpg"],
-        auth_files: [],
-        created_at: now,
-        verified_at: now,
-      },
-      {
-        id: "cert-demo-4",
-        supplier_id: supplierId,
-        category: "test",
-        name: "整艇涂层附着力检测报告",
-        no: "TEST-DEMO-2026-04",
-        issuer: "第三方检测机构（演示）",
-        valid_from: "2026-01-01",
-        valid_to: "2028-01-01",
-        ownership: "own",
-        status: "pending",
-        product_ids: ["p02"],
-        files: ["msds-report.jpg"],
-        auth_files: [],
-        created_at: now,
-      },
-    ];
-    const paragraphs = (zh) =>
-      `<p>${zh}</p><p>本内容为原型演示文章，用于展示供应商内容中心与店铺主页的联动效果。</p>`;
-    const articles = [
-      {
-        id: "article-demo-1",
-        supplier_id: supplierId,
-        title: {
-          zh: "42 尺飞桥游艇交付前，我们如何做系泊与航行测试",
-          en: "How we test a 42ft flybridge yacht before delivery",
-        },
-        content_html: {
-          zh: paragraphs(
-            "一条整艇在交付前需要完成系泊试验、航行试验与设备联调。本文按阶段说明我们的检查项与记录方式。",
-          ),
-          en: paragraphs(
-            "Before delivery, every vessel goes through dock trials, sea trials and system commissioning. This note explains our checkpoints.",
-          ),
-        },
-        cover: "assets/media/p01.jpg",
-        category: "marine",
-        tags: ["整艇", "交付"],
-        status: "published",
-        publish_at: "2026-10-12T09:00",
-        product_ids: ["p01"],
-        author: "王海 · 销售经理",
-        created_at: now,
-        updated_at: now,
-        views: 128,
-      },
-      {
-        id: "article-demo-2",
-        supplier_id: supplierId,
-        title: {
-          zh: "整艇出口：交付前要准备哪些合规资料",
-          en: "Exporting a yacht: compliance documents before delivery",
-        },
-        content_html: {
-          zh: paragraphs(
-            "整艇出口前，船东通常需要 AFS、VOC、船级社证书与设备清单。我们把常见资料整理成一份交付前检查表。",
-          ),
-          en: paragraphs(
-            "Before a yacht is exported, owners usually ask for AFS, VOC, class certificates and an equipment list. Here is our pre-delivery checklist.",
-          ),
-        },
-        cover: "assets/media/p02.jpg",
-        category: "marine",
-        tags: ["整艇", "合规"],
-        status: "published",
-        publish_at: "2026-10-08T10:30",
-        product_ids: ["p01", "p02"],
-        author: "王海 · 销售经理",
-        created_at: now,
-        updated_at: now,
-        views: 86,
-      },
-      {
-        id: "article-demo-3",
-        supplier_id: supplierId,
-        title: {
-          zh: "2026 年秋季展会预告与预约方式",
-          en: "Autumn 2026 exhibition schedule and booking",
-        },
-        content_html: {
-          zh: paragraphs("展位与预约信息将在确认后补充，本文为草稿。"),
-          en: paragraphs("Booth details will be confirmed later. This is a draft."),
-        },
-        cover: "assets/media/banner-precision.jpg",
-        category: "machine-tools",
-        tags: ["展会"],
-        status: "draft",
-        publish_at: "",
-        product_ids: [],
-        author: "王海 · 销售经理",
-        created_at: now,
-        updated_at: now,
-        views: 0,
-      },
-    ];
-    const media = [
-      {
-        id: "media-demo-1",
-        supplier_id: supplierId,
-        type: "image",
-        folder: "product",
-        name: "hailan-42-flybridge.jpg",
-        url: "assets/media/p01.jpg",
-        size: 248000,
-        tags: ["整艇", "主图"],
-        created_at: now,
-      },
-      {
-        id: "media-demo-2",
-        supplier_id: supplierId,
-        type: "image",
-        folder: "product",
-        name: "anti-fouling-coating.jpg",
-        url: "assets/media/p09.jpg",
-        size: 196000,
-        tags: ["涂装"],
-        created_at: now,
-      },
-      {
-        id: "media-demo-3",
-        supplier_id: supplierId,
-        type: "image",
-        folder: "company",
-        name: "shipyard-overview.jpg",
-        url: "assets/media/boats.jpg",
-        size: 312000,
-        tags: ["工厂实拍"],
-        created_at: now,
-      },
-      {
-        id: "media-demo-4",
-        supplier_id: supplierId,
-        type: "image",
-        folder: "article",
-        name: "precision-workshop.jpg",
-        url: "assets/media/banner-precision.jpg",
-        size: 274000,
-        tags: ["文章封面"],
-        created_at: now,
-      },
-      {
-        id: "media-demo-5",
-        supplier_id: supplierId,
-        type: "video",
-        folder: "company",
-        name: "shipyard-tour-demo.mp4",
-        url: "",
-        size: 18400000,
-        tags: ["企业视频", "演示"],
-        created_at: now,
-      },
-    ];
-    write(storage, keys.certifications, [
-      ...read(storage, keys.certifications),
-      ...certs,
-    ]);
-    write(storage, keys.articles, [...read(storage, keys.articles), ...articles]);
-    write(storage, keys.media, [...read(storage, keys.media), ...media]);
-    writeSidebar(storage, {
-      ...readSidebar(storage),
-      [supplierId]: {
-        supplier_id: supplierId,
-        author_bio: "海岚船艇 · 出口业务团队，专注整艇与配套设备的项目型采购。",
-        contact_note: "工作日 9:00–18:00（GMT+8）回复，支持图纸与验厂安排。",
-        show_contact: true,
-        hot_product_ids: ["p01", "p05"],
-        updated_at: now,
-      },
-    });
-    storage.setItem("demo_supplier_seeded", "1");
-    return true;
-  }
+
   function mediaRefs(storage, media, supplierId) {
     let count = 0;
     try {
@@ -487,7 +263,6 @@
     validateArticle,
     validateMedia,
     completeness,
-    seedDemo,
     mediaRefs,
     addToMedia,
     pickerHtml,

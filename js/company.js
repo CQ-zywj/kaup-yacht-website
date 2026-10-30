@@ -5,7 +5,10 @@ let companyProfile = {},
 let profileFailed = false;
 let companyDraft = null;
 const draftKey = id => "company_edit_draft:" + id;
-const companyEditFields = ["company", "company_en", "country", "contact", "email", "city", "phone", "website", "intro", "business_type", "position", "founded", "employees", "tagline", "theme", "address", "video", "main_categories", "team", "logo_file", "photo_files", "photos"];
+const companyEditFields = ["company", "company_en", "country", "contact", "email", "city", "phone", "website", "intro", "business_type", "position", "founded", "employees", "tagline", "theme", "address", "video", "main_categories", "team", "logo_file", "banner_files", "photo_files", "photos"];
+const TAGLINE_MAX = 40;
+const BANNER_MAX = 3;
+const THEMES = ["theme-ocean", "theme-slate", "theme-sand"];
 function draftFields(profile) {
   return Object.fromEntries(companyEditFields.filter(key => Object.hasOwn(profile, key)).map(key => [key, profile[key]]));
 }
@@ -36,7 +39,7 @@ function profileView() {
   photos = [...((editing && companyDraft ? companyDraft : companyProfile).photos || [])];
   const status = companyProfile.verification_status || "pending";
   document.getElementById("main").innerHTML =
-    `<div class="container company-container"><div class="page-intro"><div class="eyebrow">${U.tr("identitySupplier")}</div><h1>${U.tr("companyProfile")}</h1><p>${U.tr("loginDemo")}</p></div>${completenessBar()}<div class="company-heading panel"><div class="company-avatar">${companyProfile.logo_file?.id ? `<img data-local-file="${U.e(companyProfile.logo_file.id)}" alt="${U.e(companyProfile.company)}">` : U.e(companyProfile.company.slice(0, 1))}</div><div><h2>${U.e(companyProfile.company)}</h2><p>${U.e(companyProfile.company_en || "")}</p><span class="badge">${U.tr(status === "verified" ? "verifiedStatus" : status === "rejected" ? "rejectedStatus" : "pendingStatus")}</span></div><div class="company-actions">${!editing ? `<button type="button" class="button" id="edit-company">${U.tr("edit")}</button>${status !== "verified" ? `<button type="button" class="button secondary" id="verify-company">${U.tr("simulateVerify")}</button>` : ""}<a class="button secondary" href="${U.url("certifications.html")}">${U.tr("companyManageCerts")}</a><a class="button secondary" href="${U.url("storefront.html", { supplier_id: companyProfile.id })}">${U.tr("companyStorefrontPreview")} ↗</a>` : ""}</div></div>${editing ? editMarkup() : readMarkup() + storefrontRead(companyProfile)}<div class="form-actions"><a class="text-link" href="${U.url("seller-dashboard.html")}">${U.tr("consoleOverview")} →</a><a class="text-link" href="${U.url("supplier.html")}">${U.tr("myProducts")} →</a><a class="text-link" href="${U.url("inbox.html")}">${U.tr("inbox")} →</a><a class="text-link" href="${U.url("publish.html")}">${U.tr("publish")} →</a></div></div>`;
+    `<div class="container company-container"><div class="page-intro"><div class="eyebrow">${U.tr("identitySupplier")}</div><h1>${U.tr("myStore")}</h1><p>${U.tr("loginDemo")}</p></div>${completenessBar()}<div class="company-heading panel"><div class="company-avatar">${companyProfile.logo_file?.id ? `<img data-local-file="${U.e(companyProfile.logo_file.id)}" alt="${U.e(companyProfile.company)}">` : U.e(companyProfile.company.slice(0, 1))}</div><div><h2>${U.e(companyProfile.company)}</h2><p>${U.e(companyProfile.company_en || "")}</p><span class="badge">${U.tr(status === "verified" ? "verifiedStatus" : status === "rejected" ? "rejectedStatus" : "pendingStatus")}</span></div><div class="company-actions">${!editing ? `<button type="button" class="button" id="edit-company">${U.tr("edit")}</button>${status !== "verified" ? `<button type="button" class="button secondary" id="verify-company">${U.tr("simulateVerify")}</button>` : ""}<a class="button secondary" href="${U.url("certifications.html")}">${U.tr("companyManageCerts")}</a><a class="button secondary" href="${U.url("storefront.html", { supplier_id: companyProfile.id })}">${U.tr("companyStorefrontPreview")} ↗</a>` : ""}</div></div>${editing ? editMarkup() : readMarkup() + storefrontRead(companyProfile)}<div class="form-actions"><a class="text-link" href="${U.url("seller-dashboard.html")}">${U.tr("consoleOverview")} →</a><a class="text-link" href="${U.url("supplier.html")}">${U.tr("myProducts")} →</a><a class="text-link" href="${U.url("inbox.html")}">${U.tr("inbox")} →</a><a class="text-link" href="${U.url("publish.html")}">${U.tr("publish")} →</a></div></div>`;
   document.getElementById("edit-company")?.addEventListener("click", () => {
     editing = true;
     profileView();
@@ -56,6 +59,7 @@ function profileView() {
       profileView();
     };
     CompanyTeam.bind();
+    bindPreview(form);
     AccountUI.preview(
       document.getElementById("company-photos"),
       document.getElementById("photo-previews"),
@@ -88,13 +92,39 @@ async function collectCompany(form, draft) {
     form.querySelector("[name=main_categories]")?.focus();
     return null;
   }
+  if ((p.tagline || "").length > TAGLINE_MAX) {
+    document.getElementById("company-summary").textContent = U.t("taglineLengthError");
+    form.elements.tagline?.focus();
+    return null;
+  }
+  const logos = [...form.elements.company_logo_upload.files];
+  const banners = [...form.elements.company_banner_upload.files];
+  const teamFiles = [...document.getElementById("company-photos").files];
+  if (banners.length > BANNER_MAX) {
+    document.getElementById("company-summary").textContent = U.t("bannerCountError");
+    return null;
+  }
+  /* Validate every chosen file before writing any of them: a rejected banner must
+     not leave an already stored logo behind as an orphan blob. */
+  await SupplierFiles.check(logos, "logo");
+  await SupplierFiles.check(banners, "banner");
+  await SupplierFiles.check(teamFiles, "team");
   p.team = await CompanyTeam.collect(form, previous.team || [], p.id, {draft});
-  const logo = [...form.elements.company_logo_upload.files];
-  if (logo.length) p.logo_file = (await SupplierFiles.putMany(logo, p.id, "logo"))[0];
-  const files = [...document.getElementById("company-photos").files];
-  if (files.length) {
-    p.photo_files = await SupplierFiles.putMany(files, p.id, "team");
-    p.photos = files.map(file => file.name);
+  if (logos.length) p.logo_file = (await SupplierFiles.putMany(logos, p.id, "logo"))[0];
+  else if (d.company_clear_logo) {
+    delete p.logo_file;
+    p.logo = "";
+  }
+  if (banners.length) {
+    p.banner_files = await SupplierFiles.putMany(banners, p.id, "banner");
+    p.banner = "";
+  } else if (d.company_clear_banners) {
+    p.banner_files = [];
+    p.banner = "";
+  }
+  if (teamFiles.length) {
+    p.photo_files = await SupplierFiles.putMany(teamFiles, p.id, "team");
+    p.photos = teamFiles.map(file => file.name);
   }
   return p;
 }
@@ -136,17 +166,72 @@ function themeKey(value) {
     ] || "notSet"
   );
 }
-function storefrontEdit(p) {
+/* Storefront appearance now lives on this page: logo, banners, tagline, theme and
+   company video are edited together with the company profile (single edit entry). */
+function shopFrontSection(p) {
   const themes = ["", "theme-ocean", "theme-slate", "theme-sand"];
   const field = (labelKey, name, hintKey) =>
     `<div class="field"><label for="company-${name}">${U.tr(labelKey)}</label><input id="company-${name}" name="${name}" type="text" value="${U.e(p[name] || "")}">${hintKey ? `<small class="muted">${U.tr(hintKey)}</small>` : ""}</div>`;
-  return `<section class="panel"><h2>${U.tr("companyStorefront")}</h2><div class="form-grid">${field("companyTagline", "tagline")}<div class="field"><label for="company-theme">${U.tr("companyTheme")}</label><select id="company-theme" name="theme">${themes.map((value) => `<option value="${value}" ${(p.theme || "") === value ? "selected" : ""}>${U.t(themeKey(value))}</option>`).join("")}</select></div>${field("companyAddress", "address")}<div class="field"><label for="company-logo-upload">${U.tr('companyLogo')}</label><input type="file" id="company-logo-upload" name="company_logo_upload" accept=".png,.svg"><small>${U.tr('logoUploadHint')}</small>${p.logo_file?.name ? `<small>${U.e(p.logo_file.name)}</small>` : ''}</div><div class="field"><a class="button secondary" href="${U.url('store-decoration.html')}">${U.tr('consoleDecoration')} →</a><small>${U.tr('bannerUploadHint')}</small></div>${field("companyVideo", "video")}</div><p class="muted">${U.tr("companySaveFirst")}</p></section>`;
+  const logoName = p.logo_file?.name || p.logo || "";
+  const bannerNames = (p.banner_files || []).map(file => file?.name || "").filter(Boolean);
+  return `<section class="panel" id="company-shopfront"><h2>${U.tr("companyStorefront")}</h2><p class="muted">${U.tr("decorationHint")}</p><div class="form-grid"><div class="field"><label for="company-tagline">${U.tr("companyTagline")}</label><input id="company-tagline" name="tagline" type="text" maxlength="${TAGLINE_MAX}" value="${U.e(p.tagline || "")}" data-tagline-input><small class="muted" data-tagline-count>${(p.tagline || "").length}/${TAGLINE_MAX}</small></div><div class="field"><label for="company-theme">${U.tr("companyTheme")}</label><select id="company-theme" name="theme" data-theme-select>${themes.map((value) => `<option value="${value}" ${(p.theme || "") === value ? "selected" : ""}>${U.t(themeKey(value))}</option>`).join("")}</select></div><div class="field"><label for="company-logo-upload">${U.tr('companyLogo')}</label><input type="file" id="company-logo-upload" name="company_logo_upload" accept=".png,.svg,image/png,image/svg+xml"><small>${U.tr('logoUploadHint')}</small>${logoName ? `<small>${U.e(logoName)}</small><label class="check-label"><input type="checkbox" name="company_clear_logo">${U.tr("removeLogo")}</label>` : ''}</div><div class="field"><label for="company_banner_upload">${U.tr("companyBanner")}</label><input type="file" id="company_banner_upload" name="company_banner_upload" accept=".jpg,.jpeg,.png,image/jpeg,image/png" multiple><small>${U.tr('bannerUploadHint')}</small>${bannerNames.length ? `<small>${U.e(bannerNames.join(" · "))}</small><label class="check-label"><input type="checkbox" name="company_clear_banners">${U.tr("removeBanners")}</label>` : ''}</div>${field("companyVideo", "video")}</div></section>`;
+}
+/* Live storefront preview: reuses the storefront banner gradients so what the
+   supplier sees here matches the public store page. */
+function previewMarkup(p) {
+  const theme = THEMES.includes(p.theme) ? p.theme : "";
+  const initial = (p.company || "?").slice(0, 1);
+  return `<aside class="shop-preview" aria-label="${U.e(U.t("storePreview"))}"><div class="shop-preview-card"><h2>${U.tr("storePreview")}</h2><div class="shop-preview-frame"><div class="shop-preview-banner ${theme}" data-preview-banner></div><div class="shop-preview-body"><span class="shop-preview-logo" data-preview-logo>${p.logo_file?.id ? `<img data-local-file="${U.e(p.logo_file.id)}" alt="${U.e(p.company || "")}">` : U.e(initial)}</span><span class="shop-preview-text"><strong data-preview-name>${U.e(p.company || "")}</strong><span class="muted" data-preview-tagline>${U.e(p.tagline || U.t("notSet"))}</span></span></div></div><a class="button secondary" href="${U.url("storefront.html", { supplier_id: p.id })}">${U.tr("companyStorefrontPreview")} ↗</a><p class="inline-note">${U.tr("storePreviewHint")}</p></div></aside>`;
+}
+function bindPreview(form) {
+  const banner = form.querySelector("[data-preview-banner]");
+  const nameNode = form.querySelector("[data-preview-name]");
+  const taglineNode = form.querySelector("[data-preview-tagline]");
+  const logoNode = form.querySelector("[data-preview-logo]");
+  const countNode = form.querySelector("[data-tagline-count]");
+  const taglineInput = form.elements.tagline;
+  const themeSelect = form.elements.theme;
+  const companyInput = form.elements.supplier_company;
+  const logoInput = form.elements.company_logo_upload;
+  const bannerInput = form.elements.company_banner_upload;
+  const objects = [];
+  const track = (url) => { objects.push(url); return url; };
+  function paintBanner(url) {
+    if (!banner) return;
+    banner.style.backgroundImage = url ? `url("${url}")` : "";
+    banner.style.backgroundSize = url ? "cover" : "";
+    banner.style.backgroundPosition = url ? "center" : "";
+  }
+  function paintTagline() {
+    const value = (taglineInput?.value || "").trim();
+    if (taglineNode) taglineNode.textContent = value || U.t("notSet");
+    if (countNode) countNode.textContent = `${value.length}/${TAGLINE_MAX}`;
+  }
+  themeSelect?.addEventListener("change", () => {
+    THEMES.forEach((value) => banner?.classList.toggle(value, value === themeSelect.value));
+  });
+  taglineInput?.addEventListener("input", paintTagline);
+  companyInput?.addEventListener("input", () => {
+    if (nameNode) nameNode.textContent = companyInput.value.trim();
+  });
+  logoInput?.addEventListener("change", () => {
+    const file = logoInput.files?.[0];
+    if (!file || !logoNode) return;
+    const image = document.createElement("img");
+    image.alt = file.name;
+    image.src = track(URL.createObjectURL(file));
+    logoNode.replaceChildren(image);
+  });
+  bannerInput?.addEventListener("change", () => {
+    const file = bannerInput.files?.[0];
+    if (file) paintBanner(track(URL.createObjectURL(file)));
+  });
+  window.addEventListener("pagehide", () => objects.forEach((url) => URL.revokeObjectURL(url)));
 }
 function storefrontRead(p) {
   return `<section class="panel"><h2>${U.tr("companyStorefront")}</h2><table class="param-table"><tbody>${[
     ["companyTagline", p.tagline],
     ["companyTheme", p.theme ? U.t(themeKey(p.theme)) : ""],
-    ["companyAddress", p.address],
     ["companyLogo", p.logo_file?.name || p.logo],
     ["companyBanner", p.banner_files?.map(file => file.name).join(', ') || p.banner],
     ["companyVideo", p.video],
@@ -172,6 +257,7 @@ function readMarkup() {
     ["position", p.position],
     ["email", p.email],
     ["phone", p.phone],
+    ["companyAddress", p.address],
   ]
     .map(
       ([k, v]) =>
@@ -183,7 +269,7 @@ function readMarkup() {
 }
 function editMarkup() {
   const p = companyDraft || companyProfile;
-  return `<form id="company-form" novalidate>${AccountUI.supplierSection(p, true)}<section class="panel"><h2>${U.tr("basic")}</h2><div class="form-grid"><div class="field"><label for="business_type">${U.tr("businessType")}</label><select id="business_type" name="business_type">${["manufacturer", "trader", "agent", "serviceProvider"].map((k) => `<option value="${k}" data-i18n="${k}" ${p.business_type === k ? "selected" : ""}>${U.e(U.t(k))}</option>`).join("")}</select></div>${U.field("position", "position", "text", p.position || "")}${U.field("founded", "founded", "text", p.founded || "")}${U.field("employees", "employees", "text", p.employees || "")}${categories(p.main_categories || [])}</div></section><section class="panel"><h2>${U.tr('certs')}</h2><a class="button secondary" href="${U.url('certifications.html')}">${U.tr('companyManageCerts')}</a><p class="muted">${U.tr('companyDraftHint')}</p></section>${CompanyTeam.editor(p.team || [])}<section class="panel"><h2>${U.tr("companyPhotos")}</h2><label for="company-photos">${U.tr("companyPhotos")}</label><input type="file" id="company-photos" multiple accept="image/*"><div class="previews" id="photo-previews"></div><p class="muted">${U.tr("profilePreviewHint")}</p>${photos.map((f) => `<div class="file-item">${U.e(f)}</div>`).join("")}</section>${storefrontEdit(p)}<p class="error" id="company-summary" role="alert"></p><div class="form-actions"><button class="button" type="submit">${U.tr("saveCompany")}</button><button class="button secondary" id="cancel-company" type="button">${U.tr("cancel")}</button></div></form>`;
+  return `<form id="company-form" novalidate><div class="shop-edit-layout"><div class="shop-edit-main">${AccountUI.supplierSection(p, true)}<section class="panel" id="company-basic"><h2>${U.tr("basic")}</h2><div class="form-grid"><div class="field"><label for="business_type">${U.tr("businessType")}</label><select id="business_type" name="business_type">${["manufacturer", "trader", "agent", "serviceProvider"].map((k) => `<option value="${k}" data-i18n="${k}" ${p.business_type === k ? "selected" : ""}>${U.e(U.t(k))}</option>`).join("")}</select></div>${U.field("position", "position", "text", p.position || "")}${U.field("founded", "founded", "text", p.founded || "")}${U.field("employees", "employees", "text", p.employees || "")}${U.field("companyAddress", "address", "text", p.address || "")}${categories(p.main_categories || [])}</div></section>${shopFrontSection(p)}${CompanyTeam.editor(p.team || [])}<section class="panel" id="company-photos-panel"><h2>${U.tr("companyPhotos")}</h2><label for="company-photos">${U.tr("companyPhotos")}</label><input type="file" id="company-photos" multiple accept="image/*"><div class="previews" id="photo-previews"></div><p class="muted">${U.tr("profilePreviewHint")}</p>${photos.map((f) => `<div class="file-item">${U.e(f)}</div>`).join("")}</section><section class="panel" id="company-certs"><h2>${U.tr('certs')}</h2><a class="button secondary" href="${U.url('certifications.html')}">${U.tr('companyManageCerts')}</a><p class="muted">${U.tr('companyDraftHint')}</p></section><p class="error" id="company-summary" role="alert"></p><div class="form-actions"><button class="button" type="submit">${U.tr("saveCompany")}</button><button class="button secondary" id="cancel-company" type="button">${U.tr("cancel")}</button></div></div>${previewMarkup(p)}</div></form>`;
 }
 function categories(selected) {
   return `<div class="field full"><fieldset class="category-checks"><legend>${U.tr("mainCategories")}</legend>${MarineData.industries.map((c) => `<label><input type="checkbox" name="main_categories" value="${c.id}" ${selected.some(id => MarineCore.industryForCategory(id) === c.id) ? "checked" : ""}>${U.bi(c.name)}</label>`).join("")}</fieldset></div>`;

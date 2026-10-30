@@ -45,9 +45,16 @@ if (rfqUser?.role !== "buyer") {
   })();
   const supplierCard = targetSupplier
     ? `<div class="supplier-target"><div class="supplier-target-main"><div class="eyebrow">${U.tr("supplierTarget")}</div><h3>${U.bi({ zh: targetSupplier.company || "", en: targetSupplier.company_en || targetSupplier.company || "" })}</h3><p class="muted">${U.tr("supplierTargetHint")}</p></div><div class="supplier-target-side"><span class="status ${targetSupplier.verification_status === "verified" ? "verified" : "pending"}">${U.tr(targetSupplier.verification_status === "verified" ? "verifiedStatus" : "pendingStatus")}</span><a class="text-link" href="${U.url("storefront.html", { supplier_id: targetSupplierId })}">${U.tr("consoleStorefront")} ↗</a><a class="link-button" href="${U.url("rfq.html", product ? { product: product.id } : {})}">${U.tr("supplierTargetClear")}</a></div></div>`
-    : "";
+      : "";
+  const modeParam = new URLSearchParams(location.search).get("mode");
+  let mode = ["inquiry", "public"].includes(modeParam)
+    ? modeParam
+    : targetSupplierId
+      ? "inquiry"
+      : "public";
+  const modeSwitch = `<div class="rfq-mode-switch"><button type="button" data-mode="inquiry" class="${mode === "inquiry" ? "active" : ""}">${U.tr("rfqModeInquiry")}</button><button type="button" data-mode="public" class="${mode === "public" ? "active" : ""}">${U.tr("rfqModePublic")}</button></div><p class="inline-note" id="rfq-mode-hint">${U.tr(mode === "inquiry" ? "rfqModeHintInquiry" : "rfqModeHintPublic")}</p>`;
   document.getElementById("main").innerHTML =
-    `<div class="container"><div class="page-intro"><div class="eyebrow">${U.tr("rfqEyebrow")}</div><h1>${U.tr("rfqTitle")}</h1><p>${U.tr("rfqDesc")}</p></div><div class="form-layout"><form id="rfq-form" novalidate>${supplierCard}<div id="rfq-product-context">${U.context(product)}</div><section class="panel"><h2>${U.tr("generalRfq")}</h2><div class="form-grid">${U.industryField("rfq", initialCategory)}<div class="field"><label for="rfq-category">${U.tr("productGroup")} <b>*</b></label><select id="rfq-category" name="category_id" required><option value="" data-i18n="select">${U.t("select")}</option>${U.options(MarineData.categories, initialCategory)}</select><small class="error" data-error="category_id"></small></div><div class="field"><label for="rfq-subcategory">${U.tr("productType")} <b>*</b></label><select id="rfq-subcategory" name="subcategory_id" required></select><small class="error" data-error="subcategory_id"></small></div>${U.field("company", "company", "text", rfqUser.company || "", true)}${U.field("buyerCountry", "buyer_country", "text", "", true, "countryHint")}${U.field("quantity", "quantity", "number", "", true)}${U.field("delivery", "expected_delivery", "date", "", false)}<div class="field"><label for="rfq-terms">${U.tr("terms")}</label><select id="rfq-terms" name="incoterms"><option>EXW</option><option selected>FOB</option><option>CIF</option></select></div>${U.area("message", "message", "", true, "messageHint")}<div class="field full"><label for="rfq-attachments">${U.tr("attachments")}</label><input id="rfq-attachments" type="file" multiple><p class="muted">${U.tr("attachmentHint")}</p><div id="rfq-files"></div></div></div></section><div class="form-actions"><button class="button" type="submit">${U.tr("submitRfq")} →</button></div></form><aside class="form-aside"><div class="form-note"><h3>${U.tr("rfq")}</h3><p>${U.tr("quoteDesc")}</p></div></aside></div></div>`;
+    `<div class="container"><div class="page-intro"><div class="eyebrow">${U.tr("rfqEyebrow")}</div><h1>${U.tr("rfqTitle")}</h1><p>${U.tr("rfqDesc")}</p></div><div class="form-layout"><form id="rfq-form" novalidate>${modeSwitch}${supplierCard}<div id="rfq-product-context">${U.context(product)}</div><section class="panel"><h2>${U.tr("generalRfq")}</h2><div class="form-grid">${U.industryField("rfq", initialCategory)}<div class="field"><label for="rfq-category">${U.tr("productGroup")} <b>*</b></label><select id="rfq-category" name="category_id" required><option value="" data-i18n="select">${U.t("select")}</option>${U.options(MarineData.categories, initialCategory)}</select><small class="error" data-error="category_id"></small></div><div class="field"><label for="rfq-subcategory">${U.tr("productType")} <b>*</b></label><select id="rfq-subcategory" name="subcategory_id" required></select><small class="error" data-error="subcategory_id"></small></div>${U.field("company", "company", "text", rfqUser.company || "", true)}${U.field("buyerCountry", "buyer_country", "text", "", true, "countryHint")}${U.field("quantity", "quantity", "number", "", true)}${U.field("delivery", "expected_delivery", "date", "", false)}<div class="field"><label for="rfq-terms">${U.tr("terms")}</label><select id="rfq-terms" name="incoterms"><option>EXW</option><option selected>FOB</option><option>CIF</option></select></div>${U.area("message", "message", "", true, "messageHint")}<div class="field full"><label for="rfq-attachments">${U.tr("attachments")}</label><input id="rfq-attachments" type="file" multiple><p class="muted">${U.tr("attachmentHint")}</p><div id="rfq-files"></div></div></div></section><div class="form-actions"><button class="button" type="submit">${U.tr("submitRfq")} →</button></div></form><aside class="form-aside"><div class="form-note"><h3>${U.tr("rfq")}</h3><p>${U.tr("quoteDesc")}</p></div></aside></div></div>`;
   const form = document.getElementById("rfq-form");
   const quick = new URLSearchParams(location.search);
   const requestedQuantity = Number(quick.get('quantity'));
@@ -71,9 +78,54 @@ if (rfqUser?.role !== "buyer") {
   U.bindIndustrySelect("rfq", categorySelect, () => updateSubcategories(product?.subcategory_id || ""));
   updateSubcategories(product?.subcategory_id || "");
   let files = [];
-  document.getElementById("rfq-attachments").onchange = (e) => {
-    files = U.attachments(e.target.files);
-    document.getElementById("rfq-files").innerHTML = U.filesHtml(files);
+  function applyMode(next) {
+    mode = next;
+    document
+      .querySelectorAll("[data-mode]")
+      .forEach((button) =>
+        button.classList.toggle("active", button.dataset.mode === next),
+      );
+    const hint = document.getElementById("rfq-mode-hint");
+    if (hint)
+      hint.innerHTML = U.tr(
+        next === "inquiry" ? "rfqModeHintInquiry" : "rfqModeHintPublic",
+      );
+    const card = document.querySelector(".supplier-target");
+    if (card) card.hidden = next === "public";
+    const context = document.getElementById("rfq-product-context");
+    if (context && next === "public") context.hidden = true;
+    else if (context) updateProductContext();
+    U.translate();
+  }
+  document
+    .querySelectorAll("[data-mode]")
+    .forEach((button) => (button.onclick = () => applyMode(button.dataset.mode)));
+  applyMode(mode);
+  /* 附件选完要能反悔：picked 保留原始 File，删除后重建 input 的 FileList，
+     否则再次选择文件时被删的那些会跟着 FileList 一起回来。 */
+  const attachInput = document.getElementById("rfq-attachments");
+  const attachBox = document.getElementById("rfq-files");
+  let picked = [];
+  function syncAttachInput() {
+    if (typeof DataTransfer === "undefined") return;
+    const transfer = new DataTransfer();
+    picked.forEach((file) => transfer.items.add(file));
+    attachInput.files = transfer.files;
+  }
+  function paintFiles() {
+    files = U.attachments(picked);
+    attachBox.innerHTML = U.filesHtml(files, true);
+    attachBox.querySelectorAll("[data-remove-file]").forEach((button) => {
+      button.onclick = () => {
+        picked.splice(Number(button.dataset.removeFile), 1);
+        syncAttachInput();
+        paintFiles();
+      };
+    });
+  }
+  attachInput.onchange = (e) => {
+    picked = [...e.target.files];
+    paintFiles();
   };
   form.onsubmit = (e) => {
     e.preventDefault();
@@ -86,10 +138,12 @@ if (rfqUser?.role !== "buyer") {
     }
     if (!U.errors(form, U.validate(form))) return;
     const d = Object.fromEntries(new FormData(form));
+    const isPublic = mode === "public";
     const row = {
       id: "rfq-" + Date.now() + "-" + Math.random().toString(36).slice(2, 7),
-      product_id: matchesProduct() ? product.id : null,
-      supplier_id: targetSupplier ? targetSupplierId : null,
+      mode: isPublic ? "rfq" : "inquiry",
+      product_id: !isPublic && matchesProduct() ? product.id : null,
+      supplier_id: isPublic ? null : targetSupplier ? targetSupplierId : null,
       industry_id: d.industry_id,
       category_id: d.category_id,
       subcategory_id: d.subcategory_id,
@@ -108,11 +162,29 @@ if (rfqUser?.role !== "buyer") {
       created_at: new Date().toISOString(),
     };
     const list = U.read("rfq_drafts");
-    list.push(row);
+    const thread =
+      typeof MarineMessages !== "undefined"
+        ? MarineMessages.normalize(row)
+        : row;
+    list.push(
+      isPublic || typeof MarineMessages === "undefined"
+        ? thread
+        : MarineMessages.autoAssign(thread, list.map((item) => MarineMessages.normalize(item))),
+    );
     if (U.write("rfq_drafts", list)) {
       form.reset();
-      files = [];
-      document.getElementById("rfq-files").innerHTML = "";
+      picked = [];
+      paintFiles();
+      if (isPublic) {
+        U.notice(
+          "rfqPublished",
+          "rfqPublishedDesc",
+          "my-rfq.html",
+          "viewMyInquiries",
+          [{ page: "products.html", label: "backBrowse" }],
+        );
+        return;
+      }
       U.notice("rfqSuccess", "rfqSuccessDesc", "my-rfq.html", "viewMyInquiries", [{ page: "products.html", label: "backBrowse" }]);
     }
   };

@@ -2,17 +2,31 @@
 (function (root) {
   let database;
   const urls = new Map();
-  function open() {
-    if (!database) database = new Promise((resolve, reject) => {
-      const request = indexedDB.open('northlink-supplier-files', 1);
-      request.onupgradeneeded = () => {
-        request.result.createObjectStore('files', {keyPath:'id'});
-        request.result.createObjectStore('finance', {keyPath:'supplier_id'});
-      };
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => { database = null; reject(request.error); };
-      request.onblocked = () => { database = null; reject(Error('storage blocked')); };
+  const NAME = 'northlink-supplier-files', VERSION = 1, STORES = ['files','finance'];
+  function upgrade(db) {
+    if (!db.objectStoreNames.contains('files')) db.createObjectStore('files', {keyPath:'id'});
+    if (!db.objectStoreNames.contains('finance')) db.createObjectStore('finance', {keyPath:'supplier_id'});
+  }
+  function request(version) {
+    return new Promise((resolve, reject) => {
+      const req = version ? indexedDB.open(NAME, version) : indexedDB.open(NAME);
+      req.onupgradeneeded = () => upgrade(req.result);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+      req.onblocked = () => reject(Error('storage blocked'));
     });
+  }
+  /* 已存在的同名库若缺表（首轮中断、早期版本残留），固定版本号不会触发
+     onupgradeneeded，后续事务全部 NotFoundError。这里检测缺表后升一版补建。 */
+  async function connect() {
+    let db = await request(VERSION);
+    if (STORES.every(name => db.objectStoreNames.contains(name))) return db;
+    const next = db.version + 1;
+    db.close();
+    return request(next);
+  }
+  function open() {
+    if (!database) database = connect().catch(error => { database = null; throw error; });
     return database;
   }
   async function transaction(store, mode, action) {
@@ -27,12 +41,18 @@
       tx.onabort = () => reject(tx.error || Error('storage aborted'));
     });
   }
-  async function putMany(files, owner, kind) {
+  /* Validate a whole set without writing anything, so callers can validate every
+     file of a form first and only then persist. Prevents a rejected banner from
+     leaving an already-saved logo behind as an orphan blob. */
+  async function check(files, kind) {
     for (const file of files) {
       const error = SupplierData.fileError(file, kind);
       if (error) throw Error(U.t(error));
-      if (file.type.startsWith('image/')) await validateImage(file,kind);
+      if (file.type.startsWith('image/')) await validateImage(file, kind);
     }
+  }
+  async function putMany(files, owner, kind) {
+    await check(files, kind);
     const rows = files.map(file => ({id:crypto.randomUUID(),owner,name:file.name,type:file.type,size:file.size,blob:file}));
     await transaction('files','readwrite',store => { rows.forEach(row => store.put(row)); });
     return rows.map(({id,name,type,size}) => ({id,name,type,size}));
@@ -89,7 +109,7 @@
       container.append(row);
     }
   }
-  root.SupplierFiles = {putMany,url,hydrate,links,
+  root.SupplierFiles = {putMany,check,url,hydrate,links,
     getFinance(id) { return transaction('finance','readonly',store => store.get(id)); },
     saveFinance(row) { return transaction('finance','readwrite',store => store.put(row)); },
   };
