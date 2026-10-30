@@ -2,11 +2,6 @@ const { test } = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const vm = require("node:vm");
-test("optimization translation bundles keep every added UI label bilingual", () => {
-  const context={window:{}};vm.createContext(context);
-  for(const path of ["js/i18n.js","js/customer-i18n.js","js/bulk-i18n.js"])vm.runInContext(fs.readFileSync(path,"utf8"),context);
-  for(const [key,pair] of Object.entries(context.window.MarineI18n))assert.ok(Array.isArray(pair)&&pair.length===2&&pair.every(v=>typeof v==="string"&&v.length),key);
-});
 test("all pages use existing local classic scripts and stylesheet without build", () => {
   for (const page of [
     "index",
@@ -15,6 +10,7 @@ test("all pages use existing local classic scripts and stylesheet without build"
     "publish",
     "rfq",
     "my-rfq",
+    "rfq-market",
     "inbox",
     "supplier",
     "buyer-auth",
@@ -64,14 +60,18 @@ test("public pages and scripts use the KAUP LINK brand consistently", () => {
     "inquiry-detail",
     "suppliers",
   ];
+  // inquiry-detail 于 2026-10-29 下线，只保留带品牌标题的跳转页。
+  const retired = new Set(["inquiry-detail"]);
   for (const page of pages) {
     const html = fs.readFileSync(page + ".html", "utf8");
     assert.match(html, /<title>KAUP LINK \|/, page);
-    assert.match(
-      html,
-      /<meta name="description" content="智贸无疆多行业跨境 B2B 平台"/,
-      page,
-    );
+    if (!retired.has(page)) {
+      assert.match(
+        html,
+        /<meta name="description" content="智贸无疆多行业跨境 B2B 平台"/,
+        page,
+      );
+    }
     assert.doesNotMatch(html, /NORTHLINK|北贸汇|智联无疆/, page);
   }
   const scripts = ["js/i18n.js", "js/common.js", "js/content.js"]
@@ -127,5 +127,16 @@ test("all centralized UI dictionary entries have Chinese and English", () => {
       pair.every((v) => typeof v === "string" && v.length > 0),
       key,
     );
+  }
+});
+test("U.tr() markup never lands inside an HTML attribute", () => {
+  // U.tr() 返回带 <span data-i18n> 的片段，放进 aria-label/title/placeholder 等属性
+  // 会撑破标签并把裸文本渲染到页面上。属性位置只能用纯文本 U.t()。
+  for (const file of fs.readdirSync("js").filter((name) => name.endsWith(".js"))) {
+    const source = fs.readFileSync("js/" + file, "utf8");
+    for (const [, attr] of source.matchAll(
+      /\b(aria-label|title|placeholder|alt|value)="\$\{U\.tr\(/g,
+    ))
+      assert.fail(file + ": attribute " + attr + " uses U.tr(), use U.e(U.t(key)) instead");
   }
 });

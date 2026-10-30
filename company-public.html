@@ -3,31 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="description" content="KAUP LINK certifications and qualifications" />
-    <title>KAUP LINK | Company</title>
-    <link rel="stylesheet" href="assets/styles.css?v=ui20261026b" />
-    <link rel="stylesheet" href="assets/supplier-ui.css?v=ui20261026b" />
+    <meta name="description" content="公司主页已并入店铺主页" />
+    <title>KAUP LINK | Storefront</title>
+    <link rel="stylesheet" href="assets/styles.css?v=ws20261029i" />
   </head>
   <body data-page="company-public">
     <a class="skip-link" href="#main">跳至主要内容 / Skip to content</a>
-    <div id="header"></div>
-    <main id="main" tabindex="-1"></main>
-    <div id="footer"></div>
-    <dialog id="feedback" aria-label="反馈 / Feedback"></dialog>
-    <script src="mock/data.js?v=212480e5"></script>
-    <script src="js/i18n.js?v=ui20261026b"></script>
-    <script src="js/core.js?v=ui20261026b"></script>
-    <script src="js/accounts-core.js?v=ui20261026b"></script>
-    <script src="js/common.js?v=ui20261026b"></script>
-    <script src="js/form-controls.js?v=ui20261026b"></script>
-    <script src="js/accounts-ui.js?v=ui20261026b"></script>
-    <script src="js/supplier-core.js?v=ui20261026b"></script>
-    <script src="js/supplier-data.js?v=ui20261026b"></script>
-    <script src="js/supplier-files.js?v=ui20261026b"></script>
-    <script src="js/supplier-display.js?v=ui20261026b"></script>
-
-    <script src="js/supplier-shell.js?v=ui20261026b"></script>
-    <script src="js/company-public.js?v=ui20261026b"></script>
-    <script src="js/interactions.js?v=ui20261026b"></script>
+    <main id="main" tabindex="-1">
+      <div class="container section">
+        <p>公司主页已并入店铺主页，正在跳转…</p>
+        <p><a class="text-link" href="storefront.html" data-fallback>前往店铺主页 →</a></p>
+      </div>
+    </main>
+    <script>
+      /* 公司主页与店铺主页内容重叠（about / 认证 / 团队是店铺页的子集），
+         对外只保留一个地址。这里保留旧文件做 302，已发出或收藏的链接不会 404。 */
+      (function () {
+        var params = new URLSearchParams(location.search);
+        var supplier = params.get("supplier_id") || "";
+        var lang = params.get("lang") || "";
+        var target = supplier
+          ? "storefront.html?supplier_id=" + encodeURIComponent(supplier) + (lang ? "&lang=" + encodeURIComponent(lang) : "")
+          : "suppliers.html" + (lang ? "?lang=" + encodeURIComponent(lang) : "");
+        var fallback = document.querySelector("[data-fallback]");
+        if (fallback) fallback.href = target;
+        location.replace(target);
+      })();
+    </script>
   </body>
 </html>

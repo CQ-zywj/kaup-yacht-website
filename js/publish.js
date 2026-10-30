@@ -64,7 +64,7 @@
   const titles = existing?.i18n || { zh: {}, en: {} };
   const trade = existing?.trade || {};
   document.getElementById("main").innerHTML =
-    `<div class="container"><div class="page-intro"><div class="eyebrow">${U.tr("supplierMode")}</div><h1>${U.tr("publishTitle")}</h1><p>${U.tr("publishDesc")}</p></div><div class="form-layout"><form id="publish-form" novalidate><section class="panel" id="publish-basic"><h2>${U.tr("basic")}</h2><div class="form-grid">${U.industryField("publish", currentCategory)}<div class="field"><label for="publish-category">${U.tr("productGroup")} <b>*</b></label><select id="publish-category" name="category_id">${U.options(MarineData.categories, currentCategory)}</select></div><div class="field"><label for="sub-category">${U.tr("productType")} <b>*</b></label><select id="sub-category" name="subcategory_id"></select></div>${U.field("titleZh", "title_zh", "text", titles.zh.title || "", true)}${U.field("titleEn", "title_en", "text", titles.en.title || "", true)}${U.area("descriptionZh", "description_zh", titles.zh.description || "", true)}${U.area("descriptionEn", "description_en", titles.en.description || "", true)}<div class="field full"><label for="images">${U.tr("images")}</label><div class="upload"><input type="file" id="images" accept="image/png,image/jpeg,image/webp,image/svg+xml" multiple><p class="muted" style="margin:12px 0 0">${U.tr("imageHint")}</p><div class="upload-actions"><button type="button" class="button secondary" id="pick-media">${U.tr("pickFromMedia")}</button><a class="text-link" href="${U.url("media-library.html")}">${U.tr("consoleMedia")} ↗</a></div></div><div class="previews" id="previews"></div></div></div></section>${AccountUI.supplierSection(supplierProfile)}<section class="panel" id="publish-parameters"><h2>${U.tr("parameters")}</h2><div class="warning" id="compliance-note">${U.tr("complianceHint")}</div><div class="form-grid" id="parameter-fields"></div><div id="spec-panel"><div id="spec-rows"></div><button class="button secondary" id="add-spec" type="button">+ ${U.tr("addSpec")}</button></div></section><section class="panel" id="publish-certificates"><h2>${U.tr("certs")}</h2><div id="cert-rows"></div><button class="button secondary" id="add-cert" type="button">+ ${U.tr("addCert")}</button></section><section class="panel" id="publish-trade"><h2>${U.tr("trade")}</h2><div class="form-grid">${U.field("moq", "moq", "number", trade.moq || "", true)}${U.field("leadDays", "lead_time", "number", trade.lead_time || "", true)}${U.field("priceMin", "price_min", "number", trade.price_min || "", true)}${U.field("priceMax", "price_max", "number", trade.price_max || "", true)}<div class="field"><label for="incoterms">${U.tr("terms")}</label><select id="incoterms" name="incoterms">${["EXW", "FOB", "CIF", "DAP"].map((v) => `<option ${trade.incoterms?.[0] === v ? "selected" : ""}>${v}</option>`).join("")}</select></div><div class="field"><label for="unit">${U.tr("unit")}</label><select id="unit" name="unit">${[...new Set(["set", "kg", "service", ...(trade.unit ? [trade.unit] : [])])].map((v) => `<option value="${U.e(v)}" ${MarineI18n["unit_" + v] ? `data-i18n="unit_${U.e(v)}"` : ""} ${trade.unit === v ? "selected" : ""}>${U.e(MarineI18n["unit_" + v] ? U.t("unit_" + v) : v)}</option>`).join("")}</select></div></div></section><p id="form-summary" role="alert" class="error"></p><div class="form-actions publish-actions"><div class="save-state"><strong id="draft-state" role="status">${U.tr("draftEditing")}</strong><small>${U.tr("draftNextHint")}</small></div><button id="save-draft" type="button" class="button secondary">${U.tr("saveDraft")}</button><button class="button" type="submit">${U.tr("submitProduct")} →</button></div></form><aside class="form-aside"><nav class="steps" aria-label="${U.t("publishTitle")}">${[["basic", "step1"], ["supplier", "stepSupplier"], ["parameters", "stepParameters"], ["certificates", "stepCertificates"], ["trade", "stepTrade"]].map(([id, key]) => `<a href="#publish-${id}" data-section="publish-${id}">${U.tr(key)}</a>`).join("")}</nav><div class="form-note"><h3>${U.tr("supplier")}</h3><p>${U.tr("publishDesc")}</p></div><a class="text-link" href="${U.url("supplier.html")}" style="display:block;margin-top:20px">${U.tr("myProducts")} →</a></aside></div></div>`;
+    `<div class="container"><div class="page-intro"><div class="eyebrow">${U.tr("supplierMode")}</div><h1>${U.tr("publishTitle")}</h1><p>${U.tr("publishDesc")}</p><p class="inline-note">${U.tr("bulkFromPublishHint")} <a class="text-link" href="${U.url("bulk-import.html")}">${U.tr("consoleBulk")} ↗</a></p></div><div class="form-layout"><form id="publish-form" novalidate><section class="panel" id="publish-basic"><h2>${U.tr("basic")}</h2><div class="form-grid">${U.industryField("publish", currentCategory)}<div class="field"><label for="publish-category">${U.tr("productGroup")} <b>*</b></label><select id="publish-category" name="category_id">${U.options(MarineData.categories, currentCategory)}</select></div><div class="field"><label for="sub-category">${U.tr("productType")} <b>*</b></label><select id="sub-category" name="subcategory_id"></select></div>${U.field("titleZh", "title_zh", "text", titles.zh.title || "", true)}${U.field("titleEn", "title_en", "text", titles.en.title || "", true)}${U.area("descriptionZh", "description_zh", titles.zh.description || "", true)}${U.area("descriptionEn", "description_en", titles.en.description || "", true)}<div class="field full"><label for="images">${U.tr("images")}</label><div class="upload"><input type="file" id="images" accept="image/png,image/jpeg,image/webp,image/svg+xml" multiple><p class="muted" style="margin:12px 0 0">${U.tr("imageHint")}</p><div class="upload-actions"><button type="button" class="button secondary" id="pick-media">${U.tr("pickFromMedia")}</button><a class="text-link" href="${U.url("media-library.html")}">${U.tr("consoleMedia")} ↗</a></div></div><div class="previews" id="previews"></div></div></div></section>${AccountUI.supplierSection(supplierProfile)}<section class="panel" id="publish-parameters"><h2>${U.tr("parameters")}</h2><div class="warning" id="compliance-note">${U.tr("complianceHint")}</div><div class="form-grid" id="parameter-fields"></div><div id="spec-panel"><div id="spec-rows"></div><button class="button secondary" id="add-spec" type="button">+ ${U.tr("addSpec")}</button></div></section><section class="panel" id="publish-certificates"><h2>${U.tr("certs")}</h2><div id="cert-rows"></div><button class="button secondary" id="add-cert" type="button">+ ${U.tr("addCert")}</button></section><section class="panel" id="publish-trade"><h2>${U.tr("trade")}</h2><div class="form-grid">${U.field("moq", "moq", "number", trade.moq || "", true)}${U.field("leadDays", "lead_time", "number", trade.lead_time || "", true)}${U.field("priceMin", "price_min", "number", trade.price_min || "", true)}${U.field("priceMax", "price_max", "number", trade.price_max || "", true)}<div class="field"><label for="incoterms">${U.tr("terms")}</label><select id="incoterms" name="incoterms">${["EXW", "FOB", "CIF", "DAP"].map((v) => `<option ${trade.incoterms?.[0] === v ? "selected" : ""}>${v}</option>`).join("")}</select></div><div class="field"><label for="unit">${U.tr("unit")}</label><select id="unit" name="unit">${[...new Set(["set", "kg", "service", ...(trade.unit ? [trade.unit] : [])])].map((v) => `<option value="${U.e(v)}" ${MarineI18n["unit_" + v] ? `data-i18n="unit_${U.e(v)}"` : ""} ${trade.unit === v ? "selected" : ""}>${U.e(MarineI18n["unit_" + v] ? U.t("unit_" + v) : v)}</option>`).join("")}</select></div></div></section><p id="form-summary" role="alert" class="error"></p><div class="form-actions publish-actions"><div class="save-state"><strong id="draft-state" role="status">${U.tr("draftEditing")}</strong><small>${U.tr("draftNextHint")}</small></div><button id="save-draft" type="button" class="button secondary">${U.tr("saveDraft")}</button><button class="button" type="submit">${U.tr("submitProduct")} →</button></div></form><aside class="form-aside"><nav class="steps" aria-label="${U.t("publishTitle")}">${[["basic", "step1"], ["supplier", "stepSupplier"], ["parameters", "stepParameters"], ["certificates", "stepCertificates"], ["trade", "stepTrade"]].map(([id, key]) => `<a href="#publish-${id}" data-section="publish-${id}">${U.tr(key)}</a>`).join("")}</nav><div class="form-note"><h3>${U.tr("supplier")}</h3><p>${U.tr("publishDesc")}</p></div><a class="text-link" href="${U.url("supplier.html")}" style="display:block;margin-top:20px">${U.tr("myProducts")} →</a></aside></div></div>`;
   const form = document.getElementById("publish-form");
   form.querySelector(".supplier-information").id = "publish-supplier";
   let dirty = false;
@@ -267,7 +267,23 @@
       document.getElementById("form-summary").innerHTML = U.tr("validation");
       return;
     }
-    p.status = submit ? "published" : "draft";
+    /* 机审：二值判定（通过 / 驳回）。驳回时仍落库为 rejected，避免已填内容丢失 */
+    let review = { pass: true, code: "", rule: "", message: ["", ""], field: "", detail: "" };
+    if (submit) {
+      const siblings = U.read("draft_products").filter(
+        (row) => row.id !== p.id && (row.supplier_id || "") === p.supplier_id,
+      );
+      if (window.ReviewRules)
+        review = window.ReviewRules.run("product", p, { existing: siblings });
+      p.review = {
+        code: review.code,
+        rule: review.rule,
+        at: new Date().toISOString(),
+      };
+      p.status = review.pass ? "active" : "rejected";
+    } else {
+      p.status = "draft";
+    }
     const drafts = U.read("draft_products");
     const index = drafts.findIndex((v) => v.id === p.id);
     if (index >= 0) drafts[index] = p;
@@ -319,12 +335,14 @@
       dirty = false;
       document.getElementById("draft-state").innerHTML = U.tr("draftSavedInline");
       if (!submit) return;
-      U.notice(
-        submit ? "productSubmitted" : "draftSaved",
-        submit ? "productSubmittedDesc" : null,
-        "supplier.html",
-        "myProducts",
-      );
+      if (!review.pass) {
+        if (window.ReviewRules)
+          window.ReviewRules.showRejection(review, {
+            link: { page: "supplier.html", label: "myProducts" },
+          });
+        return;
+      }
+      U.notice("productSubmitted", "productSubmittedDesc", "supplier.html", "myProducts");
     }
   }
   form.onsubmit = (e) => {

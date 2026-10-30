@@ -6,9 +6,9 @@ test('content lookup rejects unknown and inherited type names without exposing r
   for(const type of ['missing','__proto__','constructor']) assert.equal(content.find(type,'precision-sourcing'),null);
   assert.equal(content.find('news','not-found'),null);
 });
-test('news, exhibitions and procurement leads have stable bilingual detail data',()=>{
+test('news and exhibitions have stable bilingual detail data, demo leads stay removed',()=>{
   const industries=JSON.parse(fs.readFileSync('mock/industries.json')).map(x=>x.id);
-  for(const type of ['news','exhibitions','leads']){
+  for(const type of ['news','exhibitions']){
     const ids=new Set();
     for(const row of content[type]){
       assert.ok(!ids.has(row.id));ids.add(row.id);
@@ -16,11 +16,15 @@ test('news, exhibitions and procurement leads have stable bilingual detail data'
       assert.ok(industries.includes(row.industry));
       for(const language of ['zh','en']){
         assert.ok(row.title[language]);
-        if(type==='leads') assert.ok(row.quantity[language] && row.country[language] && row.brief[language]);
-        else {assert.ok(row.summary[language] && row.body.length);for(const paragraph of row.body) assert.ok(paragraph[language]);}
+        assert.ok(row.summary[language] && row.body.length);
+        for(const paragraph of row.body) assert.ok(paragraph[language]);
       }
-      if(type!=='leads') assert.ok(fs.existsSync(`assets/media/banner-${row.art}.jpg`));
+      assert.ok(fs.existsSync(`assets/media/banner-${row.art}.jpg`));
       if(type==='exhibitions') assert.ok(row.date<=row.end && row.location.zh && row.location.en);
     }
   }
+  /* 首页那 3 条「演示采购线索」是原型期填充物：买家不存在，点"联系"什么也不发生。
+     2026-10-29 下线，数据与 inquiry-detail.html 详情一起移除，不允许被加回来。 */
+  assert.equal(content.leads,undefined);
+  assert.equal(content.find('leads','bearing-lead'),null);
 });

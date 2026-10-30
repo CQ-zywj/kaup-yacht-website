@@ -270,11 +270,13 @@ const U = (window.MarineUI = {
       size: f.size,
     }));
   },
-  filesHtml(items) {
-    return items
+  /* removable：附件在提交前可以撤销。传 true 时每个条目带一个移除按钮，
+     调用方用 [data-remove-file] 索引处理删除并重绘。 */
+  filesHtml(items, removable) {
+    return (items || [])
       .map(
-        (f) =>
-          `<div class="file-item">${this.e(f.name)} <small>${Math.round(f.size / 1024)} KB · ${this.tr("filePlaceholder")}</small></div>`,
+        (f, index) =>
+          `<div class="file-item${removable ? " removable" : ""}">${this.e(f.name)} <small>${Math.round(f.size / 1024)} KB · ${this.tr("filePlaceholder")}</small>${removable ? `<button type="button" class="file-remove" data-remove-file="${index}" aria-label="${this.e(this.t("removeAttachment"))}" title="${this.e(this.t("removeAttachment"))}">×</button>` : ""}</div>`,
       )
       .join("");
   },

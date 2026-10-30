@@ -31,11 +31,13 @@
   function render() {
     const products = ownProducts();
     const drafts = ownDrafts();
-    const rows = SupplierShell.scopedInquiries(U.read("rfq_drafts"), id);
-    const unread = rows.filter((row) => row.status === "submitted").length;
+    const rows = SupplierShell.scopedInquiries(U.read("rfq_drafts"), id).filter(
+      (row) => (row.supplier_id ? row.supplier_id === id : row.mode !== "rfq"),
+    );
+    const unread = SupplierShell.unreadInquiries(U.read("rfq_drafts"));
     const active = products.filter((p) => statusOf(p) === "active").length;
     const draftCount = products.filter((p) => statusOf(p) === "draft").length;
-    const pendingCount = products.filter((p) => statusOf(p) === "pending").length;
+    const rejectedCount = products.filter((p) => statusOf(p) === "rejected").length;
     const score = SupplierCore.completeness(localStorage, profile, id);
     const missing = missingCompliance(products);
     const publishedArticles = SupplierCore.articles(localStorage, id).filter(
@@ -113,7 +115,7 @@
             })
             .join("")}</tbody></table><div class="mini-actions" style="margin-top:12px"><a href="${U.url("inbox.html")}">${U.tr("viewMore")} →</a></div>`
         : `<p class="muted">${U.tr("noInquiries")}</p><a class="text-link" href="${U.url("inbox.html")}">${U.tr("consoleInbox")} →</a>`
-    }</section><section class="panel"><h2>${U.tr("productOverview")}</h2><div class="cert-row" style="margin-bottom:12px"><span class="status active">${U.tr("activeProductsCount")} ${active}</span><span class="status draft">${U.tr("draftProductsCount")} ${draftCount}</span><span class="status pending">${U.tr("pendingProductsCount")} ${pendingCount}</span></div>${
+    }</section><section class="panel"><h2>${U.tr("productOverview")}</h2><div class="cert-row" style="margin-bottom:12px"><span class="status active">${U.tr("activeProductsCount")} ${active}</span><span class="status draft">${U.tr("draftProductsCount")} ${draftCount}</span><span class="status rejected">${U.tr("statusRejected")} ${rejectedCount}</span></div>${
       recentProducts.length
         ? `<table class="console-table"><tbody>${recentProducts
             .map((product) => {

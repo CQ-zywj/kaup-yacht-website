@@ -132,3 +132,53 @@
 .check-list label > span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .cert-grid > .empty { grid-column: 1 / -1; }
 @media (max-width: 600px) { .check-list { grid-template-columns: 1fr; max-height: 320px; } }
+
+/* 「我的店铺」编辑视图：左侧资料表单 + 右侧店铺预览。 */
+.shop-edit-layout { display: grid; grid-template-columns: minmax(0, 1fr) 272px; gap: 28px; align-items: start; }
+.shop-edit-main { display: grid; gap: 18px; min-width: 0; }
+.shop-preview { position: sticky; top: 92px; }
+.shop-preview-card { display: grid; gap: 12px; padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--white, #fff); }
+.shop-preview-card h2 { margin: 0; font-size: 13px; }
+.shop-preview-frame { overflow: hidden; border: 1px solid var(--line); border-radius: 10px; }
+.shop-preview-banner { height: 84px; background-color: var(--navy, #102c40); background-image: linear-gradient(120deg, #102c40, #087d83); background-size: cover; background-position: center; }
+.shop-preview-banner.theme-slate { background-image: linear-gradient(120deg, #26333a, #5c6f78); }
+.shop-preview-banner.theme-sand { background-image: linear-gradient(120deg, #6b5334, #c9a86a); }
+.shop-preview-body { display: flex; align-items: center; gap: 10px; padding: 10px 12px; }
+.shop-preview-logo { display: grid; place-items: center; flex: none; width: 38px; height: 38px; overflow: hidden; border-radius: 8px; background: var(--bg, #f4f4f2); color: var(--ink); font-weight: 500; }
+.shop-preview-logo img { width: 100%; height: 100%; object-fit: cover; }
+.shop-preview-text { display: grid; gap: 2px; min-width: 0; }
+.shop-preview-text strong { font-size: 13px; line-height: 1.3; overflow-wrap: anywhere; }
+.shop-preview-text .muted { font-size: 11px; line-height: 1.4; overflow-wrap: anywhere; }
+.shop-preview-card .inline-note { margin: 0; }
+@media (max-width: 960px) {
+  .shop-edit-layout { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .shop-preview { position: static; order: -1; }
+  .shop-preview-banner { height: 64px; }
+}
+
+/* 侧栏分组：12 项平铺 → 7 组，组内为二级页。当前页所在组默认展开。 */
+.console-nav .console-group { margin: 2px 0; }
+.console-nav .console-group-toggle { display: flex; align-items: center; gap: 8px; width: 100%; padding: 10px 12px; border: 0; border-radius: 4px; background: transparent; font: inherit; font-size: 14px; color: var(--ink); text-align: left; cursor: pointer; }
+.console-nav .console-group-toggle > span:first-child { flex: 1; min-width: 0; }
+.console-nav .console-group-toggle:hover { background: #f1f7f7; color: var(--ocean); }
+.console-nav .console-group[data-open] > .console-group-toggle { background: #f4f8f8; }
+.console-nav .console-group[data-current] > .console-group-toggle { color: var(--ocean); font-weight: 600; }
+.console-nav .console-caret { flex: none; width: 7px; height: 7px; margin-right: 3px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; opacity: .5; transform: rotate(45deg); transition: transform .15s ease; }
+.console-nav .console-group[data-open] > .console-group-toggle .console-caret { transform: rotate(-135deg); }
+.console-nav .console-group-items { display: none; margin: 2px 0 4px 12px; padding-left: 8px; border-left: 1px solid var(--line); }
+.console-nav .console-group[data-open] > .console-group-items { display: block; }
+.console-nav .console-group-items a { padding: 8px 10px; font-size: 13px; }
+.console-nav .console-group-items a:hover { background: #f1f7f7; }
+
+/* 窄屏侧栏变成横向条，分组标题会把一条挤成两三行：此时摊平回 12 个 chip。 */
+@media (max-width: 1023px) {
+  .console-nav .console-group { display: contents; }
+  .console-nav .console-group-toggle { display: none; }
+  .console-nav .console-group:not([data-open]) > .console-group-items,
+  .console-nav .console-group[data-open] > .console-group-items { display: contents; }
+  .console-nav .console-group-items { margin: 0; padding: 0; border: 0; }
+  .console-nav .console-group-items a { padding: 8px 10px; font-size: 13px; }
+}
+
+/* 批量导入页头部：返回发布 + 我的商品 */
+.bulk-head-links { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }

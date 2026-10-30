@@ -156,7 +156,48 @@ test("relevance prioritizes title match over description-only match", () => {
     };
   assert.equal(C.sortProducts([b, a], "relevance", "yacht")[0].id, "a");
 });
-test('new inquiries can omit target country and delivery and retain product taxonomy', () => {
+test("thread records with multi-round messages and lifecycle statuses stay valid", () => {
+  const base = {
+    id: "rfq-thread",
+    buyer: { company: "Demo", country: "China" },
+    quantity: 2,
+    status: "quoted",
+    attachments: [],
+    created_at: new Date().toISOString(),
+    messages: [
+      { from: "buyer", type: "inquiry", body: "Need 2 units" },
+      {
+        from: "supplier",
+        type: "quote",
+        body: "",
+        quote: { price: 100, moq: 1, lead_time: 30 },
+      },
+    ],
+  };
+  const rows = C.readArray(
+    { getItem: () => JSON.stringify([base]) },
+    "rfq_drafts",
+  );
+  assert.equal(rows[0].status, "quoted");
+  assert.throws(() =>
+    C.readArray(
+      {
+        getItem: () =>
+          JSON.stringify([
+            { ...base, messages: [{ from: "buyer", type: "inquiry" }] },
+          ]),
+      },
+      "rfq_drafts",
+    ),
+  );
+  assert.throws(() =>
+    C.readArray(
+      { getItem: () => JSON.stringify([{ ...base, status: "archived" }]) },
+      "rfq_drafts",
+    ),
+  );
+});
+test("new inquiries can omit target country and delivery and retain product taxonomy", () => {
  const inquiry = { id:'rfq-taxonomy', buyer:{company:'Demo',country:'China'}, quantity:2, category_id:'boats', subcategory_id:'motor-yacht', message:'Demo request', status:'submitted', attachments:[], created_at:new Date().toISOString() };
  const records = C.readArray({getItem:()=>JSON.stringify([inquiry])},'rfq_drafts');
  assert.equal(records[0].category_id,'boats');

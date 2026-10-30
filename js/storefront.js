@@ -69,7 +69,6 @@
       (article) => article.status === "published",
     );
     profile = SupplierData.publicProfile(profile);
-    const config = {};
     let favCount = 0;
     try {
       favCount = JSON.parse(localStorage.getItem("storefront_favorites") || "{}")[id] || 0;
@@ -87,9 +86,9 @@
       .map((industry) => `<span class="badge muted-badge">${U.bi(U.industry(industry)?.name)}</span>`)
       .join("")}</div><div class="storefront-meta"><span>${U.e(profile.country || "")}${profile.city ? " · " + U.e(profile.city) : ""}</span>${
       profile.founded ? `<span>${U.tr("storefrontYears")}: ${U.e(profile.founded)}</span>` : ""
-    }${profile.employees ? `<span>${U.tr("storefrontEmployees")}: ${U.e(profile.employees)}</span>` : ""}<span>${U.tr("storefrontProductsCount")}: ${products.length}</span></div>${profile.tagline ? `<p style="margin:10px 0 0">${U.e(profile.tagline)}</p>` : ""}</div><div class="storefront-head-actions"><a class="button secondary" href="${U.url("company-public.html", {supplier_id:id})}">${U.tr("companyProfile")}</a><a class="button" href="${U.url("rfq.html", { supplier_id: id })}">${U.tr("storefrontInquiry")}</a><button type="button" class="button secondary" id="storefront-fav">${U.tr("storefrontFavorite")} · ${favCount}</button></div></div><section class="storefront-section"><h2>${U.tr("storefrontAbout")}</h2><div class="storefront-about"><div class="panel">${(() => {
+    }${profile.employees ? `<span>${U.tr("storefrontEmployees")}: ${U.e(profile.employees)}</span>` : ""}<span>${U.tr("storefrontProductsCount")}: ${products.length}</span></div>${profile.tagline ? `<p style="margin:10px 0 0">${U.e(profile.tagline)}</p>` : ""}</div><div class="storefront-head-actions"><a class="button" href="${U.url("rfq.html", { supplier_id: id })}">${U.tr("storefrontInquiry")}</a><button type="button" class="button secondary" id="storefront-fav">${U.tr("storefrontFavorite")} · ${favCount}</button></div></div><section class="storefront-section"><h2>${U.tr("storefrontAbout")}</h2><div class="storefront-about"><div class="panel">${(() => {
         const intro = profile.intro?.zh || profile.intro?.en || "";
-        if (intro) return `<p>${U.e(intro)}</p>`;
+        if (intro) return `<p class="preserve-lines">${U.e(intro)}</p>`;
         const first = (profile.main_categories || [])[0];
         const catName = (U.industry(first) || U.cat(first))?.name?.[U.lang] || "";
         return `<p>${U.e(
@@ -103,7 +102,7 @@
             .map((photo) => `<div class="file-item">${U.e(photo)}</div>`)
             .join("")}</div>`
         : `<div>${(profile.main_categories || []).length ? `<div class="cert-row" style="margin-top:12px">${profile.main_categories.map((cid) => `<span class="badge">${U.bi((U.industry(cid) || U.cat(cid))?.name)}</span>`).join("")}</div>` : ""}${profile.website ? `<p style="margin:12px 0 0"><a class="text-link" href="${U.e(profile.website)}" target="_blank" rel="noopener">${U.e(profile.website)} ↗</a></p>` : ""}</div>`
-    }</div><div class="panel storefront-contact"><h3 style="margin-top:0">${U.tr("storefrontContact")}</h3><p>${U.tr("contactViaPlatform")}</p><a class="button secondary" href="${U.url("rfq.html", {supplier_id:id})}">${U.tr("storefrontInquiry")}</a>${config.contact_note ? `<p class="inline-note">${U.e(config.contact_note)}</p>` : ""}</div></div></section><section class="storefront-section"><h2>${U.tr("storefrontCerts")}</h2>${
+    }</div></div></section><section class="storefront-section"><h2>${U.tr("storefrontCerts")}</h2>${
       SupplierDisplay.cards(certs)
     }</section><section class="storefront-section"><h2>${U.tr("storefrontNews")}</h2>${
       articles.length

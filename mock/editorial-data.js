@@ -137,68 +137,6 @@ const data={
         }
       ]
     }
-  ],
-  "leads": [
-    {
-      "id": "bearing-lead",
-      "industry": "bearings",
-      "title": {
-        "zh": "采购深沟球轴承 6205",
-        "en": "Buying request: 6205 deep groove bearings"
-      },
-      "quantity": {
-        "zh": "5,000 件",
-        "en": "5,000 pieces"
-      },
-      "country": {
-        "zh": "德国",
-        "en": "Germany"
-      },
-      "brief": {
-        "zh": "要求提供尺寸、精度等级及样品交付方案。请说明包装和可供数量。",
-        "en": "Please provide dimensions, tolerance grade and sample lead time, plus packaging and available quantity."
-      }
-    },
-    {
-      "id": "machine-lead",
-      "industry": "machine-tools",
-      "title": {
-        "zh": "采购数控车床",
-        "en": "Buying request: CNC turning machine"
-      },
-      "quantity": {
-        "zh": "2 台",
-        "en": "2 units"
-      },
-      "country": {
-        "zh": "阿联酋",
-        "en": "United Arab Emirates"
-      },
-      "brief": {
-        "zh": "用于金属零件加工，需提供加工行程、主轴配置及售后服务说明。",
-        "en": "For metal parts machining. Please describe working travel, spindle configuration and after-sales support."
-      }
-    },
-    {
-      "id": "crop-lead",
-      "industry": "agriculture",
-      "title": {
-        "zh": "采购大豆原料",
-        "en": "Buying request: soybean supply"
-      },
-      "quantity": {
-        "zh": "100 吨",
-        "en": "100 tonnes"
-      },
-      "country": {
-        "zh": "新加坡",
-        "en": "Singapore"
-      },
-      "brief": {
-        "zh": "请提供产地、等级、水分、包装方式及质量资料清单。",
-        "en": "Please specify origin, grade, moisture, packaging and available quality documents."
-      }
-    }
   ]
 };
 const find=(type,id)=>(Array.isArray(data[type]) ? data[type] : []).find(item=>item.id===id) || null;
