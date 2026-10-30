@@ -28,7 +28,7 @@ const U = (window.MarineUI = {
   bi(o) {
     if (o == null) return this.tr("missing");
     if (typeof o !== "object") return this.e(o);
-    return `<span data-zh="${this.e(o.zh)}" data-en="${this.e(o.en)}">${this.e(o[this.lang] || o.zh)}</span>`;
+    return `<span data-zh="${this.e(o.zh || o.en)}" data-en="${this.e(o.en || o.zh)}">${this.e(o[this.lang] || o.en || o.zh)}</span>`;
   },
   url(page, params = {}) {
     const [path, hash = ""] = page.split("#");
@@ -71,7 +71,9 @@ const U = (window.MarineUI = {
   products() {
     const products = [
       ...MarineData.products,
-      ...this.read("draft_products").filter((x) => x.status === "published"),
+      ...this.read("draft_products").filter((x) =>
+        ["published", "active"].includes(x.status),
+      ),
     ];
     try {
       const accounts = MarineAccounts.read(localStorage, "accounts", []);
@@ -146,8 +148,8 @@ const U = (window.MarineUI = {
   card(p) {
     return `<article class="product-card"><a class="card-image" href="${this.url("product.html", { id: p.id })}"><img src="${this.e(this.img(p))}" data-alt-zh="${this.e(p.i18n?.zh?.title)}" data-alt-en="${this.e(p.i18n?.en?.title)}" alt="${this.e(p.i18n?.[this.lang]?.title || "")}" loading="lazy"><span class="image-label">${this.bi(this.cat(p.category_id)?.name)}</span></a><div class="card-content"><div class="card-cert">${this.badges(p)}</div><a class="card-title" href="${this.url("product.html", { id: p.id })}">${this.bi({ zh: p.i18n.zh.title, en: p.i18n.en.title })}</a><div class="card-supplier">${this.e(p.supplier.country || "")} · ${this.bi(p.supplier.name)}</div><div class="card-price">$${Number(p.trade.price_min).toLocaleString()} <small>– $${Number(p.trade.price_max).toLocaleString()}</small></div><div class="card-bottom"><span>${this.tr("moq")} ${this.e(p.trade.moq)} ${this.tr("unit_" + p.trade.unit)}</span><a data-i18n-aria="rfq" aria-label="${this.e(this.t("rfq"))}" href="${this.url("rfq.html", { product: p.id })}">↗</a></div></div></article>`;
   },
-  empty(title, desc, link = "products.html", label = "browse") {
-    return `<div class="empty"><div class="empty-icon">⌁</div><h2>${this.tr(title)}</h2><p>${this.tr(desc)}</p><a class="button" href="${this.url(link)}">${this.tr(label)}</a></div>`;
+  empty(title, desc, link = "products.html", label = "browse", action = "") {
+    return `<div class="empty"><div class="empty-icon">⌁</div><h2>${this.tr(title)}</h2><p>${this.tr(desc)}</p>${action ? `<button type="button" class="button" data-empty-action="${this.e(action)}">${this.tr(label)}</button>` : `<a class="button" href="${this.url(link)}">${this.tr(label)}</a>`}</div>`;
   },
   translate() {
     document.documentElement.lang = this.lang;

@@ -2,6 +2,11 @@ const { test } = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const vm = require("node:vm");
+test("optimization translation bundles keep every added UI label bilingual", () => {
+  const context={window:{}};vm.createContext(context);
+  for(const path of ["js/i18n.js","js/customer-i18n.js","js/bulk-i18n.js"])vm.runInContext(fs.readFileSync(path,"utf8"),context);
+  for(const [key,pair] of Object.entries(context.window.MarineI18n))assert.ok(Array.isArray(pair)&&pair.length===2&&pair.every(v=>typeof v==="string"&&v.length),key);
+});
 test("all pages use existing local classic scripts and stylesheet without build", () => {
   for (const page of [
     "index",
@@ -20,6 +25,16 @@ test("all pages use existing local classic scripts and stylesheet without build"
     "content",
     "inquiry-detail",
     "suppliers",
+    "seller-dashboard",
+    "certifications",
+    "supplier-articles",
+    "media-library",
+    "storefront",
+    "customers",
+    "bulk-import",
+    "finance",
+    "store-decoration",
+    "company-public",
   ]) {
     const html = fs.readFileSync(page + ".html", "utf8");
     assert.match(html, /name="viewport"/);

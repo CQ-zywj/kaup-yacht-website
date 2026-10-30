@@ -1,0 +1,134 @@
+/* Shared supplier interface sizing. Keep labels, controls and actions on one grid. */
+.supplier-console { gap: 24px; }
+.console-main, #console-body, .company-container { min-width: 0; }
+.console-context { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 20px; padding-bottom: 20px; margin-bottom: 24px; border-bottom: 1px solid var(--line); }
+.console-context .inline-note { margin: 0; }
+.console-main .page-intro { padding: 0; margin: 0 0 24px; }
+.console-main .page-intro h1 { margin: 4px 0 10px; font-size: 28px; line-height: 1.3; }
+.console-main .page-intro p { max-width: 75ch; line-height: 1.7; }
+.console-nav a, .console-nav button { min-height: 44px; }
+.console-main .panel, .console-main .section-head > *, .console-grid > *, .bulk-grid > * { min-width: 0; }
+.console-main .section-head { flex-wrap: wrap; gap: 16px; align-items: center; }
+.console-main .section-head .field { flex: 1 1 200px; }
+.console-main .mini-actions { align-items: center; }
+.console-main .article-filters { display: grid; grid-template-columns: minmax(150px, .8fr) minmax(200px, 1fr); gap: 12px; width: min(100%, 440px); }
+.console-main .console-actions { align-items: center; }
+
+/* A native select, text input and the localized file picker share a 48px box. */
+:is(.supplier-console, .company-container, #cert-dialog, #cert-link-dialog, #media-dialog, #customer-dialog) :is(input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select) {
+  height: 48px; min-height: 48px; line-height: 24px; padding: 11px 12px; min-width: 0;
+}
+.localized-file { min-width: 0; width: 100%; height: 48px; min-height: 48px; padding: 1px; gap: 10px; }
+.localized-file .file-select-button { min-height: 44px; height: 44px; line-height: 22px; padding: 10px; }
+.file-selection-status { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.localized-date { min-width: 0; width: 100%; }
+.localized-date > input { padding-right: 44px !important; }
+.upload-strip { display: grid; grid-template-columns: minmax(140px, .8fr) minmax(140px, 1fr) minmax(220px, 1.6fr) auto; align-items: end; gap: 16px; padding: 20px; margin-bottom: 12px; }
+.upload-strip .field { display: flex; flex-direction: column; gap: 8px; }
+.upload-strip .field > label { margin: 0; line-height: 22px; }
+.upload-strip > .button { height: 48px; min-height: 48px; margin: 0; white-space: nowrap; }
+.upload-strip + .inline-note { margin-bottom: 16px; line-height: 1.6; }
+.console-main .cert-tabs { gap: 8px; }
+.cert-tabs button { min-height: 44px; }
+
+/* Bound the image itself, not just its grid track. */
+.media-grid { grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr)); }
+.media-card { display: flex; flex-direction: column; min-width: 0; }
+.media-card .media-frame { display: block; position: relative; width: 100%; height: auto; min-height: 0; aspect-ratio: 4 / 3; overflow: hidden; }
+.media-card .media-frame img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; min-height: 0; object-fit: cover; }
+.media-card .media-body { position: relative; width: 100%; flex: 1; padding: 12px; background: var(--white); }
+.media-card small { display: block; margin-top: 5px; line-height: 1.6; }
+.media-detail .media-preview img { display: block; width: 100%; max-width: 100%; max-height: 360px; object-fit: contain; }
+.media-detail .param-table, .cert-card dl { overflow-wrap: anywhere; }
+
+/* Editing dialogs need their own padding; global dialogs expect .modal-body. */
+:is(#cert-dialog, #cert-link-dialog, #media-dialog, #customer-dialog, .picker-dialog) { width: min(900px, calc(100vw - 40px)); max-width: 900px; max-height: calc(100dvh - 48px); padding: 24px; overflow: auto; overscroll-behavior: contain; }
+:is(#media-dialog, #customer-dialog, .picker-dialog) { width: min(800px, calc(100vw - 40px)); }
+.drawer-header { gap: 16px; align-items: flex-start; }
+.drawer-header h2 { margin: 0; line-height: 1.4; }
+.drawer-header > button { flex: 0 0 auto; min-height: 44px; }
+.cert-editor { margin-top: 24px; }
+.cert-editor .form-grid { gap: 20px; align-items: start; }
+.cert-editor .field small { display: block; color: var(--muted); line-height: 1.7; }
+.cert-editor .field .error { color: var(--danger); }
+.cert-editor .field:has(.check-label) { display: grid; gap: 6px; }
+.cert-editor .check-label { display: flex; align-items: flex-start; gap: 10px; margin: 0; line-height: 1.6; }
+.cert-editor .check-label input { flex: 0 0 auto; margin: 2px 0 0; }
+.cert-card, .certificate-open, .customer-card { overflow-wrap: anywhere; }
+.cert-card dl { grid-template-columns: max-content minmax(0, 1fr); }
+.cert-actions { align-items: center; gap: 8px 12px; }
+.cert-actions .link-button, .article-admin-actions .link-button { display: inline-flex; align-items: center; min-height: 36px; }
+.cert-actions .badge { white-space: normal; max-width: 100%; line-height: 1.6; }
+.certificate-open > div { width: 100%; min-width: 0; }
+.certificate-viewer .file-item, .settings-files .file-item { overflow-wrap: anywhere; }
+.certificate-viewer .file-item a, .settings-files .file-item a { display: inline-block; margin: 4px 12px 4px 0; }
+
+.editor-cover { display: grid; grid-template-columns: 150px minmax(0, 1fr); align-items: center; gap: 12px 16px; }
+.editor-cover > img { grid-row: span 2; }
+.editor-cover > button { justify-self: start; }
+.editor-cover .error { grid-column: 1 / -1; }
+.console-main .rich-editor { overflow-wrap: anywhere; }
+.team-grid { grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); }
+.team-card { max-width: 440px; }
+.team-card img { height: 240px; object-position: center; }
+.team-editor-row { margin-top: 16px; background: #fafcfc; }
+.team-editor-row label > input, .team-editor-row label > textarea { display: block; margin-top: 8px; }
+.team-editor-row label { margin-bottom: 0; }
+.company-completeness .score-row { display: flex; align-items: center; justify-content: space-between; }
+.company-completeness .score-row > b { margin-left: auto; }
+.company-heading { flex-wrap: wrap; gap: 16px; }
+.storefront-head-actions { flex: 0 0 auto; }
+.customer-grid { grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); }
+.customer-card dl { grid-template-columns: max-content minmax(0, 1fr); overflow-wrap: anywhere; }
+.bulk-guide th, .bulk-guide td { overflow-wrap: anywhere; }
+.console-table { overflow-wrap: anywhere; }
+
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .upload-strip { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .upload-strip > .button { justify-self: start; }
+  .cert-grid { grid-template-columns: 1fr; }
+  .console-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 767px) {
+  .supplier-console { padding-top: 16px; gap: 20px; }
+  .console-nav { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 4px; padding: 6px; max-width: 100%; scrollbar-width: thin; }
+  .console-nav a, .console-nav button { flex: 0 0 auto; white-space: nowrap; }
+  .console-context { padding-bottom: 14px; margin-bottom: 20px; }
+  .console-main .page-intro h1 { font-size: 25px; }
+  .console-main .section-head { align-items: stretch; }
+  .console-main .section-head .field { max-width: none !important; }
+  .upload-strip { grid-template-columns: minmax(0, 1fr); padding: 16px; }
+  .upload-strip > .button { width: 100%; }
+  .media-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .media-card .media-body { padding: 10px; }
+  .media-card small { font-size: 12px; }
+  :is(#cert-dialog, #cert-link-dialog, #media-dialog, #customer-dialog, .picker-dialog) { width: calc(100vw - 24px); max-height: calc(100dvh - 24px); padding: 20px; }
+  .cert-editor .form-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .cert-actions .link-button, .article-admin-actions .link-button { min-height: 44px; }
+  .editor-cover { grid-template-columns: minmax(0, 1fr); }
+  .editor-cover > img { grid-row: auto; width: 100%; height: 160px; }
+  .editor-cover > button { justify-self: stretch; }
+  .console-main .mini-actions > .field { flex: 1 1 100%; min-width: 0 !important; }
+  .console-main .article-filters { grid-template-columns: minmax(0, 1fr); width: 100%; }
+  .storefront-head-actions { flex-wrap: wrap; }
+  .storefront-head-actions .button { flex: 1 1 140px; }
+  .score-row { grid-template-columns: minmax(0, 1fr) minmax(60px, 1fr) 32px; gap: 8px; }
+  .score-hint { margin-left: 0; margin-bottom: 16px; }
+  .todo-list li { flex-wrap: wrap; }
+  .todo-list li > span:not(.dot) { flex: 1; min-width: 0; }
+  .console-table th, .console-table td { padding: 10px 6px; }
+}
+.check-list input[type="checkbox"] {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  min-height: 18px;
+  max-width: 18px;
+  padding: 0;
+  margin: 2px 0 0;
+  accent-color: var(--teal, #087f87);
+}
+.check-list label { align-items: flex-start; min-height: 44px; padding: 8px 10px; line-height: 1.5; }
+.check-list label > span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.cert-grid > .empty { grid-column: 1 / -1; }
+@media (max-width: 600px) { .check-list { grid-template-columns: 1fr; max-height: 320px; } }

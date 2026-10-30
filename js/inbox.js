@@ -4,12 +4,26 @@ let state = { status: "", from: "", to: "", sort: "newest" };
 let selectedId = null;
 document.getElementById("main").innerHTML =
   `<div class="container"><div class="page-intro"><div class="eyebrow">${U.tr("supplierMode")}</div><h1>${U.tr("inboxTitle")}</h1><p>${U.tr("inboxDesc")}</p></div><div class="metrics"><div class="metric"><strong id="unread-count">0</strong><span>${U.tr("unread")}</span></div><div class="metric"><strong id="all-count">0</strong><span>${U.tr("allInquiries")}</span></div></div><div class="panel"><div class="inbox-toolbar"><div class="field"><label for="status-filter">${U.tr("status")}</label><select id="status-filter"><option value="" data-i18n="all"></option>${["submitted", "viewed", "replied"].map((s) => `<option value="${s}" data-i18n="${s}"></option>`).join("")}</select></div>${U.field("dateFrom", "date-from", "date")}${U.field("dateTo", "date-to", "date")}<div class="field"><label for="time-sort">${U.tr("sort")}</label><select id="time-sort"><option value="newest" data-i18n="newest"></option><option value="oldest" data-i18n="oldest"></option></select></div></div></div><section id="inquiry-list" aria-live="polite"></section></div><dialog class="drawer" id="inquiry-drawer" aria-label="${U.t("inquiryDetails")}"></dialog>`;
+function scopeId() {
+  const user = AccountUI.getUser();
+  let id = "";
+  try {
+    id = MarineAccounts.readProfile(localStorage).id || "";
+  } catch {}
+  return id || user?.id || "";
+}
+// 全量（写回用），避免过滤后覆盖其他供应商的数据
 function rows() {
   return AccountUI.getUser()?.role === "supplier" ? U.read("rfq_drafts") : [];
 }
+// 当前供应商可见：定向给自己的 + 未定向的公共询盘
+function visible() {
+  const id = scopeId();
+  return rows().filter((r) => !r.supplier_id || r.supplier_id === id);
+}
 function renderList() {
   if (!AccountUI.requireSupplier()) return;
-  const all = rows();
+  const all = visible();
   document.getElementById("unread-count").textContent = all.filter(
     (r) => r.status === "submitted",
   ).length;
@@ -30,7 +44,7 @@ function renderList() {
     ? list
         .map((r) => {
           const p = U.product(r.product_id);
-          return `<button type="button" class="inquiry-item" data-inquiry="${U.e(r.id)}"><img src="${U.e(p ? U.img(p) : "assets/media/services.jpg")}" alt=""><div><h3>${p ? U.bi({ zh: p.i18n.zh.title, en: p.i18n.en.title }) : U.tr("general")}</h3><p>${U.e(r.buyer.company)} · ${U.e(r.buyer.country)}</p></div><div class="inquiry-meta"><p>${U.tr("quantity")} ${U.e(r.quantity)} · ${U.e(r.target_country || "")}</p><p>${U.e(U.date(r.created_at))}</p></div><div class="status-cell"><span class="status ${U.e(r.status)}">${U.tr(r.status)}</span></div></button>`;
+          return `<button type="button" class="inquiry-item" data-inquiry="${U.e(r.id)}"><img src="${U.e(p ? U.img(p) : "assets/media/services.jpg")}" alt=""><div><h3>${p ? U.bi({ zh: p.i18n.zh.title, en: p.i18n.en.title }) : U.tr("general")}</h3><p>${U.e(r.buyer.company)} · ${U.e(r.buyer.country)}</p></div><div class="inquiry-meta"><p>${U.tr("quantity")} ${U.e(r.quantity)} · ${U.e(r.target_country || "")}</p><p>${U.e(U.date(r.created_at))}</p>${r.supplier_id ? `<p class="muted">${U.tr("inquiryDirected")}</p>` : `<p class="muted">${U.tr("inquiryPublic")}</p>`}</div><div class="status-cell"><span class="status ${U.e(r.status)}">${U.tr(r.status)}</span></div></button>`;
         })
         .join("")
     : U.empty("noInquiries", "noInquiriesHint", "rfq.html", "generalRfq");
@@ -116,6 +130,6 @@ window.addEventListener("focus", renderList);
 window.addEventListener("languagechange", renderList);
 renderList();
 const requestedInquiry=new URLSearchParams(location.search).get("inquiry");
-if(requestedInquiry && rows().some(row=>row.id===requestedInquiry)) openInquiry(requestedInquiry);
+if(requestedInquiry && visible().some(row=>row.id===requestedInquiry)) openInquiry(requestedInquiry);
 
 })();
